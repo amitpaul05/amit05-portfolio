@@ -19,7 +19,7 @@ const About = () => {
                   <div className="aspect-[3/4] rounded-xl overflow-hidden bg-muted">
                     {/* Professional photo */}
                     <img 
-                      src="/lovable-uploads/791a0457-fa14-4ebd-a3fe-4bac6cceb295.png" 
+                      src="/lovable-uploads/817d24a1-3303-4d66-b1d3-82a710061365.png" 
                       alt="Amit Paul - Backend Developer" 
                       className="w-full h-full object-cover"
                     />
