@@ -1,6 +1,8 @@
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, MapPin, Phone, ExternalLink } from "lucide-react";
+import leetcodeIcon from "../assets/leetcode-icon.svg";
+import codeforcesIcon from "../assets/codeforces-icon.svg";
 
 const Contact = () => {
   const contactInfo = [
@@ -29,25 +31,33 @@ const Contact = () => {
       icon: Github,
       label: "GitHub",
       href: "https://github.com",
-      color: "hover:text-tech-blue"
+      color: "hover:text-tech-blue",
+      isLucideIcon: true,
+      iconSrc: ""
     },
     {
       icon: Linkedin,
       label: "LinkedIn",
       href: "https://linkedin.com",
-      color: "hover:text-tech-cyan"
+      color: "hover:text-tech-cyan",
+      isLucideIcon: true,
+      iconSrc: ""
     },
     {
-      icon: ExternalLink,
+      icon: null,
       label: "LeetCode",
       href: "https://leetcode.com",
-      color: "hover:text-primary"
+      color: "hover:text-primary",
+      isLucideIcon: false,
+      iconSrc: leetcodeIcon
     },
     {
-      icon: ExternalLink,
+      icon: null,
       label: "Codeforces",
       href: "https://codeforces.com",
-      color: "hover:text-accent"
+      color: "hover:text-accent",
+      isLucideIcon: false,
+      iconSrc: codeforcesIcon
     }
   ];
 
@@ -113,7 +123,11 @@ const Contact = () => {
                           "Visit my Codeforces profile for competitive programming"
                         }
                       >
-                        <social.icon className="h-5 w-5" />
+                        {social.isLucideIcon ? (
+                          <social.icon className="h-5 w-5" />
+                        ) : (
+                          <img src={social.iconSrc} alt={social.label} className="h-5 w-5" />
+                        )}
                         <span className="font-medium">{social.label}</span>
                       </a>
                     ))}

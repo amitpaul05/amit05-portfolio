@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
+import leetcodeIcon from "../assets/leetcode-icon.svg";
 
 const Hero = () => {
   return (
@@ -56,7 +57,7 @@ const Hero = () => {
               aria-label="LeetCode"
               title="Check out my LeetCode profile and coding solutions"
             >
-              <ExternalLink className="h-6 w-6" />
+              <img src={leetcodeIcon} alt="LeetCode" className="h-6 w-6" />
             </a>
           </div>
         </div>
