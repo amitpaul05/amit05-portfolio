@@ -83,6 +83,11 @@ const Contact = () => {
                         <a 
                           href={contact.href}
                           className="text-card-foreground hover:text-primary transition-colors duration-300 font-medium"
+                          title={
+                            contact.label === "Email" ? "Send me an email" :
+                            contact.label === "Phone" ? "Call me directly" :
+                            "My current location"
+                          }
                         >
                           {contact.value}
                         </a>
@@ -101,6 +106,12 @@ const Contact = () => {
                         key={social.label}
                         href={social.href}
                         className={`flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card/80 text-muted-foreground ${social.color} transition-all duration-300 hover:scale-105`}
+                        title={
+                          social.label === "GitHub" ? "View my GitHub repositories and projects" :
+                          social.label === "LinkedIn" ? "Connect with me on LinkedIn" :
+                          social.label === "LeetCode" ? "Check out my coding solutions on LeetCode" :
+                          "Visit my Codeforces profile for competitive programming"
+                        }
                       >
                         <social.icon className="h-5 w-5" />
                         <span className="font-medium">{social.label}</span>

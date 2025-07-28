@@ -38,6 +38,7 @@ const Hero = () => {
               href="https://github.com" 
               className="text-muted-foreground hover:text-primary transition-colors duration-300 hover:scale-110 transform"
               aria-label="GitHub"
+              title="View my GitHub repositories and open source contributions"
             >
               <Github className="h-6 w-6" />
             </a>
@@ -45,6 +46,7 @@ const Hero = () => {
               href="https://linkedin.com" 
               className="text-muted-foreground hover:text-primary transition-colors duration-300 hover:scale-110 transform"
               aria-label="LinkedIn"
+              title="Connect with me on LinkedIn for professional networking"
             >
               <Linkedin className="h-6 w-6" />
             </a>
@@ -52,6 +54,7 @@ const Hero = () => {
               href="https://leetcode.com" 
               className="text-muted-foreground hover:text-primary transition-colors duration-300 hover:scale-110 transform"
               aria-label="LeetCode"
+              title="Check out my LeetCode profile and coding solutions"
             >
               <ExternalLink className="h-6 w-6" />
             </a>
