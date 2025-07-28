@@ -16,10 +16,10 @@ const About = () => {
                 
                 {/* Main image container */}
                 <div className="relative bg-gradient-card rounded-2xl p-8 border border-border/50 group-hover:border-primary/30 transition-all duration-300">
-                  <div className="aspect-square rounded-xl overflow-hidden bg-muted">
-                    {/* Placeholder for professional photo */}
+                  <div className="aspect-[3/4] rounded-xl overflow-hidden bg-muted">
+                    {/* Professional photo */}
                     <img 
-                      src="/lovable-uploads/d797a8a6-fa86-4645-8ddd-676e5c9a625e.png" 
+                      src="/lovable-uploads/791a0457-fa14-4ebd-a3fe-4bac6cceb295.png" 
                       alt="Amit Paul - Backend Developer" 
                       className="w-full h-full object-cover"
                     />
