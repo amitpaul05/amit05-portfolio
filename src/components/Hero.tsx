@@ -11,13 +11,6 @@ const Hero = () => {
       
       <div className="container mx-auto px-6 text-center relative z-10">
         <div className="animate-slide-up">
-          <div className="mb-8">
-            <img 
-              src="/lovable-uploads/791a0457-fa14-4ebd-a3fe-4bac6cceb295.png" 
-              alt="Amit Paul" 
-              className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto mb-6 border-4 border-gradient-primary shadow-glow"
-            />
-          </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
             Amit Paul
           </h1>

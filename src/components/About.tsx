@@ -19,7 +19,7 @@ const About = () => {
                   <div className="aspect-square rounded-xl overflow-hidden bg-muted">
                     {/* Placeholder for professional photo */}
                     <img 
-                      src="/lovable-uploads/791a0457-fa14-4ebd-a3fe-4bac6cceb295.png" 
+                      src="/lovable-uploads/d797a8a6-fa86-4645-8ddd-676e5c9a625e.png" 
                       alt="Amit Paul - Backend Developer" 
                       className="w-full h-full object-cover"
                     />
