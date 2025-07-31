@@ -9,8 +9,8 @@ const Contact = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "amit21905@gmail.com",
-      href: "mailto:amit21905@gmail.com"
+      value: "amit210905@gmail.com",
+      href: "mailto:amit210905@gmail.com"
     },
     {
       icon: Phone,
@@ -30,7 +30,7 @@ const Contact = () => {
     {
       icon: Github,
       label: "GitHub",
-      href: "https://github.com",
+      href: "https://github.com/amitpaul05",
       color: "hover:text-tech-blue",
       isLucideIcon: true,
       iconSrc: ""
@@ -38,7 +38,7 @@ const Contact = () => {
     {
       icon: Linkedin,
       label: "LinkedIn",
-      href: "https://linkedin.com",
+      href: "https://www.linkedin.com/in/amitpaul05/",
       color: "hover:text-tech-cyan",
       isLucideIcon: true,
       iconSrc: ""
@@ -46,7 +46,7 @@ const Contact = () => {
     {
       icon: null,
       label: "LeetCode",
-      href: "https://leetcode.com",
+      href: "https://leetcode.com/amit210905",
       color: "hover:text-primary",
       isLucideIcon: false,
       iconSrc: leetcodeIcon
@@ -54,7 +54,7 @@ const Contact = () => {
     {
       icon: null,
       label: "Codeforces",
-      href: "https://codeforces.com",
+      href: "https://codeforces.com/profile/amit210905",
       color: "hover:text-accent",
       isLucideIcon: false,
       iconSrc: codeforcesIcon
@@ -165,11 +165,18 @@ const Contact = () => {
                   </div>
                   
                   <div className="space-y-3">
-                    <Button className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                    <Button 
+                      className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                      onClick={() => window.open('mailto:amit210905@gmail.com', '_blank')}
+                    >
                       <Mail className="mr-2 h-4 w-4" />
                       Send Email
                     </Button>
-                    <Button variant="outline" className="w-full hover:border-primary hover:text-primary transition-all duration-300">
+                    <Button 
+                      variant="outline" 
+                      className="w-full hover:border-primary hover:text-primary transition-all duration-300"
+                      onClick={() => window.open('https://drive.google.com/drive/folders/1CslS5qhOR0kxTJhxq1ot0uOKi-6Z_MCQ?usp=sharing', '_blank')}
+                    >
                       <ExternalLink className="mr-2 h-4 w-4" />
                       Download Resume
                     </Button>
@@ -191,7 +198,11 @@ const Contact = () => {
                   to tackle complex problems at companies like Google and other global tech leaders.
                 </p>
                 <div className="flex justify-center">
-                  <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                    onClick={() => window.open('mailto:amit210905@gmail.com', '_blank')}
+                  >
                     <Mail className="mr-2 h-5 w-5" />
                     Let's Build Something Amazing
                   </Button>

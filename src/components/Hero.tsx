@@ -24,11 +24,21 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <Button variant="default" size="lg" className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+            <Button 
+              variant="default" 
+              size="lg" 
+              className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+              onClick={() => window.open('mailto:amit210905@gmail.com', '_blank')}
+            >
               <Mail className="mr-2 h-4 w-4" />
               Contact Me
             </Button>
-            <Button variant="outline" size="lg" className="hover:border-primary hover:text-primary transition-all duration-300">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="hover:border-primary hover:text-primary transition-all duration-300"
+              onClick={() => window.open('https://drive.google.com/drive/folders/1CslS5qhOR0kxTJhxq1ot0uOKi-6Z_MCQ?usp=sharing', '_blank')}
+            >
               <ExternalLink className="mr-2 h-4 w-4" />
               View Resume
             </Button>
@@ -36,28 +46,34 @@ const Hero = () => {
           
           <div className="flex justify-center space-x-6">
             <a 
-              href="https://github.com" 
+              href="https://github.com/amitpaul05" 
               className="text-muted-foreground hover:text-primary transition-colors duration-300 hover:scale-110 transform"
               aria-label="GitHub"
               title="View my GitHub repositories and open source contributions"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Github className="h-6 w-6" />
             </a>
             <a 
-              href="https://linkedin.com" 
+              href="https://www.linkedin.com/in/amitpaul05/" 
               className="text-muted-foreground hover:text-primary transition-colors duration-300 hover:scale-110 transform"
               aria-label="LinkedIn"
               title="Connect with me on LinkedIn for professional networking"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <Linkedin className="h-6 w-6" />
             </a>
             <a 
-              href="https://leetcode.com" 
+              href="https://codeforces.com/profile/amit210905" 
               className="text-muted-foreground hover:text-primary transition-colors duration-300 hover:scale-110 transform"
-              aria-label="LeetCode"
-              title="Check out my LeetCode profile and coding solutions"
+              aria-label="Codeforces"
+              title="Check out my Codeforces profile and competitive programming solutions"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <img src={leetcodeIcon} alt="LeetCode" className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors duration-300" />
+              <img src={leetcodeIcon} alt="Codeforces" className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors duration-300" />
             </a>
           </div>
         </div>

@@ -11,7 +11,8 @@ const Certifications = () => {
       date: "2025",
       type: "Digital Ninja Program",
       description: "Focused on real-world data engineering practices, ETL pipelines, and dashboard development",
-      badgeColor: "bg-tech-blue/10 text-tech-blue border-tech-blue/20"
+      badgeColor: "bg-tech-blue/10 text-tech-blue border-tech-blue/20",
+      link: "https://drive.google.com/file/d/1e6sGcNpnBjjLzK6owj3xqWNzx001XqLL/view"
     },
     {
       title: "Intro to Machine Learning",
@@ -20,7 +21,8 @@ const Certifications = () => {
       date: "2024",
       type: "Online Course",
       description: "Core machine learning concepts, algorithms, and practical implementation",
-      badgeColor: "bg-tech-cyan/10 text-tech-cyan border-tech-cyan/20"
+      badgeColor: "bg-tech-cyan/10 text-tech-cyan border-tech-cyan/20",
+      link: "https://www.kaggle.com/learn/certification/amit210905/intro-to-machine-learning"
     },
     {
       title: "Django Web Framework",
@@ -29,7 +31,8 @@ const Certifications = () => {
       date: "2024",
       type: "Professional Certificate",
       description: "Advanced Django development, REST APIs, and scalable web application architecture",
-      badgeColor: "bg-primary/10 text-primary border-primary/20"
+      badgeColor: "bg-primary/10 text-primary border-primary/20",
+      link: "https://www.coursera.org/account/accomplishments/verify/JWJ6XA6H396S?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course"
     },
     {
       title: "Backend Development Track",
@@ -38,7 +41,8 @@ const Certifications = () => {
       date: "2023",
       type: "Comprehensive Program",
       description: "Full-stack backend development with focus on Python, Django, and system design",
-      badgeColor: "bg-accent/10 text-accent border-accent/20"
+      badgeColor: "bg-accent/10 text-accent border-accent/20",
+      link: "#"
     },
     {
       title: "ICPC Asia Dhaka Regional",
@@ -47,7 +51,8 @@ const Certifications = () => {
       date: "2021",
       type: "Programming Contest",
       description: "Participated in prestigious international competitive programming contest",
-      badgeColor: "bg-destructive/10 text-destructive border-destructive/20"
+      badgeColor: "bg-destructive/10 text-destructive border-destructive/20",
+      link: "https://drive.google.com/file/d/1bhFtM-fy52du5xQFllsi47IzWUycJWXW/view"
     }
   ];
 
@@ -103,10 +108,15 @@ const Certifications = () => {
                     </Badge>
                   </div>
                   
-                  <div className="flex items-center text-primary hover:text-tech-cyan transition-colors duration-300 cursor-pointer text-sm group-hover:translate-x-1 transition-transform duration-300">
+                  <a 
+                    href={cert.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-primary hover:text-tech-cyan transition-colors duration-300 cursor-pointer text-sm group-hover:translate-x-1 transition-transform duration-300"
+                  >
                     <ExternalLink className="h-4 w-4 mr-1" />
                     <span>View Certificate</span>
-                  </div>
+                  </a>
                 </div>
               </CardContent>
             </Card>
