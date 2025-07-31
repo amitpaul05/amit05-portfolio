@@ -57,7 +57,7 @@ const Hero = () => {
               aria-label="LeetCode"
               title="Check out my LeetCode profile and coding solutions"
             >
-              <img src={leetcodeIcon} alt="LeetCode" className="h-6 w-6" />
+              <img src={leetcodeIcon} alt="LeetCode" className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors duration-300" />
             </a>
           </div>
         </div>
