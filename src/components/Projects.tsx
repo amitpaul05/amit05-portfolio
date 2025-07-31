@@ -4,6 +4,21 @@ import { Badge } from "./ui/badge";
 import { Github, ExternalLink } from "lucide-react";
 
 const Projects = () => {
+  const workProjects = [
+    {
+      title: "ScholarStone",
+      description: "Educational platform and scholarship management system",
+      url: "https://www.scholarstone.net/",
+      technologies: ["Web Platform", "Education Technology"]
+    },
+    {
+      title: "Crabarian Exporter UI",
+      description: "Export management user interface system",
+      url: "http://exporter-ui.crabarian.com/",
+      technologies: ["UI/UX", "Export Management"]
+    }
+  ];
+
   const projects = [
     {
       title: "University Certificate Automation System",
@@ -68,12 +83,57 @@ const Projects = () => {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-6">
+        {/* Projects I worked on */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
+            Projects I worked on
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Professional projects I've contributed to in production environments
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+          {workProjects.map((project, index) => (
+            <Card 
+              key={project.title} 
+              className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card group"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300">
+                  {project.title}
+                </h3>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.technologies.map((tech) => (
+                    <Badge key={tech} variant="secondary" className="text-xs">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="hover:border-primary hover:text-primary"
+                  onClick={() => window.open(project.url, '_blank')}
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Visit Project
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
             Featured Projects
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real-world applications showcasing full-stack development and backend architecture expertise
+            Personal projects showcasing full-stack development and backend architecture expertise
           </p>
         </div>
         
