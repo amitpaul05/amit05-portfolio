@@ -62,10 +62,10 @@ const Contact = () => {
   ];
 
   return (
-    <section className="py-20 bg-section-bg">
+    <section className="py-20 bg-section-bg animate-on-scroll">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
+        <div className="text-center mb-16 animate-fade-in-up">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent gradient-text-animated">
             Let's Connect
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -76,7 +76,7 @@ const Contact = () => {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Contact Information */}
-            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card">
+            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-500 hover:shadow-elegant card-hover animate-slide-in-left">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold mb-6 text-card-foreground">
                   Contact Information
@@ -137,7 +137,7 @@ const Contact = () => {
             </Card>
             
             {/* Quick Message */}
-            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card">
+            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-500 hover:shadow-elegant card-hover animate-slide-in-right">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold mb-6 text-card-foreground">
                   Ready to Collaborate
@@ -188,7 +188,7 @@ const Contact = () => {
           
           {/* Call to Action */}
           <div className="text-center mt-12">
-            <Card className="bg-gradient-primary/5 border-primary/20 max-w-2xl mx-auto">
+            <Card className="bg-gradient-primary/5 border-primary/20 max-w-2xl mx-auto card-hover animate-scale-in">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold mb-4 text-card-foreground">
                   Ready for Global Engineering Challenges

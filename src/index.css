@@ -43,6 +43,9 @@ All colors MUST be HSL.
     --primary-violet: 270 91% 65%;
     --accent-green: 142 76% 36%;
     --accent-cyan: 188 94% 68%;
+    --tech-blue: 217 91% 60%;
+    --tech-cyan: 188 94% 68%;
+    --section-bg: 240 8% 8%;
     --neutral-900: 240 10% 3.9%;
     --neutral-800: 240 3.7% 15.9%;
     --neutral-700: 240 5% 26%;
@@ -125,5 +128,94 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Scroll animations */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .slide-on-scroll {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  
+  .slide-on-scroll.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  /* Enhanced hover effects */
+  .card-hover {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
+  }
+  
+  /* Gradient text animation */
+  .gradient-text-animated {
+    background: linear-gradient(-45deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary-violet)), hsl(var(--accent-cyan)));
+    background-size: 400% 400%;
+    animation: gradient-shift 4s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Stagger animation delays */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+  .stagger-6 { animation-delay: 0.6s; }
+  
+  /* Stagger child elements */
+  .stagger-child {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  
+  .stagger-child.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Icon color customization */
+  .icon-white {
+    filter: brightness(0) invert(1);
+  }
+  
+  .icon-blue {
+    filter: brightness(0) saturate(100%) invert(51%) sepia(98%) saturate(1013%) hue-rotate(194deg) brightness(103%) contrast(101%);
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Backdrop blur support */
+  .backdrop-blur-custom {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 }

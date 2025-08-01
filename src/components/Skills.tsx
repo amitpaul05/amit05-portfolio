@@ -6,7 +6,7 @@ const Skills = () => {
     {
       title: "Backend Development",
       skills: ["Python", "Django", "Django REST Framework", "PostgreSQL", "Celery", "Redis", "RESTful APIs"],
-      color: "bg-tech-blue/10 text-tech-blue border-tech-blue/20"
+      color: "bg-primary/10 text-primary border-primary/20"
     },
     {
       title: "Frontend & Tools",

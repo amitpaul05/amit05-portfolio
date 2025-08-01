@@ -142,42 +142,78 @@ const Projects = () => {
           {featuredProjects.map((project, index) => (
             <Card 
               key={project.title} 
-              className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card group h-full"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className={`relative overflow-hidden bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 
+                hover:border-primary/50 transition-all duration-500 group h-full backdrop-blur-sm
+                hover:shadow-elegant hover:shadow-primary/20 animate-fade-in-up stagger-${index + 1}
+                before:absolute before:inset-0 before:bg-gradient-to-br before:from-primary/5 before:to-transparent 
+                before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100`}
             >
-              <CardHeader>
-                <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Floating elements */}
+              <div className="absolute top-4 right-4 w-8 h-8 bg-primary/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700" />
+              <div className="absolute bottom-4 left-4 w-6 h-6 bg-accent/20 rounded-full blur-lg group-hover:scale-125 transition-transform duration-500" />
+              
+              <CardHeader className="relative z-10 pb-4">
+                <CardTitle className="text-xl font-bold group-hover:text-primary transition-all duration-300 
+                  group-hover:scale-105 transform-gpu bg-gradient-to-r from-foreground to-foreground 
+                  group-hover:from-primary group-hover:to-accent bg-clip-text group-hover:text-transparent">
                   {project.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-col justify-between h-full">
+              
+              <CardContent className="relative z-10 flex flex-col justify-between h-full pt-0">
                 <div>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                  <p className="text-muted-foreground mb-6 leading-relaxed text-sm group-hover:text-foreground/90 transition-colors duration-300">
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map((tech) => (
-                      <Badge key={tech} variant="secondary" className="text-xs">
+                  
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {project.technologies.map((tech, techIndex) => (
+                      <Badge 
+                        key={tech} 
+                        variant="secondary" 
+                        className={`text-xs relative overflow-hidden bg-muted/50 hover:bg-primary/20 
+                          border border-border/50 hover:border-primary/30 transition-all duration-300
+                          hover:scale-105 transform-gpu group-hover:animate-bounce-slow`}
+                        style={{ animationDelay: `${techIndex * 0.1}s` }}
+                      >
                         {tech}
                       </Badge>
                     ))}
                   </div>
                 </div>
-                <div className="flex gap-3">
+                
+                <div className="flex gap-3 mt-auto">
                   {project.links.github && (
-                    <Button variant="outline" size="sm" className="hover:border-primary hover:text-primary">
-                      <Github className="h-4 w-4 mr-2" />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 
+                        transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg"
+                    >
+                      <Github className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
                       Code
                     </Button>
                   )}
                   {project.links.demo && (
-                    <Button variant="outline" size="sm" className="hover:border-primary hover:text-primary">
-                      <ExternalLink className="h-4 w-4 mr-2" />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 hover:border-accent hover:text-accent hover:bg-accent/10 
+                        transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
                       Demo
                     </Button>
                   )}
                 </div>
               </CardContent>
+              
+              {/* Bottom border gradient */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary 
+                scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </Card>
           ))}
         </div>

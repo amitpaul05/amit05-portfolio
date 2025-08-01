@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
+import codeforcesIcon from "../assets/codeforces-icon.svg";
 
 const Hero = () => {
   return (
@@ -73,7 +74,7 @@ const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src={leetcodeIcon} alt="Codeforces" className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors duration-300" />
+              <img src={codeforcesIcon} alt="Codeforces" className="h-6 w-6" />
             </a>
           </div>
         </div>
