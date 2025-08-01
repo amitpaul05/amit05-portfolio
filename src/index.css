@@ -130,27 +130,27 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
   
-  /* Scroll animations */
+  /* Scroll animations - safer implementation */
   .animate-on-scroll {
-    opacity: 0;
-    transform: translateY(50px);
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
   }
   
-  .animate-on-scroll.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .animate-on-scroll:not(.visible) {
+    opacity: 0;
+    transform: translateY(50px);
   }
   
   .slide-on-scroll {
-    opacity: 0;
-    transform: translateX(-50px);
+    opacity: 1;
+    transform: translateX(0);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
   }
   
-  .slide-on-scroll.visible {
-    opacity: 1;
-    transform: translateX(0);
+  .slide-on-scroll:not(.visible) {
+    opacity: 0;
+    transform: translateX(-50px);
   }
   
   /* Enhanced hover effects */

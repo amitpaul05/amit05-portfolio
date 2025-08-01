@@ -12,14 +12,25 @@ const Index = () => {
   useScrollAnimation();
   
   useEffect(() => {
-    // Add scroll animation classes to sections
-    const sections = document.querySelectorAll('section');
-    sections.forEach((section, index) => {
-      section.classList.add('animate-on-scroll');
-      if (index % 2 === 0) {
-        section.classList.add('slide-on-scroll');
-      }
-    });
+    console.log('Index component mounted');
+    
+    // Add scroll animation classes to sections with a delay to ensure DOM is ready
+    const setupAnimations = () => {
+      const sections = document.querySelectorAll('section');
+      console.log('Found sections:', sections.length);
+      
+      sections.forEach((section, index) => {
+        section.classList.add('animate-on-scroll');
+        if (index % 2 === 0) {
+          section.classList.add('slide-on-scroll');
+        }
+      });
+    };
+    
+    // Setup with delay to ensure components are mounted
+    const timer = setTimeout(setupAnimations, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (
