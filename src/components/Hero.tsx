@@ -10,7 +10,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-tech-blue/5 to-tech-cyan/5"></div>
       
       <div className="container mx-auto px-6 text-center relative z-10">
-        <div className="animate-fade-in-up">
+        <div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent animate-scale-in">
             Amit Paul
           </h1>
