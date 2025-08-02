@@ -8,8 +8,6 @@ const Hero = () => {
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-section-bg to-background relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-r from-tech-blue/5 to-tech-cyan/5"></div>
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-tech-blue/10 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tech-cyan/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
       
       <div className="container mx-auto px-6 text-center relative z-10">
         <div>
