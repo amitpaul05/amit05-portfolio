@@ -77,6 +77,30 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      
+      {/* Modern Navigation Bar */}
+      <nav className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-8 py-4 z-20 sticky top-4 transition-all duration-300">
+        <div className="flex space-x-8">
+          <button 
+            onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+            className="text-white/80 hover:text-white font-medium transition-colors duration-300 hover:scale-105 transform"
+          >
+            About
+          </button>
+          <button 
+            onClick={() => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' })}
+            className="text-white/80 hover:text-white font-medium transition-colors duration-300 hover:scale-105 transform"
+          >
+            Academics
+          </button>
+          <button 
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+            className="text-white/80 hover:text-white font-medium transition-colors duration-300 hover:scale-105 transform"
+          >
+            Projects
+          </button>
+        </div>
+      </nav>
     </section>
   );
 };
