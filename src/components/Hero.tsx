@@ -12,7 +12,7 @@ const Hero = () => {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tech-cyan/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
       
       <div className="container mx-auto px-6 text-center relative z-10">
-        <div className="animate-slide-up">
+        <div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
             Amit Paul
           </h1>
@@ -67,14 +67,14 @@ const Hero = () => {
               <Linkedin className="h-6 w-6" />
             </a>
             <a 
-              href="https://codeforces.com/profile/amit210905" 
+              href="https://leetcode.com/u/amit210905/" 
               className="text-muted-foreground hover:text-primary transition-colors duration-300 hover:scale-110 transform"
-              aria-label="Codeforces"
-              title="Check out my Codeforces profile and competitive programming solutions"
+              aria-label="LeetCode"
+              title="Check out my LeetCode profile and problem-solving solutions"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src={codeforcesIcon} alt="Codeforces" className="h-6 w-6" />
+              <img src={leetcodeIcon} alt="LeetCode" className="h-6 w-6" />
             </a>
           </div>
         </div>
