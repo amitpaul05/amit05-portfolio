@@ -10,8 +10,8 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-tech-blue/5 to-tech-cyan/5"></div>
       
       <div className="container mx-auto px-6 text-center relative z-10">
-        <div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
+        <div className="animate-fade-in-up">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent animate-scale-in">
             Amit Paul
           </h1>
           <h2 className="text-2xl md:text-3xl text-muted-foreground mb-4">
@@ -72,7 +72,7 @@ const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src={leetcodeIcon} alt="LeetCode" className="h-6 w-6" />
+              <img src={leetcodeIcon} alt="LeetCode" className="h-6 w-6 filter brightness-0 invert opacity-60 hover:opacity-100 hover:brightness-100 hover:invert-0 hover:hue-rotate-180 transition-all duration-300" />
             </a>
           </div>
         </div>
