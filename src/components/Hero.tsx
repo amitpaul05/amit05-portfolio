@@ -1,9 +1,26 @@
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
 import codeforcesIcon from "../assets/codeforces-icon.svg";
 
 const Hero = () => {
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.querySelector('section');
+      if (heroSection) {
+        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+        const scrollPosition = window.scrollY + 100; // Add some offset
+        setIsSticky(scrollPosition >= heroBottom);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-section-bg to-background relative overflow-hidden">
@@ -80,25 +97,38 @@ const Hero = () => {
         </div>
       </section>
       
-      {/* Fixed Top Navigation Bar */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <nav className="bg-background/80 backdrop-blur-md border border-border rounded-full px-8 py-3 shadow-lg">
-          <div className="flex space-x-8">
+      {/* Liquid Glass Navigation Bar */}
+      <div className={`transition-all duration-500 ease-in-out z-50 ${
+        isSticky 
+          ? 'fixed top-4 left-1/2 transform -translate-x-1/2' 
+          : 'flex justify-center -mt-8'
+      }`}>
+        <nav className={`
+          backdrop-blur-xl bg-gradient-to-r from-background/30 via-background/50 to-background/30 
+          border border-white/20 rounded-full px-8 py-4 shadow-2xl
+          transition-all duration-500 ease-in-out
+          hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+          before:absolute before:inset-0 before:rounded-full 
+          before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent
+          before:blur-sm relative overflow-hidden
+          ${isSticky ? 'animate-slide-in-right' : ''}
+        `}>
+          <div className="flex space-x-8 relative z-10">
             <button 
               onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-foreground/70 hover:text-foreground font-medium transition-all duration-300 hover:scale-105"
+              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               About
             </button>
             <button 
               onClick={() => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-foreground/70 hover:text-foreground font-medium transition-all duration-300 hover:scale-105"
+              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               Academics
             </button>
             <button 
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-foreground/70 hover:text-foreground font-medium transition-all duration-300 hover:scale-105"
+              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               Projects
             </button>
