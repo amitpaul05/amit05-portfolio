@@ -98,36 +98,49 @@ const Hero = () => {
       </section>
       
       {/* Liquid Glass Navigation Bar */}
-      <div className={`transition-all duration-500 ease-in-out z-50 ${
+      <div className={`z-50 ${
         isSticky 
           ? 'fixed top-4 left-1/2 transform -translate-x-1/2' 
           : 'flex justify-center -mt-8'
       }`}>
-        <nav className={`
+        <nav className="
           backdrop-blur-xl bg-gradient-to-r from-background/30 via-background/50 to-background/30 
           border border-white/20 rounded-full px-8 py-4 shadow-2xl
-          transition-all duration-500 ease-in-out
           hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
           before:absolute before:inset-0 before:rounded-full 
           before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent
           before:blur-sm relative overflow-hidden
-          ${isSticky ? 'animate-slide-in-right' : ''}
-        `}>
+        ">
           <div className="flex space-x-8 relative z-10">
             <button 
-              onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                const aboutSection = document.querySelector('[id="about"]');
+                if (aboutSection) {
+                  aboutSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               About
             </button>
             <button 
-              onClick={() => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                const experienceSection = document.querySelector('[id="experience"]');
+                if (experienceSection) {
+                  experienceSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               Academics
             </button>
             <button 
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                const projectsSection = document.querySelector('[id="projects"]');
+                if (projectsSection) {
+                  projectsSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               Projects
