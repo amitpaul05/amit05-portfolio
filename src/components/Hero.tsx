@@ -145,6 +145,17 @@ const Hero = () => {
             >
               Projects
             </button>
+            <button 
+              onClick={() => {
+                const certificatesSection = document.querySelector('[id="certifications"]');
+                if (certificatesSection) {
+                  certificatesSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+            >
+              Certificates
+            </button>
           </div>
         </nav>
       </div>

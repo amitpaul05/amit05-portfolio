@@ -72,7 +72,15 @@ const Certifications = () => {
           {certifications.map((cert, index) => (
             <Card 
               key={cert.title} 
-              className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card group h-full"
+              className="
+                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
+                border border-white/20 rounded-2xl shadow-2xl
+                hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+                before:absolute before:inset-0 before:rounded-2xl 
+                before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
+                before:blur-sm relative overflow-hidden group h-full
+                hover:border-primary/30 transition-all duration-300
+              "
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <CardContent className="p-6 flex flex-col h-full">
@@ -125,7 +133,14 @@ const Certifications = () => {
         
         {/* Skills Focus Section */}
         <div className="mt-16 text-center">
-          <Card className="bg-gradient-card border-border/50 max-w-2xl mx-auto">
+          <Card className="
+            backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
+            border border-white/20 rounded-2xl shadow-2xl max-w-2xl mx-auto
+            hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+            before:absolute before:inset-0 before:rounded-2xl 
+            before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
+            before:blur-sm relative overflow-hidden
+          ">
             <CardContent className="p-8">
               <h3 className="text-2xl font-semibold mb-4 text-card-foreground">
                 Continuous Learning Focus

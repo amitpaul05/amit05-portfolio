@@ -57,7 +57,14 @@ const About = () => {
               </div>
               
               {/* Quick facts */}
-              <Card className="bg-gradient-card border-border/50">
+              <Card className="
+                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
+                border border-white/20 rounded-2xl shadow-2xl
+                hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+                before:absolute before:inset-0 before:rounded-2xl 
+                before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
+                before:blur-sm relative overflow-hidden
+              ">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-4 text-card-foreground">Quick Facts</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -127,7 +134,14 @@ const About = () => {
               </div>
               
               {/* Personal touch */}
-              <Card className="bg-primary/5 border-primary/20">
+              <Card className="
+                backdrop-blur-xl bg-gradient-to-br from-primary/10 via-primary/20 to-primary/5 
+                border border-primary/20 rounded-2xl shadow-2xl
+                hover:shadow-[0_0_40px_rgba(var(--primary),0.2)]
+                before:absolute before:inset-0 before:rounded-2xl 
+                before:bg-gradient-to-br before:from-transparent before:via-primary/10 before:to-transparent
+                before:blur-sm relative overflow-hidden
+              ">
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold mb-3 text-card-foreground">
                     Beyond Code

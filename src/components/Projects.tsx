@@ -97,7 +97,15 @@ const Projects = () => {
           {workProjects.map((project, index) => (
             <Card 
               key={project.title} 
-              className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-card group"
+              className="
+                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
+                border border-white/20 rounded-2xl shadow-2xl
+                hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+                before:absolute before:inset-0 before:rounded-2xl 
+                before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
+                before:blur-sm relative overflow-hidden group
+                hover:border-primary/30 transition-all duration-300
+              "
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <CardContent className="p-6">
@@ -227,7 +235,15 @@ const Projects = () => {
           {otherProjects.map((project, index) => (
             <Card 
               key={project.title} 
-              className="bg-card/50 border-border/30 hover:border-primary/20 transition-all duration-300 hover:bg-card/80"
+              className="
+                backdrop-blur-xl bg-gradient-to-br from-background/20 via-background/30 to-background/20 
+                border border-white/15 rounded-xl shadow-xl
+                hover:shadow-[0_0_30px_rgba(255,255,255,0.08)]
+                before:absolute before:inset-0 before:rounded-xl 
+                before:bg-gradient-to-br before:from-transparent before:via-white/5 before:to-transparent
+                before:blur-sm relative overflow-hidden
+                hover:border-primary/20 transition-all duration-300
+              "
               style={{ animationDelay: `${(index + 3) * 0.1}s` }}
             >
               <CardContent className="p-6">
