@@ -80,25 +80,25 @@ const Hero = () => {
         </div>
       </section>
       
-      {/* Modern Sticky Navigation Bar */}
-      <div className="sticky top-0 z-50 flex justify-center -mt-8">
-        <nav className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-8 py-4 shadow-lg">
+      {/* Fixed Top Navigation Bar */}
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+        <nav className="bg-background/80 backdrop-blur-md border border-border rounded-full px-8 py-3 shadow-lg">
           <div className="flex space-x-8">
             <button 
               onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-white/80 hover:text-white font-medium transition-all duration-300 hover:scale-105"
+              className="text-foreground/70 hover:text-foreground font-medium transition-all duration-300 hover:scale-105"
             >
               About
             </button>
             <button 
               onClick={() => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-white/80 hover:text-white font-medium transition-all duration-300 hover:scale-105"
+              className="text-foreground/70 hover:text-foreground font-medium transition-all duration-300 hover:scale-105"
             >
               Academics
             </button>
             <button 
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-white/80 hover:text-white font-medium transition-all duration-300 hover:scale-105"
+              className="text-foreground/70 hover:text-foreground font-medium transition-all duration-300 hover:scale-105"
             >
               Projects
             </button>
