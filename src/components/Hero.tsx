@@ -6,18 +6,37 @@ import codeforcesIcon from "../assets/codeforces-icon.svg";
 
 const Hero = () => {
   const [isSticky, setIsSticky] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
     const handleScroll = () => {
       const heroSection = document.querySelector('section');
       if (heroSection) {
         const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-        const scrollPosition = window.scrollY + 100; // Add some offset
+        const scrollPosition = window.scrollY + 100;
         setIsSticky(scrollPosition >= heroBottom);
+      }
+
+      // Scroll spy logic
+      const sections = ['about', 'experience', 'projects', 'certifications'];
+      const currentSection = sections.find(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          return rect.top <= 150 && rect.bottom >= 150;
+        }
+        return false;
+      });
+
+      if (currentSection) {
+        setActiveSection(currentSection);
+      } else if (window.scrollY < 100) {
+        setActiveSection('hero');
       }
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial state
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -119,7 +138,11 @@ const Hero = () => {
                   aboutSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+                activeSection === 'about' 
+                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  : 'text-foreground/80 hover:text-foreground'
+              }`}
             >
               About
             </button>
@@ -130,7 +153,11 @@ const Hero = () => {
                   experienceSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+                activeSection === 'experience' 
+                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  : 'text-foreground/80 hover:text-foreground'
+              }`}
             >
               Academics
             </button>
@@ -141,7 +168,11 @@ const Hero = () => {
                   projectsSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+                activeSection === 'projects' 
+                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  : 'text-foreground/80 hover:text-foreground'
+              }`}
             >
               Projects
             </button>
@@ -152,7 +183,11 @@ const Hero = () => {
                   certificatesSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+                activeSection === 'certifications' 
+                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  : 'text-foreground/80 hover:text-foreground'
+              }`}
             >
               Certificates
             </button>
