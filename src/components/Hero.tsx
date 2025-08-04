@@ -19,20 +19,24 @@ const Hero = () => {
 
       // Scroll spy logic
       const sections = ['about', 'experience', 'projects', 'certifications'];
-      const currentSection = sections.find(sectionId => {
+      const scrollPos = window.scrollY + 200; // Offset for viewport center
+      
+      let currentSection = 'hero';
+      
+      for (const sectionId of sections) {
         const section = document.getElementById(sectionId);
         if (section) {
-          const rect = section.getBoundingClientRect();
-          return rect.top <= 150 && rect.bottom >= 150;
+          const sectionTop = section.offsetTop;
+          const sectionBottom = sectionTop + section.offsetHeight;
+          
+          if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+            currentSection = sectionId;
+            break;
+          }
         }
-        return false;
-      });
-
-      if (currentSection) {
-        setActiveSection(currentSection);
-      } else if (window.scrollY < 100) {
-        setActiveSection('hero');
       }
+      
+      setActiveSection(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll);
