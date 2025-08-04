@@ -81,7 +81,7 @@ const Projects = () => {
   const otherProjects = projects.filter(p => !p.featured);
 
   return (
-    <section className="py-20 bg-background">
+    <section id="projects" className="py-20 bg-background">
       <div className="container mx-auto px-6">
         {/* Projects I worked on */}
         <div className="text-center mb-16">
