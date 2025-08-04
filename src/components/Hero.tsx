@@ -105,13 +105,13 @@ const Hero = () => {
       }`}>
         <nav className="
           backdrop-blur-xl bg-gradient-to-r from-background/30 via-background/50 to-background/30 
-          border border-white/20 rounded-full px-8 py-4 shadow-2xl
+          border border-white/20 rounded-full px-4 py-3 md:px-8 md:py-4 shadow-2xl
           hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
           before:absolute before:inset-0 before:rounded-full 
           before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent
           before:blur-sm relative overflow-hidden
         ">
-          <div className="flex space-x-8 relative z-10">
+          <div className="flex space-x-4 md:space-x-8 relative z-10">
             <button 
               onClick={() => {
                 const aboutSection = document.querySelector('[id="about"]');
@@ -119,7 +119,7 @@ const Hero = () => {
                   aboutSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               About
             </button>
@@ -130,7 +130,7 @@ const Hero = () => {
                   experienceSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               Academics
             </button>
@@ -141,7 +141,7 @@ const Hero = () => {
                   projectsSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               Projects
             </button>
@@ -152,7 +152,7 @@ const Hero = () => {
                   certificatesSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="text-foreground/80 hover:text-foreground font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
+              className="text-foreground/80 hover:text-foreground text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10"
             >
               Certificates
             </button>
