@@ -114,7 +114,7 @@ const Hero = () => {
           <div className="flex space-x-4 md:space-x-8 relative z-10">
             <button 
               onClick={() => {
-                const aboutSection = document.querySelector('[id="about"]');
+                const aboutSection = document.getElementById('about');
                 if (aboutSection) {
                   aboutSection.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -125,7 +125,7 @@ const Hero = () => {
             </button>
             <button 
               onClick={() => {
-                const experienceSection = document.querySelector('[id="experience"]');
+                const experienceSection = document.getElementById('experience');
                 if (experienceSection) {
                   experienceSection.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -136,7 +136,7 @@ const Hero = () => {
             </button>
             <button 
               onClick={() => {
-                const projectsSection = document.querySelector('[id="projects"]');
+                const projectsSection = document.getElementById('projects');
                 if (projectsSection) {
                   projectsSection.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -147,7 +147,7 @@ const Hero = () => {
             </button>
             <button 
               onClick={() => {
-                const certificatesSection = document.querySelector('[id="certifications"]');
+                const certificatesSection = document.getElementById('certifications');
                 if (certificatesSection) {
                   certificatesSection.scrollIntoView({ behavior: 'smooth' });
                 }
