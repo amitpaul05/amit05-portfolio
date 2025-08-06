@@ -127,7 +127,7 @@ const Hero = () => {
           : 'flex justify-center -mt-8'
       }`}>
         <nav className="
-          backdrop-blur-xl bg-gradient-to-r from-background/30 via-background/50 to-background/30 
+          backdrop-blur-md bg-gradient-to-r from-background/30 via-background/50 to-background/30 
           border border-white/20 rounded-full px-4 py-3 md:px-8 md:py-4 shadow-2xl
           hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
           before:absolute before:inset-0 before:rounded-full 
@@ -142,9 +142,9 @@ const Hero = () => {
                   aboutSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-3 py-2 rounded-full hover:bg-white/10 ${
                 activeSection === 'about' 
-                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
             >
@@ -157,9 +157,9 @@ const Hero = () => {
                   experienceSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-3 py-2 rounded-full hover:bg-white/10 ${
                 activeSection === 'experience' 
-                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
             >
@@ -172,9 +172,9 @@ const Hero = () => {
                   projectsSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-3 py-2 rounded-full hover:bg-white/10 ${
                 activeSection === 'projects' 
-                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
             >
@@ -187,9 +187,9 @@ const Hero = () => {
                   certificatesSection.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 rounded-full hover:bg-white/10 ${
+              className={`text-sm md:text-base font-medium transition-all duration-300 hover:scale-105 px-3 py-2 rounded-full hover:bg-white/10 ${
                 activeSection === 'certifications' 
-                  ? 'text-primary bg-primary/10 border border-primary/30' 
+                  ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
             >
