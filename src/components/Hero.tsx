@@ -121,7 +121,7 @@ const Hero = () => {
       </section>
       
       {/* Liquid Glass Navigation Bar */}
-      <div className={`z-50 transition-all duration-500 ease-in-out ${
+      <div className={`z-50 ${
         isSticky 
           ? 'fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl' 
           : 'flex justify-center -mt-8'
