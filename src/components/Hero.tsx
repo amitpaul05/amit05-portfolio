@@ -121,7 +121,7 @@ const Hero = () => {
       </section>
       
       {/* Liquid Glass Navigation Bar */}
-      <div className={`z-50 ${
+      <div className={`z-50 transition-all duration-500 ease-in-out ${
         isSticky 
           ? 'fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl' 
           : 'flex justify-center -mt-8'
@@ -132,9 +132,9 @@ const Hero = () => {
           hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
           before:absolute before:inset-0 before:rounded-full 
           before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent
-          before:blur-sm relative overflow-hidden
+          before:blur-sm relative overflow-hidden w-full transition-all duration-500 ease-in-out
         ">
-          <div className="flex space-x-2 md:space-x-6 relative z-10">
+          <div className="flex space-x-2 md:justify-evenly md:space-x-0 relative z-10">
             <button 
               onClick={() => {
                 const aboutSection = document.getElementById('about');
