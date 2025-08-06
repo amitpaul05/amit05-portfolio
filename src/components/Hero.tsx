@@ -134,7 +134,11 @@ const Hero = () => {
           before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent
           before:blur-sm relative overflow-hidden
         ">
-          <div className="flex space-x-2 md:space-x-6 relative z-10">
+          <div className={`flex relative z-10 ${
+            isSticky 
+              ? 'justify-between w-full' 
+              : 'space-x-2 md:space-x-6'
+          }`}>
             <button 
               onClick={() => {
                 const aboutSection = document.getElementById('about');
