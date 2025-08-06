@@ -35,16 +35,6 @@ const Certifications = () => {
       link: "https://www.coursera.org/account/accomplishments/verify/JWJ6XA6H396S?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course"
     },
     {
-      title: "Backend Development Track",
-      issuer: "Programming Hero",
-      focus: "Backend Engineering",
-      date: "2023",
-      type: "Comprehensive Program",
-      description: "Full-stack backend development with focus on Python, Django, and system design",
-      badgeColor: "bg-accent/10 text-accent border-accent/20",
-      link: "#"
-    },
-    {
       title: "ICPC Asia Dhaka Regional",
       issuer: "ICPC Global",
       focus: "Competitive Programming",
