@@ -108,7 +108,7 @@ const Projects = () => {
               "
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-6 relative z-10">
                 <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300">
                   {project.title}
                 </h3>
@@ -125,7 +125,7 @@ const Projects = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="hover:border-primary hover:text-primary"
+                  className="hover:border-primary hover:text-primary relative z-20"
                   onClick={() => {
                     console.log('Visiting project:', project.url);
                     window.open(project.url, '_blank');
