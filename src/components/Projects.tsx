@@ -202,7 +202,13 @@ const Projects = () => {
                     size="sm" 
                     className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 
                       transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
-                    onClick={() => window.open(project.links.github, '_blank')}
+                    onClick={() => {
+                      if (project.links.github && project.links.github !== '#') {
+                        window.open(project.links.github, '_blank');
+                      } else {
+                        alert('GitHub repository link not available yet');
+                      }
+                    }}
                   >
                     <Github className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
                     View Code
@@ -212,8 +218,13 @@ const Projects = () => {
                     size="sm" 
                     className="flex-1 hover:border-accent hover:text-accent hover:bg-accent/10 
                       transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
-                    onClick={() => project.links.demo && project.links.demo !== '#' ? window.open(project.links.demo, '_blank') : null}
-                    disabled={!project.links.demo || project.links.demo === '#'}
+                    onClick={() => {
+                      if (project.links.demo && project.links.demo !== '#') {
+                        window.open(project.links.demo, '_blank');
+                      } else {
+                        alert('Demo link not available yet');
+                      }
+                    }}
                   >
                     <ExternalLink className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
                     Demo
