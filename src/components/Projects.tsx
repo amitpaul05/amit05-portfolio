@@ -201,24 +201,23 @@ const Projects = () => {
                     variant="outline" 
                     size="sm" 
                     className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 
-                      transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg"
+                      transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
                     onClick={() => window.open(project.links.github, '_blank')}
                   >
                     <Github className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
-                    Code
+                    View Code
                   </Button>
-                  {project.links.demo && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="flex-1 hover:border-accent hover:text-accent hover:bg-accent/10 
-                        transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg"
-                      onClick={() => window.open(project.links.demo, '_blank')}
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
-                      Demo
-                    </Button>
-                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1 hover:border-accent hover:text-accent hover:bg-accent/10 
+                      transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
+                    onClick={() => project.links.demo && project.links.demo !== '#' ? window.open(project.links.demo, '_blank') : null}
+                    disabled={!project.links.demo || project.links.demo === '#'}
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
+                    Demo
+                  </Button>
                 </div>
               </CardContent>
               
