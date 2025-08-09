@@ -17,26 +17,18 @@ const Hero = () => {
         setIsSticky(scrollPosition >= heroBottom);
       }
 
-      // Scroll spy logic
-      const sections = ['about', 'experience', 'projects', 'certifications'];
-      const scrollPos = window.scrollY + 200; // Offset for viewport center
-      
-      let currentSection = 'hero';
-      
-      for (const sectionId of sections) {
-        const section = document.getElementById(sectionId);
-        if (section) {
-          const sectionTop = section.offsetTop;
-          const sectionBottom = sectionTop + section.offsetHeight;
-          
-          if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
-            currentSection = sectionId;
-            break;
-          }
+      // Scroll spy logic for tabs
+      const tabSection = document.querySelector('[role="tablist"]') as HTMLElement;
+      if (tabSection) {
+        const tabSectionTop = tabSection.offsetTop - 100;
+        const scrollPos = window.scrollY + 200;
+        
+        if (scrollPos >= tabSectionTop) {
+          setActiveSection('tabs');
+        } else {
+          setActiveSection('hero');
         }
       }
-      
-      setActiveSection(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -141,13 +133,16 @@ const Hero = () => {
           }`}>
             <button 
               onClick={() => {
-                const aboutSection = document.getElementById('about');
-                if (aboutSection) {
-                  aboutSection.scrollIntoView({ behavior: 'smooth' });
+                const tabSection = document.querySelector('[role="tablist"]');
+                if (tabSection) {
+                  tabSection.scrollIntoView({ behavior: 'smooth' });
+                  // Trigger about tab
+                  const aboutTab = document.querySelector('[data-value="about"]') as HTMLElement;
+                  if (aboutTab) aboutTab.click();
                 }
               }}
               className={`text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full hover:bg-white/10 ${
-                activeSection === 'about' 
+                activeSection === 'tabs' 
                   ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
@@ -156,13 +151,16 @@ const Hero = () => {
             </button>
             <button 
               onClick={() => {
-                const experienceSection = document.getElementById('experience');
-                if (experienceSection) {
-                  experienceSection.scrollIntoView({ behavior: 'smooth' });
+                const tabSection = document.querySelector('[role="tablist"]');
+                if (tabSection) {
+                  tabSection.scrollIntoView({ behavior: 'smooth' });
+                  // Trigger academic tab
+                  const academicTab = document.querySelector('[data-value="academic"]') as HTMLElement;
+                  if (academicTab) academicTab.click();
                 }
               }}
               className={`text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full hover:bg-white/10 ${
-                activeSection === 'experience' 
+                activeSection === 'tabs' 
                   ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
@@ -171,13 +169,16 @@ const Hero = () => {
             </button>
             <button 
               onClick={() => {
-                const projectsSection = document.getElementById('projects');
-                if (projectsSection) {
-                  projectsSection.scrollIntoView({ behavior: 'smooth' });
+                const tabSection = document.querySelector('[role="tablist"]');
+                if (tabSection) {
+                  tabSection.scrollIntoView({ behavior: 'smooth' });
+                  // Trigger projects tab
+                  const projectsTab = document.querySelector('[data-value="projects"]') as HTMLElement;
+                  if (projectsTab) projectsTab.click();
                 }
               }}
               className={`text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full hover:bg-white/10 ${
-                activeSection === 'projects' 
+                activeSection === 'tabs' 
                   ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
@@ -186,13 +187,16 @@ const Hero = () => {
             </button>
             <button 
               onClick={() => {
-                const certificatesSection = document.getElementById('certifications');
-                if (certificatesSection) {
-                  certificatesSection.scrollIntoView({ behavior: 'smooth' });
+                const tabSection = document.querySelector('[role="tablist"]');
+                if (tabSection) {
+                  tabSection.scrollIntoView({ behavior: 'smooth' });
+                  // Trigger certificates tab
+                  const certificatesTab = document.querySelector('[data-value="certificates"]') as HTMLElement;
+                  if (certificatesTab) certificatesTab.click();
                 }
               }}
               className={`text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full hover:bg-white/10 ${
-                activeSection === 'certifications' 
+                activeSection === 'tabs' 
                   ? 'backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground' 
                   : 'text-foreground/80 hover:text-foreground'
               }`}
