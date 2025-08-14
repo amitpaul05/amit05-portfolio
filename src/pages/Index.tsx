@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import Hero from "@/components/Hero";
-import TabSection from "@/components/TabSection";
+import About from "@/components/About";
+import Skills from "@/components/Skills";
+import Projects from "@/components/Projects";
+import Experience from "@/components/Experience";
+import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import useScrollAnimation from "@/components/ScrollAnimations";
 
@@ -32,7 +36,11 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
       <Hero />
-      <TabSection />
+      <About />
+      <Experience />
+      <Skills />
+      <Projects />
+      <Certifications />
       <Contact />
     </div>
   );
