@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Hero from "@/components/Hero";
 import TabSection from "@/components/TabSection";
 import Contact from "@/components/Contact";
 import useScrollAnimation from "@/components/ScrollAnimations";
@@ -31,7 +30,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
-      {/* <Hero /> */}
       <TabSection />
       <Contact />
     </div>

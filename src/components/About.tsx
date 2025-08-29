@@ -1,6 +1,7 @@
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { MapPin, GraduationCap, Code, Coffee } from "lucide-react";
+import amit from '../assets/amit.webp';
 
 const About = () => {
   return (
@@ -19,7 +20,7 @@ const About = () => {
                   <div className="aspect-[3/4] rounded-xl overflow-hidden bg-muted">
                     {/* Professional photo */}
                     <img 
-                      src="/lovable-uploads/817d24a1-3303-4d66-b1d3-82a710061365.png" 
+                      src={amit}
                       alt="Amit Paul - Backend Developer" 
                       className="w-full h-full object-cover"
                     />

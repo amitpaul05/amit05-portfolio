@@ -1,12 +1,11 @@
 import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { GraduationCap, Book, Award, Calendar, MapPin, Mail, User } from "lucide-react";
-import tomaMadam from '../assets/toma_madam.jpg';
+import tomaMadam from '../assets/toma_madam.webp';
 import kuLogo from '../assets/khulna-university-logo.png';
-import nahidsir from '../assets/nahid_sir.jpg';
-import mizansir from '../assets/mizan_sir.jpeg';
-import amit from '../assets/amit.jpg';
-import bhola from '../assets/bhola.jpeg';
+import nahidsir from '../assets/nahid_sir.webp';
+import mizansir from '../assets/mizan_sir.webp';
+import amit from '../assets/amit.webp';
+import bhola from '../assets/bhola.webp';
 
 
 const Academic = () => {
