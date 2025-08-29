@@ -113,24 +113,27 @@ const Hero = () => {
       </section>
       
       {/* Liquid Glass Navigation Bar */}
-      <div className={`z-50 ${
-        isSticky 
-          ? 'fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl' 
-          : 'flex justify-center -mt-8'
-      }`}>
-        <nav className="
-          backdrop-blur-md bg-gradient-to-r from-background/30 via-background/50 to-background/30 
-          border border-white/20 rounded-full px-4 py-3 md:px-8 md:py-4 shadow-2xl
-          hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-          before:absolute before:inset-0 before:rounded-full 
-          before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent
-          before:blur-sm relative overflow-hidden
-        ">
-          <div className={`flex relative z-10 ${
-            isSticky 
-              ? 'justify-between w-full' 
-              : 'space-x-2 md:space-x-6'
-          }`}>
+      <div
+  className={`z-50 transition-all duration-500 ease-in-out ${
+    isSticky
+      ? 'fixed transition-all top-4 left-1/2 transform -translate-x-1/2 translate-y-0 w-[90%] max-w-4xl opacity-100 duration-500 ease-in-out'
+      : 'relative left-1/2 transform -translate-x-1/2 -translate-y-10 flex justify-center -mt-8 opacity-80 duration-500'
+  }`}
+>
+  <nav className="
+    backdrop-blur-md bg-gradient-to-r from-background/30 via-background/50 to-background/30 
+    border border-white/20 rounded-full px-4 py-3 md:px-8 md:py-4 shadow-2xl
+    hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+    before:absolute before:inset-0 before:rounded-full 
+    before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent
+    before:blur-sm relative overflow-hidden
+    transition-all duration-500
+  ">
+    <div className={`flex relative z-10 ${
+      isSticky 
+        ? 'justify-between w-full' 
+        : 'space-x-2 md:space-x-6'
+    }`}>
             <button 
               onClick={() => {
                 const tabSection = document.querySelector('[role="tablist"]');
