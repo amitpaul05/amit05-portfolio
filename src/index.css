@@ -135,12 +135,14 @@ All colors MUST be HSL.
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    visibility: hidden;
   }
-  
-  .animate-on-scroll:not(.visible) {
-    opacity: 0;
-    transform: translateY(50px);
+
+  .animate-on-scroll.visible {
+    visibility: visible;
+    transform: translateY(0);
   }
+
   
   .slide-on-scroll {
     opacity: 1;

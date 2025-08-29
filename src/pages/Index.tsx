@@ -24,14 +24,14 @@ const Index = () => {
     };
     
     // Setup with delay to ensure components are mounted
-    const timer = setTimeout(setupAnimations, 100);
+    const timer = setTimeout(setupAnimations, 10);
     
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
-      <Hero />
+      {/* <Hero /> */}
       <TabSection />
       <Contact />
     </div>

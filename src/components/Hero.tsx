@@ -41,7 +41,7 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
 
   return (
     <>
-      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-section-bg to-background relative overflow-hidden">
+      <section className="h-screen flex items-center justify-center bg-gradient-to-br from-background via-section-bg to-background relative overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-r from-tech-blue/5 to-tech-cyan/5"></div>
 
