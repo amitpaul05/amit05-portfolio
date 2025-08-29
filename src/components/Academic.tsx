@@ -1,6 +1,13 @@
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { GraduationCap, Book, Award, Calendar, MapPin, Mail, User } from "lucide-react";
+import tomaMadam from '../assets/toma_madam.jpg';
+import kuLogo from '../assets/khulna-university-logo.png';
+import nahidsir from '../assets/nahid_sir.jpg';
+import mizansir from '../assets/mizan_sir.jpeg';
+import amit from '../assets/amit.jpg';
+import bhola from '../assets/bhola.jpeg';
+
 
 const Academic = () => {
   // Education Object
@@ -14,21 +21,21 @@ const education = {
     title: "A Comparative Study of Vision Transformers and Time Series Transformers for Bearing Fault Diagnosis Using PU and CWRU Datasets",
     supervisor: {
       name: "Dr. Rafia Nishat Toma",
-      photo: "/src/assets/toma_madam.jpg",
+      photo: tomaMadam,
       contact: "mailto:rafiatoma@ece.ku.ac.bd",
       portfolio: "https://ku.ac.bd/discipline/ece/faculty/rafiatoma",
       role: "Supervisor"
     },
     member: {
       name: "Prof. Dr. Md. Mizanur Rahman",
-      photo: "/src/assets/mizan_sir.jpeg",
+      photo: mizansir,
       contact: "mailto:mizan.ku@ku.ac.bd",
       portfolio: "https://ku.ac.bd/discipline/ece/faculty/mizan.ku",
       role: "Member"
     },
     externalMember: {
       name: "Prof. Dr. Abdullah-Al Nahid",
-      photo: "/src/assets/nahid_sir.jpg",
+      photo: nahidsir,
       contact: "mailto:nahid.ece.ku@gmail.com",
       portfolio: "https://ku.ac.bd/discipline/ece/faculty/nahid.ece.ku",
       role: "External Member"
@@ -36,14 +43,14 @@ const education = {
     students: [
       {
         name: "Amit Paul",
-        photo: "/src/assets/amit.jpg",
+        photo: amit,
         contact: "mailto:amit210905@gmail.com",
         portfolio: "https://portfolio.example.com",
         role: "Student"
       },
       {
         name: "Bholanath Bala",
-        photo: "src/assets/bhola.jpeg",
+        photo: bhola,
         contact: "mailto:bholanath@example.com",
         portfolio: "https://www.linkedin.com/in/bhola-nath-bala-16064b263/",
         role: "Student"
@@ -136,8 +143,8 @@ const education = {
                   <div className="flex flex-wrap items-center gap-6 text-gray-200 text-sm md:text-base">
                     <div className="flex items-center gap-1">
                       <img 
-                        src="/src/assets/khulna-university-logo.png" 
-                        alt="Khulna University" 
+                        src={kuLogo}
+                        alt="Khulna University"
                         className="h-5 w-5 object-contain"
                       />
                       {education.university}
