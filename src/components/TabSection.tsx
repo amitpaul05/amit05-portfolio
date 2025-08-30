@@ -128,10 +128,13 @@ const TabSection = () => {
               {nextPage && (
                 <button
                   onClick={() => setActiveTab(nextPage)}
-                  className="group relative flex items-center justify-center h-16 w-48 rounded-xl 
+                  className="group relative flex items-center justify-center 
+                            h-16 w-48 rounded-xl 
                             bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 
                             backdrop-blur-lg border border-white/10 text-white font-bold shadow-xl overflow-hidden 
-                            transition-all duration-300 hover:scale-105"
+                            transition-all duration-300 hover:scale-105
+                            md:h-16 md:w-48 md:text-base
+                            h-12 w-32 text-sm"
                 >
                   <span className="absolute left-8 opacity-0 group-hover:opacity-100 transform -translate-x-16 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap font-bold">
                     {nextPage.charAt(0).toUpperCase() + nextPage.slice(1)}
