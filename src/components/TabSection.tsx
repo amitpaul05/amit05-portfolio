@@ -109,10 +109,20 @@ const TabSection = () => {
                 <button
                   onClick={() => setActiveTab(prevPage)}
                   className="group relative flex items-center justify-center 
-                            lg:h-16 lg:w-48 rounded-xl 
-                            bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 
-                            backdrop-blur-lg border border-white/10 text-white font-bold shadow-xl overflow-hidden 
-                            transition-all duration-300 hover:scale-105
+                            lg:h-16 lg:w-48 rounded-2xl 
+                            backdrop-blur-xl 
+                            bg-gradient-to-br from-background/30 via-background/50 to-background/30
+                            border border-white/20 
+                            shadow-2xl 
+                            overflow-hidden 
+                            transition-all duration-300
+                            hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+                            hover:border-primary/30
+                            before:absolute before:inset-0 before:rounded-2xl 
+                            before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent 
+                            before:blur-sm
+                            hover:bg-gradient-to-r hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-pink-500/20
+                            text-white font-bold
                             md:h-16 md:w-48 md:text-base
                             h-14 w-40 text-sm"
                 >
@@ -132,10 +142,20 @@ const TabSection = () => {
                 <button
                   onClick={() => setActiveTab(nextPage)}
                   className="group relative flex items-center justify-center 
-                            lg:h-16 lg:w-48 rounded-xl 
-                            bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 
-                            backdrop-blur-lg border border-white/10 text-white font-bold shadow-xl overflow-hidden 
-                            transition-all duration-300 hover:scale-105
+                            lg:h-16 lg:w-48 rounded-2xl 
+                            backdrop-blur-xl 
+                            bg-gradient-to-br from-background/30 via-background/50 to-background/30
+                            border border-white/20 
+                            shadow-2xl 
+                            overflow-hidden 
+                            transition-all duration-300
+                            hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
+                            hover:border-primary/30
+                            before:absolute before:inset-0 before:rounded-2xl 
+                            before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent 
+                            before:blur-sm
+                            hover:bg-gradient-to-r hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-pink-500/20
+                            text-white font-bold
                             md:h-16 md:w-48 md:text-base
                             h-14 w-40 text-sm"
                 >
