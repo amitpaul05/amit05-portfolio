@@ -126,7 +126,7 @@ const Contact = () => {
                         {social.isLucideIcon ? (
                           <social.icon className="h-5 w-5" />
                         ) : (
-                          <img src={social.iconSrc} alt={social.label} className="h-5 w-5" />
+                          <img src={social.iconSrc} alt={social.label} className="h-6 w-6 filter brightness-0 invert opacity-60" />
                         )}
                         <span className="font-medium">{social.label}</span>
                       </a>

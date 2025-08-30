@@ -31,8 +31,11 @@ const About = () => {
                     Backend Developer
                   </div>
                   
-                  <div className="absolute -top-4 -left-4 bg-card border border-border/50 px-3 py-2 rounded-lg text-sm text-card-foreground shadow-lg animate-float" style={{ animationDelay: '2s' }}>
-                    Django Expert
+                  <div
+                    className="absolute -top-4 -left-4 bg-gradient-to-r from-emerald-900 to-cyan-700 border border-border/50 px-3 py-2 rounded-lg text-sm text-white shadow-lg animate-float"
+                    style={{ animationDelay: '2s' }}
+                  >
+                    AI Enthusiast
                   </div>
                 </div>
               </div>
@@ -47,13 +50,11 @@ const About = () => {
                 <p className="text-lg text-muted-foreground leading-relaxed mb-6">
                   I'm a passionate Backend Developer with a strong foundation in Django and Python, 
                   specializing in building scalable web applications and RESTful APIs. My experience 
-                  spans from developing LMS systems to creating innovative solutions like face recognition 
+                  spans from developing Learning Management Systems to creating innovative solutions like face recognition 
                   payment systems.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  Currently contributing at Idlewild Digital, where I've taken ownership of 75% of a 
-                  feature-rich LMS backend architecture. I believe in clean code, modular design, and 
-                  solving complex problems with elegant solutions.
+                  At Idlewild Digital, I engineered 75% of the LMS (Scholarshone) backend architecture, optimized workflows for the import-export platform (Crabarian), and delivered scalable solutions across projects while also contributing to frontend features with Vue.js.
                 </p>
               </div>
               
