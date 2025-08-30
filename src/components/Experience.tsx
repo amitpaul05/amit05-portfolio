@@ -32,10 +32,10 @@ const Experience = () => {
     },
     {
       title: "Data Science & Engineering Trainee",
-      company: "Industrial Attachment Program",
+      company: "Grameenphone Ltd.",
       location: "Dhaka, Bangladesh",
       period: "Jan 2025 - Feb 2025",
-      type: "Training",
+      type: "Industrial Attachment Program",
       achievements: [
         "Designed and prototyped a chatbot using dummy telecom FAQs and REST APIs for user query simulation",
         "Built simple ETL pipelines to ingest mock call data records and visualize using matplotlib and Power BI",
