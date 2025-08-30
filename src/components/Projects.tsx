@@ -12,10 +12,10 @@ const Projects = () => {
       technologies: ["Web Platform", "Education Technology"]
     },
     {
-      title: "Crabarian Exporter UI",
+      title: "Exporter Crabarian",
       description: "Export management user interface system",
       url: "http://exporter-ui.crabarian.com/",
-      technologies: ["UI/UX", "Export Management"]
+      technologies: ["Import Export Management"]
     }
   ];
 
