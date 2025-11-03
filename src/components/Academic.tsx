@@ -43,7 +43,7 @@ const education = {
       {
         name: "Amit Paul",
         photo: amit,
-        contact: "mailto:amit210905@gmail.com",
+        contact: "mailto:amit.paul.ece@gmail.com",
         portfolio: "https://amitpaul-portfolio.netlify.app/",
         role: "Student"
       },
