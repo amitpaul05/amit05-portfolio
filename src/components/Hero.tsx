@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
+import resume from '../assets/Amit_Paul_s_Resume.pdf';
 
 interface HeroProps {
   activeTab: string;
@@ -63,7 +64,7 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
                 variant="default"
                 size="lg"
                 className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
-                onClick={() => window.open("mailto:amit210905@gmail.com", "_blank")}
+                onClick={() => window.open("mailto:amit.paul.ece@gmail.com", "_blank")}
               >
                 <Mail className="mr-2 h-4 w-4" />
                 Contact Me
@@ -74,8 +75,7 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
                 className="hover:border-primary hover:text-primary transition-all duration-300"
                 onClick={() =>
                   window.open(
-                    "https://drive.google.com/drive/folders/1CslS5qhOR0kxTJhxq1ot0uOKi-6Z_MCQ?usp=sharing",
-                    "_blank"
+                    resume
                   )
                 }
               >
