@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
 import resume from '../assets/Amit_Paul_s_Resume.pdf';
+import GlassSurface from "./GlassSurface";
 
 interface HeroProps {
   activeTab: string;
@@ -122,7 +123,7 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
       </section>
 
       {/* Navigation */}
-      <div
+      {/* <div
         className={`z-50 transition-all duration-500 ease-in-out ${
           isSticky
             ? "fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl opacity-100 duration-500 ease-in-out"
@@ -150,7 +151,97 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
             ))}
           </div>
         </nav>
-      </div>
+      </div> */}
+
+
+<div
+  className={`z-50 transition-all duration-500 ease-in-out ${
+    isSticky
+      ? "fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl opacity-100"
+      : "relative left-1/2 transform -translate-x-1/2 -translate-y-10 flex justify-center -mt-8 opacity-80"
+  }`}
+>
+  <nav 
+  className="relative px-4 py-3 md:px-8 md:py-4 rounded-full shadow-2xl overflow-hidden transition-all duration-500"
+  >
+    
+    {/* FluidGlass background layer */}
+    <div className="absolute inset-0 pointer-events-none z-0">
+      <GlassSurface width="100%" height="100%" className="shadow-lg"
+        borderRadius={50}
+        borderWidth={0}
+        brightness={50}
+        opacity={0.93}
+        blur={10}
+        displace={.50}
+        backgroundOpacity={0.1}
+        saturation={1}
+        distortionScale={180}
+        redOffset={0}
+        greenOffset={10}
+        blueOffset={20}
+      />
+    </div>
+
+    {/* Your existing nav content untouched */}
+<div
+  className={`relative z-10 flex ${
+    isSticky ? "justify-between w-full" : "space-x-2 md:space-x-6"
+  }`}
+>
+  {["about", "academic", "projects", "certificates"].map((tab) => {
+    const isActive = activeTab === tab;
+
+    return isActive ? (
+      <GlassSurface
+        key={tab}
+        height="100%"
+        width="20%"
+        borderRadius={50}
+        borderWidth={0}
+        brightness={50}
+        opacity={0.93}
+        blur={11}
+        displace={5}
+        backgroundOpacity={0.1}
+        saturation={1}
+        distortionScale={-90}
+        redOffset={0}
+        greenOffset={10}
+        blueOffset={20}
+        style={{
+    boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(247, 7, 7, 0.1)',
+    transition: 'all 0.3s ease',
+  }}
+      >
+        <button
+          onClick={() => setActiveTab(tab)}
+          className="text-xs md:text-base font-medium px-2 py-1 md:px-3 md:py-2"
+        >
+          {tab.charAt(0).toUpperCase() + tab.slice(1)}
+        </button>
+      </GlassSurface>
+    ) : (
+      <button
+        key={tab}
+        onClick={() => setActiveTab(tab)}
+        className="text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full text-foreground/80 hover:text-foreground"
+      >
+        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+      </button>
+    );
+  })}
+</div>
+
+  </nav>
+</div>
+
+
+
+
+
+
     </>
   );
 };
