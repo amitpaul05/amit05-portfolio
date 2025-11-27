@@ -124,111 +124,86 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
 
       {/* Navigation */}
 
-<div
-  className={`z-50 transition-all duration-500 ease-in-out ${
-    isSticky
-      ? "fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl opacity-100"
-      : "relative left-1/2 transform -translate-x-1/2 -translate-y-10 flex justify-center -mt-8 opacity-80"
-  }`}
->
-  <nav 
-  className="relative px-4 py-3 md:px-8 md:py-4 rounded-full shadow-2xl overflow-hidden transition-all duration-500"
-  >
-    
-    <div className="absolute inset-0 pointer-events-none z-0">
-      <GlassSurface width="100%" height="100%" className="shadow-lg"
-        borderRadius={50}
-        borderWidth={0}
-        brightness={50}
-        opacity={0.93}
-        blur={10}
-        displace={.50}
-        backgroundOpacity={0.1}
-        saturation={1}
-        distortionScale={180}
-        redOffset={0}
-        greenOffset={10}
-        blueOffset={20}
-      />
-    </div>
-
-{/* <div
-  className={`relative z-10 flex ${
-    isSticky ? "justify-between w-full" : "space-x-2 md:space-x-6"
-  }`}
->
-  {["about", "academic", "projects", "certificates"].map((tab) => {
-    const isActive = activeTab === tab;
-
-    return isActive ? (
-      <GlassSurface
-        key={tab}
-        height="100%"
-        width="20%"
-        borderRadius={50}
-        borderWidth={0}
-        brightness={50}
-        opacity={0.93}
-        blur={11}
-        displace={5}
-        backgroundOpacity={0.1}
-        saturation={1}
-        distortionScale={-90}
-        redOffset={0}
-        greenOffset={10}
-        blueOffset={20}
-        style={{
-    boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-    backgroundColor: 'rgba(247, 7, 7, 0.1)',
-    transition: 'all 0.3s ease',
-  }}
-      >
-        <button
-          onClick={() => setActiveTab(tab)}
-          className="text-xs md:text-base font-medium px-2 py-1 md:px-3 md:py-2"
+        <div
+          className={`z-50 transition-all duration-500 ease-in-out ${
+            isSticky
+              ? "fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl opacity-100"
+              : "relative left-1/2 transform -translate-x-1/2 -translate-y-10 flex justify-center -mt-8 opacity-80"
+          }`}
         >
-          {tab.charAt(0).toUpperCase() + tab.slice(1)}
-        </button>
-      </GlassSurface>
-    ) : (
-      <button
-        key={tab}
-        onClick={() => setActiveTab(tab)}
-        className="text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full text-foreground/80 hover:text-foreground"
-      >
-        {tab.charAt(0).toUpperCase() + tab.slice(1)}
-      </button>
-    );
-  })}
-</div> */}
-
-<div
-            className={`flex relative z-10 ${
-              isSticky ? "justify-between w-full" : "space-x-2 md:space-x-6"
-            }`}
+          <nav 
+          className="relative px-4 py-3 md:px-8 md:py-4 rounded-full shadow-2xl overflow-hidden transition-all duration-500"
           >
-            {["about", "academic", "projects", "certificates"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full hover:bg-white/10 ${
-                  activeTab === tab
-                    ? "backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground"
-                    : "text-foreground/80 hover:text-foreground"
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </div>
+            
+            <div className="absolute inset-0 pointer-events-none z-0">
+              <GlassSurface width="100%" height="100%" className="shadow-lg"
+                borderRadius={50}
+                borderWidth={0}
+                brightness={50}
+                opacity={0.93}
+                blur={10}
+                displace={.50}
+                backgroundOpacity={0.1}
+                saturation={1}
+                distortionScale={180}
+                redOffset={0}
+                greenOffset={10}
+                blueOffset={20}
+              />
+            </div>
 
-  </nav>
-</div>
+            <div
+              className={`relative z-10 flex ${
+                isSticky ? "justify-between w-full" : "space-x-2 md:space-x-6"
+              }`}
+            >
+              {["about", "academic", "projects", "certificates"].map((tab) => {
+                const isActive = activeTab === tab;
 
+                return isActive ? (
+                  <GlassSurface
+                    key={tab}
+                    height="100%"
+                    width="20%"
+                    borderRadius={50}
+                    borderWidth={0}
+                    brightness={50}
+                    opacity={0.93}
+                    blur={11}
+                    displace={5}
+                    backgroundOpacity={0.1}
+                    saturation={1}
+                    distortionScale={-90}
+                    redOffset={0}
+                    greenOffset={10}
+                    blueOffset={20}
+                    style={{
+                boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
+                backgroundColor: 'rgba(247, 7, 7, 0.1)',
+                transition: 'all 0.3s ease',
+              }}
+                  >
+                    <button
+                      onClick={() => setActiveTab(tab)}
+                      className="text-xs md:text-base font-medium px-2 py-1 md:px-3 md:py-2"
+                    >
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </button>
+                  </GlassSurface>
+                ) : (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className="text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full text-foreground/80 hover:text-foreground"
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                );
+              })}
+            </div>
 
-
-
-
+          </nav>
+        </div>
 
     </>
   );
