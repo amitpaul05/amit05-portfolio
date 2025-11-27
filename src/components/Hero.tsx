@@ -123,36 +123,6 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
       </section>
 
       {/* Navigation */}
-      {/* <div
-        className={`z-50 transition-all duration-500 ease-in-out ${
-          isSticky
-            ? "fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-4xl opacity-100 duration-500 ease-in-out"
-            : "relative left-1/2 transform -translate-x-1/2 -translate-y-10 flex justify-center -mt-8 opacity-80 duration-500"
-        }`}
-      >
-        <nav className="backdrop-blur-md bg-gradient-to-r from-background/30 via-background/50 to-background/30 border border-white/20 rounded-full px-4 py-3 md:px-8 md:py-4 shadow-2xl hover:shadow-[0_0_40px_rgba(255,255,255,0.1)] relative overflow-hidden transition-all duration-500">
-          <div
-            className={`flex relative z-10 ${
-              isSticky ? "justify-between w-full" : "space-x-2 md:space-x-6"
-            }`}
-          >
-            {["about", "academic", "projects", "certificates"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full hover:bg-white/10 ${
-                  activeTab === tab
-                    ? "backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground"
-                    : "text-foreground/80 hover:text-foreground"
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </div>
-        </nav>
-      </div> */}
-
 
 <div
   className={`z-50 transition-all duration-500 ease-in-out ${
@@ -165,7 +135,6 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
   className="relative px-4 py-3 md:px-8 md:py-4 rounded-full shadow-2xl overflow-hidden transition-all duration-500"
   >
     
-    {/* FluidGlass background layer */}
     <div className="absolute inset-0 pointer-events-none z-0">
       <GlassSurface width="100%" height="100%" className="shadow-lg"
         borderRadius={50}
@@ -183,8 +152,7 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
       />
     </div>
 
-    {/* Your existing nav content untouched */}
-<div
+{/* <div
   className={`relative z-10 flex ${
     isSticky ? "justify-between w-full" : "space-x-2 md:space-x-6"
   }`}
@@ -232,7 +200,27 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
       </button>
     );
   })}
-</div>
+</div> */}
+
+<div
+            className={`flex relative z-10 ${
+              isSticky ? "justify-between w-full" : "space-x-2 md:space-x-6"
+            }`}
+          >
+            {["about", "academic", "projects", "certificates"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full hover:bg-white/10 ${
+                  activeTab === tab
+                    ? "backdrop-blur-sm bg-white/20 border border-white/30 shadow-lg text-foreground"
+                    : "text-foreground/80 hover:text-foreground"
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
 
   </nav>
 </div>
