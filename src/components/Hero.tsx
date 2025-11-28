@@ -4,6 +4,8 @@ import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
 import resume from '../assets/Amit_Paul_s_Resume.pdf';
 import GlassSurface from "./GlassSurface";
+import RotatingText from './RotatingText'
+import SplitText from "./SplitText";
 
 interface HeroProps {
   activeTab: string;
@@ -49,12 +51,38 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
 
         <div className="container mx-auto px-6 text-center relative z-10">
           <div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
+            {/* <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
               Amit Paul
-            </h1>
-            <h2 className="text-2xl md:text-3xl text-muted-foreground mb-4">
-              Backend Developer
-            </h2>
+            </h1> */}
+            <SplitText
+              text="AMIT PAUL"
+              className="text-5xl md:text-7xl font-bold mb-6 text-blue-500"
+              delay={100}
+              duration={0.6}
+              ease="power3.out"
+              splitType="chars"
+              from={{ opacity: 0, y: 40 }}
+              to={{ opacity: 1, y: 0 }}
+              threshold={0.1}
+              rootMargin="-100px"
+              textAlign="center"
+            />
+
+
+            <div className="flex justify-center items-center h-8 md:h-10 outline-2 mb-2">
+              <RotatingText
+              texts={['Backend Developer', 'Problem Solver', 'AI Enthusist', 'Cool!']}
+              mainClassName="text-2xl md:text-3xl mb-4 text-muted-foreground rounded-md px-2 w-max duration-300 outline outline-offset-2 outline-emerald-500 text-amber-200 bg-blue-900/10"
+              staggerFrom={"last"}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-120%" }}
+              staggerDuration={0.025}
+              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+              transition={{ type: "spring", damping: 30, stiffness: 400 }}
+              rotationInterval={2000}
+            />
+            </div>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
               Django & Python specialist with expertise in REST APIs, PostgreSQL, and scalable architecture.
               Building robust backend systems and full-stack applications for modern web experiences.
