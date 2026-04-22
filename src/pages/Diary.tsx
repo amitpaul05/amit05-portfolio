@@ -1,9 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getAllEntries, type DiaryEntry } from '@/lib/diary';
-import GlassSurface from '@/components/GlassSurface';
 
 const MOOD_EMOJI: Record<string, string> = {
   motivated: '🔥',
@@ -81,50 +78,17 @@ function EntryCard({ entry }: { entry: DiaryEntry }) {
 }
 
 const Diary = () => {
-  const navigate = useNavigate();
   const entries = getAllEntries();
 
   return (
-    <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
-      {/* Glassmorphic pill nav — matches the portfolio's Hero navbar */}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
-        <nav className="relative px-6 py-3 rounded-full shadow-2xl overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none z-0">
-            <GlassSurface
-              width="100%"
-              height="100%"
-              borderRadius={50}
-              borderWidth={0}
-              brightness={50}
-              opacity={0.93}
-              blur={10}
-              displace={0.5}
-              backgroundOpacity={0.1}
-              saturation={1}
-              distortionScale={-180}
-              redOffset={0}
-              greenOffset={10}
-              blueOffset={20}
-            />
-          </div>
-          <div className="relative z-10 flex items-center justify-between">
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Portfolio
-            </button>
-            <span className="font-diary text-xl font-bold text-foreground">Dev Journal</span>
-            <span className="text-xs md:text-sm text-foreground/60">
-              {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
-            </span>
-          </div>
-        </nav>
-      </div>
-
-      {/* Entry list */}
-      <main className="max-w-2xl mx-auto px-4 pt-24 pb-16 space-y-14">
+    <section>
+      <div className="max-w-2xl mx-auto px-4 pt-6 pb-16 space-y-14">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="font-diary text-3xl font-bold text-foreground">Dev Journal</h1>
+          <span className="text-sm text-muted-foreground">
+            {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
+          </span>
+        </div>
         {entries.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-diary text-xl text-muted-foreground">No entries yet.</p>
@@ -132,8 +96,8 @@ const Diary = () => {
         ) : (
           entries.map((entry) => <EntryCard key={entry.slug} entry={entry} />)
         )}
-      </main>
-    </div>
+      </div>
+    </section>
   );
 };
 

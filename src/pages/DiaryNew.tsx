@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, Eye, EyeOff, CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { commitDiaryEntry } from '@/lib/github';
 import { toast } from 'sonner';
 import GlassSurface from '@/components/GlassSurface';
@@ -72,6 +73,12 @@ const DiaryNew = () => {
   const [showPAT, setShowPAT] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
+
+  function handleBack() {
+    setIsLeaving(true);
+    setTimeout(() => navigate('/diary'), 320);
+  }
 
   const [form, setForm] = useState({
     date: today(),
@@ -153,7 +160,12 @@ const DiaryNew = () => {
     <>
       {showPAT && <PATModal onClose={() => setShowPAT(false)} />}
 
-      <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        animate={isLeaving ? { opacity: 0, x: 50 } : { opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        className="min-h-screen bg-background text-foreground dark overflow-x-hidden"
+      >
         {/* Glassmorphic pill nav */}
         <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
           <nav className="relative px-6 py-3 rounded-full shadow-2xl overflow-hidden">
@@ -177,11 +189,19 @@ const DiaryNew = () => {
             </div>
             <div className="relative z-10 flex items-center justify-between">
               <button
-                onClick={() => navigate('/diary')}
+                onClick={handleBack}
+                disabled={isLeaving}
                 className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
               >
-                <ArrowLeft className="w-4 h-4" />
-                Journal
+                <motion.span
+                  className="flex items-center gap-1.5"
+                  whileHover={{ x: -4 }}
+                  whileTap={{ x: -8 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Journal
+                </motion.span>
               </button>
               <span className="text-xl font-bold text-foreground">New Entry</span>
               <button
@@ -285,7 +305,7 @@ const DiaryNew = () => {
             </div>
           </form>
         </main>
-      </div>
+      </motion.div>
     </>
   );
 };
