@@ -79,6 +79,14 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Diary page */
+    --diary-paper: 25 20% 7%;
+    --diary-rule: 30 15% 20%;
+    --diary-rule-margin: 0 65% 45%;
+    --diary-ink: 35 40% 85%;
+    --diary-ink-muted: 35 20% 50%;
+    --diary-accent: 35 80% 65%;
   }
 
   .dark {
@@ -219,5 +227,53 @@ All colors MUST be HSL.
   .backdrop-blur-custom {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+@layer components {
+  /* Notebook ruled-paper background for diary entries */
+  .diary-paper {
+    background-color: hsl(var(--diary-paper));
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 29px,
+      hsl(var(--diary-rule)) 29px,
+      hsl(var(--diary-rule)) 30px
+    );
+  }
+
+  /* Prose styles for rendered markdown inside diary entries */
+  .diary-prose p { margin-bottom: 0; }
+  .diary-prose p + p { margin-top: 0.5rem; }
+  .diary-prose strong { color: hsl(var(--diary-accent)); font-weight: 700; }
+  .diary-prose ul { list-style-type: disc; padding-left: 1.5rem; }
+  .diary-prose ol { list-style-type: decimal; padding-left: 1.5rem; }
+  .diary-prose li { margin-bottom: 0.125rem; }
+  .diary-prose h1, .diary-prose h2, .diary-prose h3 {
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+    color: hsl(var(--diary-ink));
+  }
+  .diary-prose code {
+    font-family: monospace;
+    font-size: 0.875em;
+    background-color: hsl(var(--diary-rule));
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+  }
+  .diary-prose pre {
+    background-color: hsl(var(--diary-rule));
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+    font-family: monospace;
+    font-size: 0.875rem;
+  }
+  .diary-prose pre code {
+    background: none;
+    padding: 0;
   }
 }

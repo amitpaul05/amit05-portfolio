@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const useScrollAnimation = () => {
+const useScrollAnimation = (deps: unknown[] = []) => {
   const elementsRef = useRef<(HTMLElement | null)[]>([]);
   
   useEffect(() => {
@@ -76,7 +76,7 @@ const useScrollAnimation = () => {
       clearTimeout(fallbackTimer);
       observers.forEach(observer => observer.disconnect());
     };
-  }, []);
+  }, deps);
   
   return { elementsRef };
 };

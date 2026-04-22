@@ -25,7 +25,7 @@ const Projects = () => {
       description: "Full-stack certificate issuance system with Django REST Framework, PostgreSQL backend, and Vue.js frontend for a database course project. Presented to university ICT Cell for potential official implementation.",
       technologies: ["Django", "Django REST", "PostgreSQL", "Vue.js", "Certificate Generation"],
       links: {
-        github: "#",
+        github: "https://github.com/amitpaul05/ku-certificate-portal.git",
         demo: "#"
       },
       featured: true
@@ -203,7 +203,7 @@ const Projects = () => {
                     className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 
                       transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
                     onClick={() => {
-                      if (project.links.github && project.links.github !== '#') {
+                      if (project.links.github) {
                         window.open(project.links.github, '_blank');
                       } else {
                         alert('GitHub repository link not available yet');
