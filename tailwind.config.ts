@@ -72,7 +72,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				diary: {
+					paper: 'hsl(var(--diary-paper))',
+					rule: 'hsl(var(--diary-rule))',
+					'rule-margin': 'hsl(var(--diary-rule-margin))',
+					ink: 'hsl(var(--diary-ink))',
+					'ink-muted': 'hsl(var(--diary-ink-muted))',
+					accent: 'hsl(var(--diary-accent))',
+				},
+			},
+			fontFamily: {
+				diary: ['Patrick Hand', 'cursive'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
