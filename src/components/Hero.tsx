@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
@@ -16,6 +17,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHasScrolled }) => {
   const [isSticky, setIsSticky] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -228,6 +230,12 @@ const Hero: React.FC<HeroProps> = ({ activeTab, setActiveTab, hasScrolled, setHa
                   </button>
                 );
               })}
+              <button
+                onClick={() => navigate('/diary')}
+                className="text-xs md:text-base font-medium transition-all duration-300 hover:scale-105 px-2 py-1 md:px-3 md:py-2 rounded-full text-foreground/80 hover:text-foreground"
+              >
+                Diary
+              </button>
             </div>
 
           </nav>
