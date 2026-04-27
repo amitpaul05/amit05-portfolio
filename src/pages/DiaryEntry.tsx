@@ -12,6 +12,9 @@ const MOOD_EMOJI: Record<string, string> = {
   frustrated: '😤',
   pumped: '⚡',
   reflective: '🤔',
+  relaxed: '😌',
+  happy: '😊',
+  anxious: '😰',
 };
 
 function formatDate(iso: string) {
@@ -44,7 +47,6 @@ const DiaryEntry = () => {
     );
   }
 
-  const moodEmoji = MOOD_EMOJI[entry.mood] ?? '';
 
   return (
     <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
@@ -77,7 +79,7 @@ const DiaryEntry = () => {
               <ArrowLeft className="w-4 h-4" />
               Journal
             </button>
-            <span className="font-diary text-xl font-bold text-foreground">Dev Journal</span>
+            <span className="w-16" />
             <span className="w-16" />
           </div>
         </nav>
@@ -85,49 +87,34 @@ const DiaryEntry = () => {
 
       <main className="max-w-2xl mx-auto px-4 pt-24 pb-16">
         <article className="relative">
-          <div className="diary-paper rounded shadow-2xl relative overflow-hidden">
-            {/* Spiral binding holes */}
-            <div className="absolute left-3 top-0 bottom-0 flex flex-col justify-around py-8 pointer-events-none z-10">
-              {Array.from({ length: 7 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-3.5 h-3.5 rounded-full border-2 border-diary-rule shadow-inner"
-                  style={{ backgroundColor: 'hsl(var(--diary-paper))' }}
-                />
-              ))}
-            </div>
+          <div className="diary-paper rounded shadow-2xl relative h-[1088px] overflow-hidden">
+
+            {/* Red margin rule */}
+            <div
+              className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
+              style={{ left: '3rem', backgroundColor: 'hsl(var(--diary-rule-margin) / 0.55)' }}
+            />
 
             {/* Date badge */}
-            <div className="absolute top-4 right-4 z-10">
-              <span className="font-diary text-sm text-diary-ink-muted inline-block -rotate-2 border border-diary-rule/40 px-2 py-0.5 rounded bg-diary-paper/80 whitespace-nowrap">
+            <div className="absolute top-2 right-5 z-20">
+              <span
+                className="font-diary text-sm text-diary-ink-muted inline-block -rotate-2 border border-diary-rule/40 px-2 py-0 rounded whitespace-nowrap leading-8"
+                style={{ backgroundColor: 'hsl(var(--diary-paper) / 0.9)' }}
+              >
                 {formatDate(entry.date)}
               </span>
             </div>
 
-            <div className="pl-14 pr-6 pt-6 pb-8 relative">
-              {/* Red margin rule */}
-              <div
-                className="absolute top-0 bottom-0 w-px"
-                style={{ left: '3rem', backgroundColor: 'hsl(var(--diary-rule-margin) / 0.55)' }}
-              />
-
-              {/* Mood + tags */}
-              <div className="font-diary text-sm text-diary-ink-muted mb-2 flex flex-wrap items-center gap-2 leading-[1.875rem]">
-                {moodEmoji && <span>{moodEmoji} {entry.mood}</span>}
-                {entry.tags.map((tag) => (
-                  <span key={tag} className="text-xs border border-diary-rule/40 px-1.5 py-px rounded-sm">
-                    #{tag}
-                  </span>
+            <div className="pl-14 pr-10 pt-8 pb-8">
+              {/* Moods */}
+              <div className="font-diary text-sm text-diary-ink-muted flex flex-wrap items-center gap-3 leading-8">
+                {entry.moods.map((m) => (
+                  <span key={m}>{MOOD_EMOJI[m] ?? '•'} {m}</span>
                 ))}
               </div>
 
-              {/* Title */}
-              <h1 className="font-diary text-3xl font-bold text-diary-ink mb-4 leading-[1.875rem] pr-28">
-                {entry.title}
-              </h1>
-
               {/* Body */}
-              <div className="font-diary text-base leading-[1.875rem] text-diary-ink diary-prose">
+              <div className="font-diary text-base leading-8 text-diary-ink diary-prose">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{entry.content}</ReactMarkdown>
               </div>
             </div>

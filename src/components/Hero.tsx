@@ -143,7 +143,7 @@ const Hero: React.FC = () => {
             : "relative left-1/2 transform -translate-x-1/2 -translate-y-10 flex justify-center -mt-8 opacity-80"
         }`}
       >
-        <nav className="relative px-4 py-3 md:px-8 md:py-4 rounded-full shadow-2xl overflow-hidden transition-all duration-500">
+        <nav className="relative px-4 py-2 md:px-8 md:py-2.5 rounded-full shadow-2xl overflow-hidden transition-all duration-500">
           <div className="absolute inset-0 pointer-events-none z-0">
             <GlassSurface
               width="100%"

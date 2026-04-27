@@ -4,14 +4,12 @@ const BRANCH = 'main';
 
 export interface DiaryPayload {
   date: string;
-  title: string;
-  mood: string;
-  tags: string[];
+  moods: string[];
   body: string;
 }
 
-function buildMarkdown({ date, title, mood, tags, body }: DiaryPayload): string {
-  return `---\ndate: ${date}\ntitle: "${title}"\nmood: ${mood}\ntags: [${tags.join(', ')}]\n---\n\n${body}`;
+function buildMarkdown({ date, moods, body }: DiaryPayload): string {
+  return `---\ndate: ${date}\nmoods: [${moods.join(', ')}]\n---\n\n${body}`;
 }
 
 export async function commitDiaryEntry(payload: DiaryPayload, pat: string): Promise<void> {
@@ -27,7 +25,7 @@ export async function commitDiaryEntry(payload: DiaryPayload, pat: string): Prom
   const content = btoa(unescape(encodeURIComponent(buildMarkdown(payload))));
 
   const body: Record<string, string> = {
-    message: `diary: ${payload.date} — ${payload.title}`,
+    message: `diary: ${payload.date}`,
     content,
     branch: BRANCH,
   };

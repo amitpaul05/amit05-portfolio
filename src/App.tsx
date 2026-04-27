@@ -11,6 +11,7 @@ import CertificatesPage from "./pages/CertificatesPage";
 import Diary from "./pages/Diary";
 import DiaryEntry from "./pages/DiaryEntry";
 import DiaryNew from "./pages/DiaryNew";
+import DiaryEdit from "./pages/DiaryEdit";
 import ResumeUpload from "./pages/ResumeUpload";
 import NotFound from "./pages/NotFound";
 
@@ -33,6 +34,8 @@ const App = () => (
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="/diary/new" element={<DiaryNew />} />
+          <Route path="/diary/edit" element={<DiaryEdit />} />
+          <Route path="/diary/:date/edit" element={<DiaryEdit />} />
           <Route path="/admin/resume" element={<ResumeUpload />} />
           <Route path="/diary/:date" element={<DiaryEntry />} />
           <Route path="*" element={<NotFound />} />

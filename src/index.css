@@ -80,13 +80,13 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Diary page */
-    --diary-paper: 25 20% 7%;
-    --diary-rule: 30 15% 20%;
-    --diary-rule-margin: 0 65% 45%;
-    --diary-ink: 35 40% 85%;
-    --diary-ink-muted: 35 20% 50%;
-    --diary-accent: 35 80% 65%;
+    /* Diary page — always cream, never dark-mode-flipped */
+    --diary-paper: 42 40% 93%;
+    --diary-rule: 210 30% 82%;
+    --diary-rule-margin: 0 65% 55%;
+    --diary-ink: 20 10% 8%;
+    --diary-ink-muted: 25 20% 45%;
+    --diary-accent: 215 45% 35%;
   }
 
   .dark {
@@ -231,46 +231,64 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Notebook ruled-paper background for diary entries */
+  /* Sidebar scrolls its own content without showing a scrollbar track */
+  .diary-sidebar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .diary-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
+   * Notebook ruled paper — 32 px grid.
+   * Rule at the top of every 32 px period → lines at y = 0, 32, 64, …
+   * Content area uses pt-8 pb-8 (32 px each), so text starts at y = 32,
+   * and the first text line sits perfectly inside the box 32 → 64.
+   * Page height = 64 px padding + 32 lines × 32 px = 1088 px.
+   */
   .diary-paper {
     background-color: hsl(var(--diary-paper));
     background-image: repeating-linear-gradient(
       to bottom,
-      transparent 0px,
-      transparent 29px,
-      hsl(var(--diary-rule)) 29px,
-      hsl(var(--diary-rule)) 30px
+      hsl(var(--diary-rule)) 0px,
+      hsl(var(--diary-rule)) 1px,
+      transparent 1px,
+      transparent 32px
     );
   }
 
-  /* Prose styles for rendered markdown inside diary entries */
+  /* Prose — every margin must be a multiple of 32 px to stay on the grid */
   .diary-prose p { margin-bottom: 0; }
-  .diary-prose p + p { margin-top: 0.5rem; }
-  .diary-prose strong { color: hsl(var(--diary-accent)); font-weight: 700; }
-  .diary-prose ul { list-style-type: disc; padding-left: 1.5rem; }
-  .diary-prose ol { list-style-type: decimal; padding-left: 1.5rem; }
-  .diary-prose li { margin-bottom: 0.125rem; }
+  .diary-prose p + p { margin-top: 2rem; }
+  .diary-prose strong { color: hsl(var(--diary-ink)); font-weight: 700; }
+  .diary-prose ul { list-style-type: disc; padding-left: 1.5rem; margin: 0; }
+  .diary-prose ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0; }
+  .diary-prose li { margin: 0; line-height: 2rem; }
   .diary-prose h1, .diary-prose h2, .diary-prose h3 {
+    font-size: 1rem;
     font-weight: 700;
-    margin-top: 1rem;
-    margin-bottom: 0.25rem;
+    line-height: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 0;
     color: hsl(var(--diary-ink));
   }
   .diary-prose code {
     font-family: monospace;
     font-size: 0.875em;
-    background-color: hsl(var(--diary-rule));
+    background-color: hsl(var(--diary-rule) / 0.6);
     padding: 0.1em 0.3em;
     border-radius: 3px;
   }
   .diary-prose pre {
-    background-color: hsl(var(--diary-rule));
-    padding: 0.75rem 1rem;
+    background-color: hsl(var(--diary-rule) / 0.6);
+    padding: 0 1rem;
     border-radius: 4px;
     overflow-x: auto;
-    margin: 0.5rem 0;
+    margin: 2rem 0 0;
     font-family: monospace;
     font-size: 0.875rem;
+    line-height: 2rem;
   }
   .diary-prose pre code {
     background: none;

@@ -1,8 +1,6 @@
 export interface DiaryEntry {
   date: string;
-  title: string;
-  mood: string;
-  tags: string[];
+  moods: string[];
   content: string;
   slug: string;
 }
@@ -41,11 +39,14 @@ export function getAllEntries(): DiaryEntry[] {
     .map(([path, raw]) => {
       const { data, content } = parseFrontmatter(raw);
       const slug = path.split('/').pop()!.replace('.md', '');
+      // Support both old `mood: x` (single) and new `moods: [x, y]` (array)
+      const rawMoods = data.moods ?? data.mood;
+      const moods: string[] = Array.isArray(rawMoods)
+        ? (rawMoods as string[]).filter(Boolean)
+        : rawMoods ? [(rawMoods as string)] : [];
       return {
         date: (data.date as string) ?? slug,
-        title: (data.title as string) ?? 'Untitled',
-        mood: (data.mood as string) ?? '',
-        tags: (data.tags as string[]) ?? [],
+        moods,
         content,
         slug,
       };

@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Settings, Eye, EyeOff, CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Settings, Eye, EyeOff, CheckCircle, Loader2, ArrowLeft, Pencil } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { commitDiaryEntry } from '@/lib/github';
+import { getAllEntries, getEntryBySlug, type DiaryEntry } from '@/lib/diary';
 import { toast } from 'sonner';
 import GlassSurface from '@/components/GlassSurface';
 
@@ -14,8 +15,30 @@ const MOOD_EMOJI: Record<string, string> = {
   tired: '😴', frustrated: '😤', relaxed: '😌', happy: '😊', anxious: '😰',
 };
 
-function today() {
-  return new Date().toISOString().split('T')[0];
+function formatDate(iso: string) {
+  return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', {
+    weekday: 'short', month: 'long', day: 'numeric', year: 'numeric',
+  });
+}
+
+function GlassNav({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
+      <nav className="relative px-6 py-2.5 rounded-full shadow-2xl overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <GlassSurface
+            width="100%" height="100%" borderRadius={50} borderWidth={0}
+            brightness={50} opacity={0.93} blur={10} displace={0.5}
+            backgroundOpacity={0.1} saturation={1} distortionScale={-180}
+            redOffset={0} greenOffset={10} blueOffset={20}
+          />
+        </div>
+        <div className="relative z-10 flex items-center justify-between">
+          {children}
+        </div>
+      </nav>
+    </div>
+  );
 }
 
 function PATModal({ onClose }: { onClose: () => void }) {
@@ -35,7 +58,6 @@ function PATModal({ onClose }: { onClose: () => void }) {
         <p className="text-sm text-muted-foreground mb-4">
           Fine-grained PAT · Repository Contents: Read &amp; write
         </p>
-
         <div className="relative">
           <input
             type={show ? 'text' : 'password'}
@@ -52,7 +74,6 @@ function PATModal({ onClose }: { onClose: () => void }) {
             {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
-
         <div className="flex gap-3 mt-4">
           <button
             onClick={save}
@@ -60,10 +81,7 @@ function PATModal({ onClose }: { onClose: () => void }) {
           >
             Save
           </button>
-          <button
-            onClick={onClose}
-            className="text-sm text-muted-foreground hover:text-foreground px-4 py-2 transition-colors"
-          >
+          <button onClick={onClose} className="text-sm text-muted-foreground hover:text-foreground px-4 py-2 transition-colors">
             Cancel
           </button>
         </div>
@@ -72,22 +90,73 @@ function PATModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-const DiaryNew = () => {
+function DiaryEditList() {
+  const navigate = useNavigate();
+  const entries = getAllEntries();
+
+  return (
+    <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
+      <GlassNav>
+        <button
+          onClick={() => navigate('/diary')}
+          className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Journal
+        </button>
+        <span className="text-lg font-bold text-foreground">Edit entries</span>
+        <span className="w-16" />
+      </GlassNav>
+
+      <main className="max-w-2xl mx-auto px-4 pt-24 pb-10">
+        <div className="diary-paper rounded shadow-2xl relative overflow-hidden">
+          <div
+            className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
+            style={{ left: '3rem', backgroundColor: 'hsl(var(--diary-rule-margin) / 0.55)' }}
+          />
+          <div className="pl-14 pr-10 pt-8 pb-8">
+            {entries.length === 0 ? (
+              <p className="font-diary text-diary-ink-muted leading-8">No entries yet.</p>
+            ) : (
+              entries.map((entry) => (
+                <div
+                  key={entry.slug}
+                  className="flex items-center justify-between border-b border-diary-rule/40 last:border-0"
+                >
+                  <div className="leading-8">
+                    <span className="font-diary text-sm text-diary-ink">{formatDate(entry.date)}</span>
+                    <span className="font-diary text-xs text-diary-ink-muted ml-2">
+                      {entry.moods.map((m) => MOOD_EMOJI[m] ?? '•').join(' ')}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => navigate(`/diary/${entry.slug}/edit`)}
+                    className="font-diary text-xs text-diary-ink-muted hover:text-diary-ink transition-colors flex items-center gap-1 leading-8"
+                  >
+                    <Pencil className="w-3 h-3" />
+                    edit
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
   const navigate = useNavigate();
   const [showPAT, setShowPAT] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
-  function handleBack() {
-    setIsLeaving(true);
-    setTimeout(() => navigate('/diary'), 320);
-  }
-
   const [form, setForm] = useState({
-    date: today(),
-    moods: ['motivated'] as string[],
-    body: '',
+    date: entry.date,
+    moods: entry.moods.length ? entry.moods : ['motivated'],
+    body: entry.content,
   });
 
   function set(field: string, value: string) {
@@ -101,29 +170,20 @@ const DiaryNew = () => {
     }));
   }
 
+  function handleBack() {
+    setIsLeaving(true);
+    setTimeout(() => navigate('/diary/edit'), 320);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const pat = localStorage.getItem(PAT_KEY);
-    if (!pat) {
-      setShowPAT(true);
-      return;
-    }
-
-    if (!form.body.trim()) {
-      toast.error('Entry body is required');
-      return;
-    }
+    if (!pat) { setShowPAT(true); return; }
+    if (!form.body.trim()) { toast.error('Entry body is required'); return; }
 
     setSubmitting(true);
     try {
-      await commitDiaryEntry(
-        {
-          date: form.date,
-          moods: form.moods,
-          body: form.body.trim(),
-        },
-        pat,
-      );
+      await commitDiaryEntry({ date: form.date, moods: form.moods, body: form.body.trim() }, pat);
       setDone(true);
     } catch (err) {
       toast.error((err as Error).message ?? 'Commit failed');
@@ -137,24 +197,16 @@ const DiaryNew = () => {
       <div className="min-h-screen bg-background text-foreground dark flex items-center justify-center">
         <div className="text-center space-y-4 px-6">
           <CheckCircle className="w-12 h-12 text-diary-accent mx-auto" />
-          <p className="text-2xl font-bold text-diary-ink">Entry committed!</p>
+          <p className="text-2xl font-bold text-diary-ink">Entry updated!</p>
           <p className="text-base text-diary-ink-muted">
-            Netlify will rebuild in ~1 min and your entry will go live.
+            Netlify will rebuild in ~1 min and your changes will go live.
           </p>
-          <div className="flex gap-4 justify-center mt-6">
-            <button
-              onClick={() => { setDone(false); setForm({ date: today(), moods: ['motivated'], body: '' }); }}
-              className="text-base text-diary-ink-muted hover:text-diary-ink underline transition-colors"
-            >
-              Write another
-            </button>
-            <button
-              onClick={() => navigate('/diary')}
-              className="text-base text-diary-ink-muted hover:text-diary-ink underline transition-colors"
-            >
-              View journal
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/diary/edit')}
+            className="text-base text-diary-ink-muted hover:text-diary-ink underline transition-colors"
+          >
+            Back to entries
+          </button>
         </div>
       </div>
     );
@@ -170,66 +222,40 @@ const DiaryNew = () => {
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className="min-h-screen bg-background text-foreground dark overflow-x-hidden"
       >
-        {/* Glassmorphic pill nav */}
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
-          <nav className="relative px-6 py-3 rounded-full shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <GlassSurface
-                width="100%"
-                height="100%"
-                borderRadius={50}
-                borderWidth={0}
-                brightness={50}
-                opacity={0.93}
-                blur={10}
-                displace={0.5}
-                backgroundOpacity={0.1}
-                saturation={1}
-                distortionScale={-180}
-                redOffset={0}
-                greenOffset={10}
-                blueOffset={20}
-              />
-            </div>
-            <div className="relative z-10 flex items-center justify-between">
-              <button
-                onClick={handleBack}
-                disabled={isLeaving}
-                className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
-              >
-                <motion.span
-                  className="flex items-center gap-1.5"
-                  whileHover={{ x: -4 }}
-                  whileTap={{ x: -8 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Journal
-                </motion.span>
-              </button>
-              <span className="text-xl font-bold text-foreground">New Entry</span>
-              <button
-                onClick={() => setShowPAT(true)}
-                className="text-foreground/60 hover:text-foreground transition-colors"
-                title="GitHub token settings"
-              >
-                <Settings className="w-5 h-5" />
-              </button>
-            </div>
-          </nav>
-        </div>
+        <GlassNav>
+          <button
+            onClick={handleBack}
+            disabled={isLeaving}
+            className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
+          >
+            <motion.span
+              className="flex items-center gap-1.5"
+              whileHover={{ x: -4 }}
+              whileTap={{ x: -8 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Entries
+            </motion.span>
+          </button>
+          <span className="text-xl font-bold text-foreground">Edit Entry</span>
+          <button
+            onClick={() => setShowPAT(true)}
+            className="text-foreground/60 hover:text-foreground transition-colors"
+            title="GitHub token settings"
+          >
+            <Settings className="w-5 h-5" />
+          </button>
+        </GlassNav>
 
         <main className="max-w-2xl mx-auto px-4 pt-24 pb-10">
           <form onSubmit={handleSubmit}>
             <div className="diary-paper rounded shadow-2xl relative overflow-hidden">
-              {/* Red margin rule */}
               <div
                 className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
                 style={{ left: '3rem', backgroundColor: 'hsl(var(--diary-rule-margin) / 0.55)' }}
               />
-
               <div className="pl-14 pr-10 pt-8 pb-8">
-                {/* Date */}
                 <div className="leading-8">
                   <input
                     type="date"
@@ -238,8 +264,6 @@ const DiaryNew = () => {
                     className="text-sm text-diary-ink-muted bg-transparent border-b border-diary-rule/40 outline-none focus:border-diary-accent cursor-pointer leading-8"
                   />
                 </div>
-
-                {/* Mood toggles — pick as many as apply */}
                 <div className="flex flex-wrap gap-2 leading-8">
                   {MOODS.map((m) => (
                     <button
@@ -256,8 +280,6 @@ const DiaryNew = () => {
                     </button>
                   ))}
                 </div>
-
-                {/* Body */}
                 <textarea
                   value={form.body}
                   onChange={(e) => set('body', e.target.value)}
@@ -268,8 +290,6 @@ const DiaryNew = () => {
                 />
               </div>
             </div>
-
-            {/* Submit */}
             <div className="mt-6 flex justify-end">
               <button
                 type="submit"
@@ -277,7 +297,7 @@ const DiaryNew = () => {
                 className="text-lg px-8 py-2 rounded border border-diary-accent/50 text-diary-ink bg-diary-accent/10 hover:bg-diary-accent/20 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                {submitting ? 'Committing...' : 'Commit entry'}
+                {submitting ? 'Saving...' : 'Save changes'}
               </button>
             </div>
           </form>
@@ -285,6 +305,29 @@ const DiaryNew = () => {
       </motion.div>
     </>
   );
+}
+
+const DiaryEdit = () => {
+  const { date } = useParams<{ date?: string }>();
+  const navigate = useNavigate();
+
+  if (!date) return <DiaryEditList />;
+
+  const entry = getEntryBySlug(date);
+  if (!entry) {
+    return (
+      <div className="min-h-screen bg-background text-foreground dark flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <p className="text-xl text-muted-foreground">Entry not found.</p>
+          <button onClick={() => navigate('/diary/edit')} className="text-muted-foreground hover:text-foreground underline">
+            ← Back to entries
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return <DiaryEditForm entry={entry} />;
 };
 
-export default DiaryNew;
+export default DiaryEdit;

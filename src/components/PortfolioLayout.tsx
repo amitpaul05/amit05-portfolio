@@ -122,7 +122,9 @@ const PortfolioLayout = () => {
         </div>
       )}
 
-      <Contact />
+      <div id="contact-section">
+        <Contact />
+      </div>
     </div>
   );
 };
