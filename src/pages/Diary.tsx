@@ -1,5 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useRef, useState, useEffect, type CSSProperties } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getAllEntries, type DiaryEntry } from '@/lib/diary';
@@ -125,28 +124,43 @@ function EntryCard({ entry }: { entry: DiaryEntry }) {
   );
 }
 
+const NAVBAR_HEIGHT = 64;
+
+type SidebarState = 'pre' | 'fixed' | 'unlocked';
+
 const Diary = () => {
   const entries = getAllEntries();
   const groups = groupByMonth(entries);
   const sectionRef = useRef<HTMLElement>(null);
-  const [sidebarState, setSidebarState] = useState<'pre' | 'fixed' | 'gone'>('pre');
+  const [sidebarState, setSidebarState] = useState<SidebarState>('pre');
+  const [unlockedTop, setUnlockedTop] = useState(0);
+  const prevStateRef = useRef<SidebarState>('pre');
 
   useEffect(() => {
-    const NAVBAR_BOTTOM = 64;
-
     function update() {
       if (!sectionRef.current) return;
       const sectionTop = sectionRef.current.getBoundingClientRect().top;
       const contact = document.getElementById('contact-section');
       const contactTop = contact ? contact.getBoundingClientRect().top : Infinity;
 
-      if (sectionTop > NAVBAR_BOTTOM) {
-        setSidebarState('pre');
+      let next: SidebarState;
+      if (sectionTop > NAVBAR_HEIGHT) {
+        next = 'pre';
       } else if (contactTop >= window.innerHeight) {
-        setSidebarState('fixed');
+        next = 'fixed';
       } else {
-        setSidebarState('gone');
+        next = 'unlocked';
       }
+
+      // Compute the absolute offset only on the transition into 'unlocked',
+      // so the sidebar appears to continue from its locked position and
+      // then drifts away naturally with the page as you scroll into the footer.
+      if (next === 'unlocked' && prevStateRef.current !== 'unlocked') {
+        setUnlockedTop(NAVBAR_HEIGHT - sectionTop);
+      }
+
+      prevStateRef.current = next;
+      setSidebarState(next);
     }
 
     window.addEventListener('scroll', update, { passive: true });
@@ -158,24 +172,21 @@ const Diary = () => {
     };
   }, []);
 
+  const sidebarStyle: CSSProperties =
+    sidebarState === 'fixed'
+      ? { position: 'fixed', top: NAVBAR_HEIGHT, left: 32 }
+      : sidebarState === 'unlocked'
+      ? { position: 'absolute', top: unlockedTop, left: 32 }
+      : { position: 'absolute', top: 0, left: 32 };
+
   return (
     <section ref={sectionRef} className="relative">
-      <AnimatePresence>
-        {sidebarState !== 'gone' && (
-          <motion.aside
-            key="diary-sidebar"
-            exit={{ y: -24, opacity: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            className={`hidden xl:block w-28 z-40 diary-sidebar max-h-[calc(100vh-4rem)] overflow-y-auto ${
-              sidebarState === 'pre'
-                ? 'absolute left-8 top-0'
-                : 'fixed top-16 left-8'
-            }`}
-          >
-            <SidebarList groups={groups} />
-          </motion.aside>
-        )}
-      </AnimatePresence>
+      <aside
+        className="hidden xl:block w-28 z-40 diary-sidebar max-h-[calc(100vh-4rem)] overflow-y-auto"
+        style={sidebarStyle}
+      >
+        <SidebarList groups={groups} />
+      </aside>
       <div className="max-w-[860px] mx-auto px-4 pt-6 pb-16 space-y-16">
         {entries.length === 0 ? (
           <div className="text-center py-24">
