@@ -19,7 +19,7 @@ const PortfolioLayout = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      document.querySelectorAll('section').forEach((section, i) => {
+      document.querySelectorAll('section:not([data-no-animate])').forEach((section, i) => {
         section.classList.add('animate-on-scroll');
         if (i % 2 === 0) section.classList.add('slide-on-scroll');
       });

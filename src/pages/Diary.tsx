@@ -3,6 +3,36 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getAllEntries, type DiaryEntry } from '@/lib/diary';
 
+const SKELETON_WIDTHS = ['90%','85%','95%','70%','80%','88%','75%','92%','65%','85%','90%','72%','88%','60%','78%'];
+
+function SkeletonCard() {
+  return (
+    <div className="diary-paper rounded shadow-2xl relative h-[1088px] overflow-hidden">
+      <div
+        className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
+        style={{ left: '3rem', backgroundColor: 'hsl(var(--diary-rule-margin) / 0.55)' }}
+      />
+      <div className="absolute top-2 right-5 z-20">
+        <div className="diary-shimmer-bar h-8 w-36 rounded" />
+      </div>
+      <div className="pl-14 pr-10 pt-8 pb-8">
+        <div className="flex items-center gap-3 h-8">
+          <div className="diary-shimmer-bar h-4 w-16 rounded" />
+          <div className="diary-shimmer-bar h-4 w-20 rounded" />
+          <div className="diary-shimmer-bar h-4 w-14 rounded" />
+        </div>
+        <div>
+          {SKELETON_WIDTHS.map((w, i) => (
+            <div key={i} className="flex items-center h-8">
+              <div className="diary-shimmer-bar h-4 rounded" style={{ width: w }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const MOOD_EMOJI: Record<string, string> = {
   motivated: '🔥',
   focused: '🎯',
@@ -135,6 +165,12 @@ const Diary = () => {
   const [sidebarState, setSidebarState] = useState<SidebarState>('pre');
   const [unlockedTop, setUnlockedTop] = useState(0);
   const prevStateRef = useRef<SidebarState>('pre');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     function update() {
@@ -180,7 +216,7 @@ const Diary = () => {
       : { position: 'absolute', top: 0, left: 32 };
 
   return (
-    <section ref={sectionRef} className="relative">
+    <section ref={sectionRef} className="relative" data-no-animate>
       <aside
         className="hidden xl:block w-28 z-40 diary-sidebar max-h-[calc(100vh-4rem)] overflow-y-auto"
         style={sidebarStyle}
@@ -188,7 +224,12 @@ const Diary = () => {
         <SidebarList groups={groups} />
       </aside>
       <div className="max-w-[860px] mx-auto px-4 pt-6 pb-16 space-y-16">
-        {entries.length === 0 ? (
+        {loading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : entries.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-diary text-xl text-muted-foreground">No entries yet.</p>
           </div>

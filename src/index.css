@@ -228,6 +228,11 @@ All colors MUST be HSL.
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
+
+  @keyframes diary-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
 }
 
 @layer components {
@@ -238,6 +243,17 @@ All colors MUST be HSL.
   }
   .diary-sidebar::-webkit-scrollbar {
     display: none;
+  }
+
+  .diary-shimmer-bar {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--diary-rule) / 0.5) 25%,
+      hsl(var(--diary-rule))        50%,
+      hsl(var(--diary-rule) / 0.5) 75%
+    );
+    background-size: 200% 100%;
+    animation: diary-shimmer 1.5s linear infinite;
   }
 
   /*
