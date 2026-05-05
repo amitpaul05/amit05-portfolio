@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, type CSSProperties } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { getAllEntries, type DiaryEntry } from '@/lib/diary';
 
 const SKELETON_WIDTHS = ['90%','85%','95%','70%','80%','88%','75%','92%','65%','85%','90%','72%','88%','60%','78%'];
@@ -82,28 +83,70 @@ function scrollToEntry(slug: string) {
   document.getElementById(`entry-${slug}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function SidebarList({ groups }: { groups: Record<string, DiaryEntry[]> }) {
+function SidebarList({
+  groups,
+  expandedMonth,
+  activeSlug,
+  onMonthClick,
+}: {
+  groups: Record<string, DiaryEntry[]>;
+  expandedMonth: string;
+  activeSlug: string;
+  onMonthClick: (month: string) => void;
+}) {
   return (
-    <div className="space-y-5">
-      {Object.entries(groups).map(([monthKey, monthEntries]) => (
-        <div key={monthKey}>
-          <p className="text-[11px] font-semibold text-muted-foreground/60 uppercase tracking-widest mb-2">
-            {formatMonthLabel(monthKey)}
-          </p>
-          <ul className="space-y-1.5">
-            {monthEntries.map((entry) => (
-              <li key={entry.slug}>
-                <button
-                  onClick={() => scrollToEntry(entry.slug)}
-                  className="font-diary text-sm text-muted-foreground hover:text-foreground transition-colors w-full text-left leading-snug"
-                >
-                  {formatShortDate(entry.date)}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="space-y-3">
+      {Object.entries(groups).map(([monthKey, monthEntries]) => {
+        const isOpen = monthKey === expandedMonth;
+        return (
+          <div key={monthKey}>
+            <button
+              onClick={() => onMonthClick(monthKey)}
+              className={`flex items-center justify-between w-full text-left px-2 py-1 rounded transition-colors duration-200 ${
+                isOpen ? 'bg-white/10' : 'hover:bg-white/5'
+              }`}
+            >
+              <span
+                className={`text-[11px] font-semibold uppercase tracking-widest transition-colors duration-200 ${
+                  isOpen ? 'text-muted-foreground/90' : 'text-muted-foreground/40'
+                }`}
+              >
+                {formatMonthLabel(monthKey)}
+              </span>
+              <ChevronDown
+                className={`w-3 h-3 shrink-0 transition-transform duration-200 ${
+                  isOpen ? 'rotate-0 text-muted-foreground/60' : '-rotate-90 text-muted-foreground/30'
+                }`}
+              />
+            </button>
+            <div
+              className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-in-out ${
+                isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+              }`}
+            >
+              <ul className="min-h-0 overflow-hidden space-y-1.5 mt-1 ml-3 pl-2 border-l border-muted-foreground/20">
+                {monthEntries.map((entry) => (
+                  <li key={entry.slug}>
+                    <button
+                      onClick={() => scrollToEntry(entry.slug)}
+                      className={`font-diary text-sm w-full text-left leading-snug flex items-center gap-1 px-1 py-0.5 rounded transition-colors duration-200 ${
+                        entry.slug === activeSlug
+                          ? 'bg-white/10 text-foreground'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                      }`}
+                    >
+                      <ChevronRight className={`w-2.5 h-2.5 shrink-0 transition-colors duration-200 ${
+                        entry.slug === activeSlug ? 'text-muted-foreground/70' : 'text-muted-foreground/30'
+                      }`} />
+                      {formatShortDate(entry.date)}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -166,11 +209,34 @@ const Diary = () => {
   const [unlockedTop, setUnlockedTop] = useState(0);
   const prevStateRef = useRef<SidebarState>('pre');
   const [loading, setLoading] = useState(true);
+  const [expandedMonth, setExpandedMonth] = useState(() => entries[0]?.date.slice(0, 7) ?? '');
+  const [activeSlug, setActiveSlug] = useState(() => entries[0]?.slug ?? '');
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    if (loading) return;
+    const observer = new IntersectionObserver(
+      (changes) => {
+        const entering = changes
+          .filter(c => c.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (entering.length === 0) return;
+        const slug = entering[0].target.id.replace('entry-', '');
+        const found = entries.find(e => e.slug === slug);
+        if (found) {
+          setExpandedMonth(found.date.slice(0, 7));
+          setActiveSlug(found.slug);
+        }
+      },
+      { rootMargin: `-${NAVBAR_HEIGHT}px 0px -30% 0px`, threshold: 0 },
+    );
+    document.querySelectorAll('article[id^="entry-"]').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, [loading]);
 
   useEffect(() => {
     function update() {
@@ -221,7 +287,7 @@ const Diary = () => {
         className="hidden xl:block w-28 z-40 diary-sidebar max-h-[calc(100vh-4rem)] overflow-y-auto"
         style={sidebarStyle}
       >
-        <SidebarList groups={groups} />
+        <SidebarList groups={groups} expandedMonth={expandedMonth} activeSlug={activeSlug} onMonthClick={setExpandedMonth} />
       </aside>
       <div className="max-w-[860px] mx-auto px-4 pt-6 pb-16 space-y-16">
         {loading ? (
