@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, type CSSProperties } from 'react';
+import { useRef, useState, useEffect, useMemo, type CSSProperties } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronDown, ChevronRight } from 'lucide-react';
@@ -202,8 +202,8 @@ const NAVBAR_HEIGHT = 64;
 type SidebarState = 'pre' | 'fixed' | 'unlocked';
 
 const Diary = () => {
-  const entries = getAllEntries();
-  const groups = groupByMonth(entries);
+  const entries = useMemo(() => getAllEntries(), []);
+  const groups = useMemo(() => groupByMonth(entries), [entries]);
   const sectionRef = useRef<HTMLElement>(null);
   const [sidebarState, setSidebarState] = useState<SidebarState>('pre');
   const [unlockedTop, setUnlockedTop] = useState(0);

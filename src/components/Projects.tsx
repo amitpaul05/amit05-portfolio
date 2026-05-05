@@ -126,10 +126,7 @@ const Projects = () => {
                   variant="outline" 
                   size="sm" 
                   className="hover:border-primary hover:text-primary relative z-20"
-                  onClick={() => {
-                    console.log('Visiting project:', project.url);
-                    window.open(project.url, '_blank');
-                  }}
+                  onClick={() => window.open(project.url, '_blank')}
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Visit Project
