@@ -153,14 +153,14 @@ const Hero: React.FC = () => {
               borderWidth={0}
               brightness={50}
               opacity={0.93}
-              blur={10}
+              blur={45}
               displace={0.50}
               backgroundOpacity={0.1}
               saturation={1}
-              distortionScale={-180}
+              distortionScale={-30}
               redOffset={0}
-              greenOffset={10}
-              blueOffset={20}
+              greenOffset={0}
+              blueOffset={0}
             />
           </div>
 

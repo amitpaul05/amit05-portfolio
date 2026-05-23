@@ -5,11 +5,25 @@ import { Calendar, MapPin, Building } from "lucide-react";
 const Experience = () => {
   const experiences = [
     {
-      title: "Backend Developer",
+      title: "Software Engineer",
       company: "Idlewild Digital",
       location: "Dhaka, Bangladesh",
-      period: "Jan 2024 - Present",
+      period: "Mar 2026 - Present",
       type: "Full-time",
+      achievements: [
+        "Dockerized and redeployed multiple production Django projects (scholarstone.academy, govara, sikago, smallslive) across AWS, GCP, and VPS — resolved container startup ordering issues at the infrastructure level without modifying application code",
+        "Refactored Stripe payment flow on SmallsLive (a legacy Django ticketing platform for 3 NYC jazz venues: Smalls, Mezzrow, JazzCultural) to support 3DS authentication — create payment method → pass method ID to confirmation page → create payment intent via API call → 3DS challenge → capture",
+        "Architecting AYO, an LLM chat platform for students: migrated chat storage from LiteLLM middleware into LibreChat to reduce middleware dependency and improve reliability, integrated Keycloak SSO with JWT expiry check and refresh-retry flow, and built media upload APIs aligned with LibreChat's payload structure",
+        "Built a streaming CSV export pipeline in AYO using Python generators to avoid memory overhead on large conversation datasets — resolved N+1 queries via selective prefetching, added flexible filtering (model, email, date), and refactored export logic into dedicated model managers"
+      ],
+      technologies: ["Docker", "AWS", "GCP", "VPS", "Django", "Stripe", "LibreChat", "LiteLLM", "Keycloak", "PostgreSQL"]
+    },
+    {
+      title: "Backend Developer",
+      company: "Idlewild Digital",
+      location: "Remote",
+      period: "Jan 2024 - Feb 2026",
+      type: "Part-time (Remote)",
       achievements: [
         "Designed and developed microservice architecture (75% ownership) for a feature-rich LMS using Django REST Framework, with fine-grained permission control and modular API structure",
         "Implemented real-time notification tracking and automated certificate generation with WeasyPrint, enhancing user engagement and admin efficiency",

@@ -1,20 +1,43 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink, Lock } from "lucide-react";
 
 const Projects = () => {
   const workProjects = [
     {
+      title: "AYO",
+      description: "LLM-powered chat platform for students. Architected chat storage directly in LibreChat (migrated from LiteLLM middleware), integrated Keycloak SSO with JWT refresh-retry flow, built media upload APIs, and shipped a streaming CSV export pipeline with generator-based responses and N+1-free queries.",
+      url: null,
+      screenshot: "/project-screenshots/ayo.png",
+      technologies: ["Django", "LibreChat", "LiteLLM", "Keycloak", "PostgreSQL"]
+    },
+    {
+      title: "Govara",
+      description: "AI-powered governance and compliance SaaS platform. Companies run self-audits against frameworks (ISO 27001, NIST AIRM), upload certifications for independent auditor review, and distribute them to stakeholders. Features Stripe subscription billing, a GPT-4o-mini governance assistant, Celery-based async tasks, and a public company directory.",
+      url: "https://govara-ui.idlewilddigital.com/",
+      screenshot: "/project-screenshots/govara.png",
+      technologies: ["Django", "Next.js", "Stripe", "OpenAI", "Celery", "Redis", "PostgreSQL", "Cloudinary"]
+    },
+    {
+      title: "SmallsLive",
+      description: "Ticket management platform for live jazz shows across three NYC venues (Smalls, Mezzrow, JazzCultural). Refactored legacy Stripe integration on an older Django app to support 3DS authentication — create payment method → pass method ID to confirmation → create payment intent via API → 3DS challenge → capture.",
+      url: "https://smallslive.com/",
+      screenshot: "/project-screenshots/smallslive.png",
+      technologies: ["Django", "Stripe", "3DS Authentication", "Payment Processing"]
+    },
+    {
       title: "ScholarStone",
       description: "Educational platform and scholarship management system",
       url: "https://www.scholarstone.net/",
+      screenshot: "/project-screenshots/scholarstone.png",
       technologies: ["Web Platform", "Education Technology"]
     },
     {
       title: "Exporter Crabarian",
       description: "Export management user interface system",
-      url: "http://exporter-ui.crabarian.com/",
+      url: "https://exporter.crabarian.com/",
+      screenshot: "/project-screenshots/crabarian.png",
       technologies: ["Import Export Management"]
     }
   ];
@@ -93,44 +116,58 @@ const Projects = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {workProjects.map((project, index) => (
-            <Card 
-              key={project.title} 
-              className="
-                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
+            <Card
+              key={project.title}
+              className={`
+                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30
                 border border-white/20 rounded-2xl shadow-2xl
                 hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-                before:absolute before:inset-0 before:rounded-2xl 
+                before:absolute before:inset-0 before:rounded-2xl
                 before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
                 before:blur-sm relative overflow-hidden group
                 hover:border-primary/30 transition-all duration-300
-              "
+                ${project.url ? 'cursor-pointer' : ''}
+              `}
               style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => project.url && window.open(project.url, '_blank')}
             >
+              {!project.url && (
+                <div className="absolute inset-0 z-20 bg-black/0 group-hover:bg-black/50 transition-all duration-300 rounded-2xl flex flex-col items-center justify-center gap-2 pointer-events-none">
+                  <Lock className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">Private</span>
+                </div>
+              )}
+              {project.screenshot && (
+                <div className="relative overflow-hidden h-44 rounded-t-2xl">
+                  <img
+                    src={project.screenshot}
+                    alt={`${project.title} screenshot`}
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/60" />
+                </div>
+              )}
               <CardContent className="p-6 relative z-10">
-                <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300">
-                  {project.title}
-                </h3>
-                <p className="text-muted-foreground mb-4 leading-relaxed">
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  {project.url && (
+                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300 flex-shrink-0 mt-1" />
+                  )}
+                </div>
+                <p className="text-muted-foreground mb-4 leading-relaxed text-sm">
                   {project.description}
                 </p>
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
                     <Badge key={tech} variant="secondary" className="text-xs">
                       {tech}
                     </Badge>
                   ))}
                 </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="hover:border-primary hover:text-primary relative z-20"
-                  onClick={() => window.open(project.url, '_blank')}
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Visit Project
-                </Button>
               </CardContent>
             </Card>
           ))}
