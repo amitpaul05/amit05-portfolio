@@ -21,14 +21,14 @@ const About = () => {
                     {/* Professional photo */}
                     <img 
                       src={amit}
-                      alt="Amit Paul - Backend Developer" 
+                      alt="Amit Paul - Software Engineer"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   
                   {/* Floating badges */}
                   <div className="absolute -bottom-4 -right-4 bg-gradient-primary text-primary-foreground px-4 py-2 rounded-lg font-semibold shadow-lg animate-float">
-                    Backend Developer
+                    Software Engineer
                   </div>
                   
                   <div
@@ -48,13 +48,10 @@ const About = () => {
                   About Me
                 </h2>
                 <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                  I'm a passionate Backend Developer with a strong foundation in Django and Python, 
-                  specializing in building scalable web applications and RESTful APIs. My experience 
-                  spans from developing Learning Management Systems to creating innovative solutions like face recognition 
-                  payment systems.
+                  I'm a Software Engineer at Idlewild Digital, promoted in March 2026 after joining on-site in February. I build and maintain production systems across the full backend stack — from LLM integrations and payment flows to cloud deployments and API architecture.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  At Idlewild Digital, I engineered 75% of the LMS (Scholarshone) backend architecture, optimized workflows for the import-export platform (Crabarian), and delivered scalable solutions across projects while also contributing to frontend features with Vue.js.
+                  Recent work spans AYO (an LLM chat platform for research studies), Govara (an AI-powered governance and compliance SaaS), SmallsLive (Stripe 3DS payment refactor for NYC jazz venues), and deploying multiple production Django projects across AWS, GCP, and VPS infrastructure.
                 </p>
               </div>
               
@@ -127,10 +124,13 @@ const About = () => {
                     PostgreSQL Optimization
                   </Badge>
                   <Badge className="bg-accent/10 text-accent border-accent/20">
-                    System Design
+                    Cloud Deployments
                   </Badge>
                   <Badge className="bg-destructive/10 text-destructive border-destructive/20">
-                    Problem Solving
+                    Payment Integration
+                  </Badge>
+                  <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+                    LLM Integration
                   </Badge>
                 </div>
               </div>
@@ -149,10 +149,7 @@ const About = () => {
                     Beyond Code
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    When I'm not architecting backend systems, you'll find me solving algorithmic challenges 
-                    on LeetCode and Codeforces, contributing to open-source projects, or exploring the latest 
-                    in cloud architecture and microservices. I'm passionate about continuous learning and 
-                    ready to tackle global-scale engineering challenges.
+                    Outside of work I work through technical books — Grokking Algorithms, Grokking System Design — and practice on LeetCode to sharpen problem-solving intuition. I also read Bengali literature to unwind. I'm drawn to understanding how systems work, whether in code or in a good story.
                   </p>
                 </CardContent>
               </Card>

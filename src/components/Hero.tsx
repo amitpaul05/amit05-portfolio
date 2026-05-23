@@ -60,7 +60,7 @@ const Hero: React.FC = () => {
 
             <div className="flex justify-center items-center h-8 md:h-10 outline-2 mb-2">
               <RotatingText
-                texts={['Backend Developer', 'Problem Solver', 'AI Enthusist', 'Cool!']}
+                texts={['Software Engineer', 'Problem Solver', 'AI Enthusiast', 'Cool!']}
                 mainClassName="text-2xl md:text-3xl mb-4 text-muted-foreground rounded-md px-2 w-max duration-300 outline outline-offset-2 outline-emerald-500 text-amber-200 bg-blue-900/10"
                 staggerFrom={"last"}
                 initial={{ y: "100%" }}
@@ -74,8 +74,7 @@ const Hero: React.FC = () => {
             </div>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Django & Python specialist with expertise in REST APIs, PostgreSQL, and scalable architecture.
-              Building robust backend systems and full-stack applications for modern web experiences.
+              Software Engineer at Idlewild Digital — building production systems across LLM integrations, payment flows, and cloud infrastructure. Django & Python at the core, deployed on AWS, GCP, and VPS.
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 mb-12">
