@@ -73,7 +73,7 @@ const About = () => {
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Location</p>
-                        <p className="font-medium text-card-foreground">Khulna, Bangladesh</p>
+                        <p className="font-medium text-card-foreground">Dhaka, Bangladesh</p>
                       </div>
                     </div>
                     
