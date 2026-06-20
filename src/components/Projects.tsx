@@ -1,44 +1,46 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Github, ExternalLink, Lock } from "lucide-react";
+import { Github, ExternalLink, Lock, Activity } from "lucide-react";
 
 const Projects = () => {
   const workProjects = [
     {
       title: "AYO",
-      description: "LLM-powered chat platform for students. Architected chat storage directly in LibreChat (migrated from LiteLLM middleware), integrated Keycloak SSO with JWT refresh-retry flow, built media upload APIs, and shipped a streaming CSV export pipeline with generator-based responses and N+1-free queries.",
+      description: "AI chat research platform connecting researchers with student participants via researcher-issued invite links. Migrated chat storage from LiteLLM middleware to direct LibreChat integration, giving researchers access to full conversation metadata without a proxy hop. Keycloak SSO authenticates all roles; Django validates Bearer JWTs against the Keycloak userinfo endpoint. Built a streaming ZIP export (turns + conversations CSVs) using a generator that drains every 500 rows, eliminating timeout failures on large session exports.",
+      architectureNote: "Architecture: Keycloak SSO → Django API + Next.js dashboard → LibreChat (MongoDB) · PostgreSQL · LiteLLM proxy. Access via researcher-issued invite only.",
       url: null,
       screenshot: "/project-screenshots/ayo.png",
-      technologies: ["Django", "LibreChat", "LiteLLM", "Keycloak", "PostgreSQL"]
+      technologies: ["Django", "LibreChat", "LiteLLM", "Keycloak", "PostgreSQL", "MongoDB", "Next.js"]
     },
     {
       title: "Govara",
-      description: "AI-powered governance and compliance SaaS platform. Companies run self-audits against frameworks (ISO 27001, NIST AIRM), upload certifications for independent auditor review, and distribute them to stakeholders. Features Stripe subscription billing, a GPT-4o-mini governance assistant, Celery-based async tasks, and a public company directory.",
+      description: "AI-powered governance and compliance SaaS. Companies self-audit against ISO 27001 and ISO 42001 (AI governance) frameworks, upload evidence for assigned independent auditors, and share certifications with stakeholders via a public directory. Cross-framework control mapping reduces redundant evidence across frameworks. Built with Django, Celery async tasks, Stripe subscription billing, and a GPT-4o-mini compliance assistant.",
       url: "https://govara-ui.idlewilddigital.com/",
       screenshot: "/project-screenshots/govara.png",
       technologies: ["Django", "Next.js", "Stripe", "OpenAI", "Celery", "Redis", "PostgreSQL", "Cloudinary"]
     },
     {
       title: "SmallsLive",
-      description: "Ticket management platform for live jazz shows across three NYC venues (Smalls, Mezzrow, JazzCultural). Refactored legacy Stripe integration on an older Django app to support 3DS authentication — create payment method → pass method ID to confirmation → create payment intent via API → 3DS challenge → capture.",
+      description: "Ticket management platform for live jazz at three NYC venues (Smalls, Mezzrow, JazzCultural). Rebuilt the Stripe checkout flow on a legacy Django app to support 3DS2/SCA: server creates a PaymentIntent, client calls confirmCardPayment (which handles the 3DS challenge inline via Stripe.js), then submits for server-side capture on requires_capture — resolving declined EU cardholder transactions that broke under SCA enforcement.",
       url: "https://smallslive.com/",
       screenshot: "/project-screenshots/smallslive.png",
-      technologies: ["Django", "Stripe", "3DS Authentication", "Payment Processing"]
+      technologies: ["Django", "Stripe", "3DS2 / SCA", "Payment Processing"],
+      trafficStats: { label: "Jun 2026 snapshot of website traffic hits", peak: "328K", avg: "262K" }
     },
     {
       title: "ScholarStone",
-      description: "Educational platform and scholarship management system",
+      description: "Multi-academy LMS platform modeled on Coursera/Udemy. Instructors create courses structured as chapters → video lessons (Vimeo or YouTube), manage a draft → review → published lifecycle, and build quizzes. Students enroll, track lesson completion, and receive auto-generated certificates on finishing a course. Supports multiple independent academies with their own instructor teams.",
       url: "https://www.scholarstone.net/",
       screenshot: "/project-screenshots/scholarstone.png",
-      technologies: ["Web Platform", "Education Technology"]
+      technologies: ["Django", "Django REST", "PostgreSQL", "LMS", "Certificate Generation"]
     },
     {
       title: "Exporter Crabarian",
-      description: "Export management user interface system",
+      description: "ERP system for freight export management — Django REST backend, Vue.js frontend. Covers the full export workflow: inventory tracking → shipment creation → flight booking → sales and order management → payment processing → ledger reconciliation. Multi-company architecture with per-company configuration and role-based access.",
       url: "https://exporter.crabarian.com/",
       screenshot: "/project-screenshots/crabarian.png",
-      technologies: ["Import Export Management"]
+      technologies: ["Django", "Vue.js", "PostgreSQL", "REST API", "Multi-tenant"]
     }
   ];
 
@@ -55,7 +57,7 @@ const Projects = () => {
     },
     {
       title: "Smart Canteen System",
-      description: "Developed a system utilizing face recognition technology to track food consumption and payment status automatically, enhancing user engagement and admin efficiency.",
+      description: "Face-recognition-based canteen management system. Identifies students at payment terminals, records food consumption per student, and automates payment tracking — replacing manual cashier workflows.",
       technologies: ["Python", "Face Recognition", "Django", "Payment Processing", "Computer Vision"],
       links: {
         github: "#"
@@ -63,104 +65,93 @@ const Projects = () => {
       featured: true
     },
     {
-      title: "Automated Doctor's Serial Management System",
-      description: "Integrated GSM technology for SMS functionality to enable appointment management. Developed a web-based platform for users and staff to make, monitor, and view serial numbers conveniently.",
-      technologies: ["Django", "SMS/GSM Integration", "PostgreSQL", "Web Platform", "Appointment Management"],
+      title: "Doctor's Appointment Queue System",
+      description: "GSM/SMS-integrated appointment queue system for a medical clinic. A Django backend manages queue state; a hardware GSM module sends SMS notifications when a patient's number is called; staff and patients both have web interfaces.",
+      technologies: ["Django", "GSM / SMS Integration", "PostgreSQL", "Queue Management"],
       links: {
         github: "#"
       },
       featured: true
     },
-    {
-      title: "Customer Relationship Management (CRM)",
-      description: "Developed a CRM web app using Django and PostgreSQL with optimized queries and real-time dashboard features. Designed for internal tracking of clients, leads, and performance metrics.",
-      technologies: ["Django", "PostgreSQL", "Real-time Dashboard", "Performance Optimization"],
-      links: {
-        github: "#"
-      },
-      featured: false
-    },
-    {
-      title: "Little Lemon Restaurant App",
-      description: "Built a Django-based app for menu management and table reservations with a modular, reusable component structure. Implemented customer and staff workflows for a seamless restaurant management experience.",
-      technologies: ["Django", "Modular Design", "Restaurant Management", "Reservation System"],
-      links: {
-        github: "#"
-      },
-      featured: false
-    },
-    {
-      title: "Daily Updates Communication Tool",
-      description: "Internal team communication and reporting tool using Django REST Framework. Implemented secure login, update scheduling, and auto-archive of posts with modular coding and DRY principles.",
-      technologies: ["Django REST", "Team Communication", "Auto-scheduling", "Secure Authentication"],
-      links: {
-        github: "#"
-      },
-      featured: false
-    }
   ];
 
-  const featuredProjects = projects.filter(p => p.featured);
-  const otherProjects = projects.filter(p => !p.featured);
-
   return (
-    <section id="projects" className="py-20 bg-background">
+    <section id="projects" className="py-20">
       <div className="container mx-auto px-6">
         {/* Projects I worked on */}
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Projects I worked on
+            Production Projects
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Professional projects I've contributed to in production environments
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {workProjects.map((project, index) => (
             <Card
               key={project.title}
-              className={`
-                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30
-                border border-white/20 rounded-2xl shadow-2xl
-                hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-                before:absolute before:inset-0 before:rounded-2xl
-                before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
-                before:blur-sm relative overflow-hidden group
-                hover:border-primary/30 transition-all duration-300
-                ${project.url ? 'cursor-pointer' : ''}
-              `}
+              className={`bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl transition-all duration-300 relative overflow-hidden flex flex-col${project.url ? ' hover:border-primary/30 group cursor-pointer' : ''}`}
               style={{ animationDelay: `${index * 0.1}s` }}
               onClick={() => project.url && window.open(project.url, '_blank')}
             >
-              {!project.url && (
-                <div className="absolute inset-0 z-20 bg-black/0 group-hover:bg-black/50 transition-all duration-300 rounded-2xl flex flex-col items-center justify-center gap-2 pointer-events-none">
-                  <Lock className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">Private</span>
-                </div>
-              )}
               {project.screenshot && (
-                <div className="relative overflow-hidden h-44 rounded-t-2xl">
+                <div className="relative overflow-hidden h-44 rounded-t-2xl flex-shrink-0">
                   <img
                     src={project.screenshot}
-                    alt={`${project.title} screenshot`}
-                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    alt={`${project.title} — ${project.description.split(/\.\s/)[0]}`}
+                    className="w-full h-full object-cover object-top transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/60" />
                 </div>
               )}
-              <CardContent className="p-6 relative z-10">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  {project.url && (
-                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300 flex-shrink-0 mt-1" />
+              <CardContent className="p-6 relative z-10 flex-1 flex flex-col">
+                <div className="flex-1">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-xl font-semibold group-hover:text-primary transition-colors duration-300">
+                      {project.title}
+                    </h3>
+                    <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                      {!project.url && (
+                        <span className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded border border-border text-muted-foreground">
+                          <Lock className="h-3 w-3" /> Private
+                        </span>
+                      )}
+                      {project.url && (
+                        <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300 mt-1" />
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground mb-3 leading-relaxed text-sm">
+                    {project.description}
+                  </p>
+                  {'architectureNote' in project && project.architectureNote && (
+                    <p className="text-xs font-mono text-muted-foreground mb-4 pt-2 border-t border-border/50 leading-relaxed">
+                      {project.architectureNote}
+                    </p>
+                  )}
+                  {'trafficStats' in project && project.trafficStats && (
+                    <div className="mt-4 pt-3 border-t border-border/50">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Activity className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-[11px] font-mono text-muted-foreground">{(project.trafficStats as any).label}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex-1 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5">
+                          <div className="text-lg font-bold font-mono text-foreground leading-none mb-1">{(project.trafficStats as any).peak}</div>
+                          <div className="text-[11px] text-muted-foreground">peak req / day</div>
+                        </div>
+                        <div className="flex-1 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5">
+                          <div className="text-lg font-bold font-mono text-foreground leading-none mb-1">{(project.trafficStats as any).avg}</div>
+                          <div className="text-[11px] text-muted-foreground">avg req / day</div>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
-                <p className="text-muted-foreground mb-4 leading-relaxed text-sm">
-                  {project.description}
-                </p>
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
                     <Badge key={tech} variant="secondary" className="text-xs">
@@ -168,6 +159,7 @@ const Projects = () => {
                     </Badge>
                   ))}
                 </div>
+                
               </CardContent>
             </Card>
           ))}
@@ -175,151 +167,70 @@ const Projects = () => {
 
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Featured Projects
+            Academic & Personal Projects
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Personal projects showcasing full-stack development and backend architecture expertise
+            Projects built during university — spanning backend APIs, computer vision, and hardware integration
           </p>
         </div>
-        
+
         {/* Featured Projects */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
-          {featuredProjects.map((project, index) => (
-            <Card 
-              key={project.title} 
-              className={`relative overflow-hidden bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 
-                hover:border-primary/50 transition-all duration-500 group h-full backdrop-blur-sm
-                hover:shadow-elegant hover:shadow-primary/20 animate-fade-in-up stagger-${index + 1}
-                before:absolute before:inset-0 before:bg-gradient-to-br before:from-primary/5 before:to-transparent 
-                before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100`}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          {projects.map((project, index) => (
+            <Card
+              key={project.title}
+              className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl hover:border-primary/30 transition-all duration-300 group relative overflow-hidden h-full"
             >
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              {/* Floating elements */}
-              <div className="absolute top-4 right-4 w-8 h-8 bg-primary/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700" />
-              <div className="absolute bottom-4 left-4 w-6 h-6 bg-accent/20 rounded-full blur-lg group-hover:scale-125 transition-transform duration-500" />
-              
-              <CardHeader className="relative z-10 pb-4">
-                <CardTitle className="text-xl font-bold group-hover:text-primary transition-all duration-300 
-                  group-hover:scale-105 transform-gpu bg-gradient-to-r from-foreground to-foreground 
-                  group-hover:from-primary group-hover:to-accent bg-clip-text group-hover:text-transparent">
-                  {project.title}
-                </CardTitle>
-              </CardHeader>
-              
-              <CardContent className="relative z-10 flex flex-col justify-between h-full pt-0">
+              <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full">
                 <div>
-                  <p className="text-muted-foreground mb-6 leading-relaxed text-sm group-hover:text-foreground/90 transition-colors duration-300">
+                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors duration-300 mb-3">
+                    {project.title}
+                  </h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed text-sm">
                     {project.description}
                   </p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {project.technologies.map((tech, techIndex) => (
-                      <Badge 
-                        key={tech} 
-                        variant="secondary" 
-                        className={`text-xs relative overflow-hidden bg-muted/50 hover:bg-primary/20 
-                          border border-border/50 hover:border-primary/30 transition-all duration-300
-                          hover:scale-105 transform-gpu group-hover:animate-bounce-slow`}
-                        style={{ animationDelay: `${techIndex * 0.1}s` }}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project.technologies.map((tech) => (
+                      <Badge
+                        key={tech}
+                        variant="secondary"
+                        className="text-xs"
                       >
                         {tech}
                       </Badge>
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="flex gap-3 mt-auto">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 
-                      transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
-                    onClick={() => {
-                      if (project.links.github) {
-                        window.open(project.links.github, '_blank');
-                      } else {
-                        alert('GitHub repository link not available yet');
-                      }
-                    }}
-                  >
-                    <Github className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
-                    View Code
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex-1 hover:border-accent hover:text-accent hover:bg-accent/10 
-                      transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
-                    onClick={() => {
-                      if (project.links.demo && project.links.demo !== '#') {
-                        window.open(project.links.demo, '_blank');
-                      } else {
-                        alert('Demo link not available yet');
-                      }
-                    }}
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
-                    Demo
-                  </Button>
+                  {project.links.github && project.links.github !== '#' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 transition-all duration-300"
+                      onClick={() => window.open(project.links.github, '_blank')}
+                    >
+                      <Github className="h-4 w-4 mr-2" />
+                      View Code
+                    </Button>
+                  )}
+                  {project.links.demo && project.links.demo !== '#' && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 transition-all duration-300"
+                      onClick={() => window.open(project.links.demo, '_blank')}
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Demo
+                    </Button>
+                  )}
                 </div>
               </CardContent>
-              
-              {/* Bottom border gradient */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary 
-                scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </Card>
           ))}
         </div>
 
-        {/* Other Projects */}
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-semibold text-card-foreground">Other Projects</h3>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {otherProjects.map((project, index) => (
-            <Card 
-              key={project.title} 
-              className="
-                backdrop-blur-xl bg-gradient-to-br from-background/20 via-background/30 to-background/20 
-                border border-white/15 rounded-xl shadow-xl
-                hover:shadow-[0_0_30px_rgba(255,255,255,0.08)]
-                before:absolute before:inset-0 before:rounded-xl 
-                before:bg-gradient-to-br before:from-transparent before:via-white/5 before:to-transparent
-                before:blur-sm relative overflow-hidden
-                hover:border-primary/20 transition-all duration-300
-              "
-              style={{ animationDelay: `${(index + 3) * 0.1}s` }}
-            >
-              <CardContent className="p-6">
-                <h4 className="text-lg font-semibold mb-2 text-card-foreground hover:text-primary transition-colors duration-300">
-                  {project.title}
-                </h4>
-                <p className="text-muted-foreground text-sm mb-3">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {project.technologies.slice(0, 3).map((tech) => (
-                    <Badge key={tech} variant="secondary" className="text-xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                  {project.technologies.length > 3 && (
-                    <Badge variant="secondary" className="text-xs">
-                      +{project.technologies.length - 3} more
-                    </Badge>
-                  )}
-                </div>
-                <Button variant="ghost" size="sm" className="p-0 h-auto text-primary hover:text-primary/80">
-                  <Github className="h-4 w-4 mr-1" />
-                  View Code
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
       </div>
     </section>
   );

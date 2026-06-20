@@ -5,7 +5,7 @@ import Hero from "./Hero";
 import Contact from "./Contact";
 import useScrollAnimation from "./ScrollAnimations";
 
-const sections = ["about", "academic", "projects", "certificates", "diary"];
+const sections = ["about", "academic", "projects", "certificates"];
 
 const PortfolioLayout = () => {
   const location = useLocation();
@@ -58,20 +58,14 @@ const PortfolioLayout = () => {
                 <button
                   onClick={() => navigate(`/${prevSection}`)}
                   className="group relative flex items-center justify-center
-                            lg:h-16 lg:w-48 rounded-2xl
-                            backdrop-blur-xl
-                            bg-gradient-to-br from-background/30 via-background/50 to-background/30
-                            border border-white/20
-                            shadow-2xl
+                            lg:h-16 lg:w-48 rounded-md
+                            bg-bg-surface
+                            border border-border-muted-custom
+                            shadow-md
                             overflow-hidden
-                            transition-all duration-300
-                            hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-                            hover:border-primary/30
-                            before:absolute before:inset-0 before:rounded-2xl
-                            before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
-                            before:blur-sm
-                            hover:bg-gradient-to-r hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-pink-500/20
-                            text-white font-bold
+                            transition-all duration-200
+                            hover:border-primary/30 hover:text-foreground
+                            text-muted-foreground
                             md:h-16 md:w-48 md:text-base
                             h-14 w-40 text-sm"
                 >
@@ -91,20 +85,14 @@ const PortfolioLayout = () => {
                 <button
                   onClick={() => navigate(`/${nextSection}`)}
                   className="group relative flex items-center justify-center
-                            lg:h-16 lg:w-48 rounded-2xl
-                            backdrop-blur-xl
-                            bg-gradient-to-br from-background/30 via-background/50 to-background/30
-                            border border-white/20
-                            shadow-2xl
+                            lg:h-16 lg:w-48 rounded-md
+                            bg-bg-surface
+                            border border-border-muted-custom
+                            shadow-md
                             overflow-hidden
-                            transition-all duration-300
-                            hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-                            hover:border-primary/30
-                            before:absolute before:inset-0 before:rounded-2xl
-                            before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
-                            before:blur-sm
-                            hover:bg-gradient-to-r hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-pink-500/20
-                            text-white font-bold
+                            transition-all duration-200
+                            hover:border-primary/30 hover:text-foreground
+                            text-muted-foreground
                             md:h-16 md:w-48 md:text-base
                             h-14 w-40 text-sm"
                 >

@@ -2,6 +2,7 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo
 import {
   motion,
   AnimatePresence,
+  useReducedMotion,
   Transition,
   type VariantLabels,
   type Target,
@@ -67,6 +68,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
     },
     ref
   ) => {
+    const prefersReduced = useReducedMotion();
     const [currentTextIndex, setCurrentTextIndex] = useState<number>(0);
 
     const splitIntoCharacters = (text: string): string[] => {
@@ -202,10 +204,10 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
                   {wordObj.characters.map((char, charIndex) => (
                     <motion.span
                       key={charIndex}
-                      initial={initial}
-                      animate={animate}
-                      exit={exit}
-                      transition={{
+                      initial={prefersReduced ? { y: 0, opacity: 1 } : initial}
+                      animate={prefersReduced ? { y: 0, opacity: 1 } : animate}
+                      exit={prefersReduced ? { y: 0, opacity: 1 } : exit}
+                      transition={prefersReduced ? { duration: 0.01 } : {
                         ...transition,
                         delay: getStaggerDelay(
                           previousCharsCount + charIndex,

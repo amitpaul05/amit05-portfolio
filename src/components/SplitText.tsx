@@ -94,6 +94,16 @@ const SplitText: React.FC<SplitTextProps> = ({
         reduceWhiteSpace: false,
         onSplit: (self: GSAPSplitText) => {
           assignTargets(self);
+          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (prefersReduced) {
+            targets.forEach((t) => {
+              (t as HTMLElement).style.opacity = '1';
+              (t as HTMLElement).style.transform = 'none';
+            });
+            animationCompletedRef.current = true;
+            onLetterAnimationComplete?.();
+            return;
+          }
           return gsap.fromTo(
             targets,
             { ...from },

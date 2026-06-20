@@ -1,6 +1,6 @@
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
-import { Github, Linkedin, Mail, MapPin, Phone, ExternalLink } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
 import codeforcesIcon from "../assets/codeforces-icon.svg";
 import resume from '../assets/Amit_Paul_s_Resume.pdf';
@@ -14,15 +14,9 @@ const Contact = () => {
       href: "mailto:amit.paul.ece@gmail.com"
     },
     {
-      icon: Phone,
-      label: "Phone",
-      value: "+880177720932",
-      href: "tel:+880177720932"
-    },
-    {
       icon: MapPin,
       label: "Location",
-      value: "Khulna, Bangladesh",
+      value: "Dhaka, Bangladesh",
       href: "#"
     }
   ];
@@ -32,7 +26,6 @@ const Contact = () => {
       icon: Github,
       label: "GitHub",
       href: "https://github.com/amitpaul05",
-      color: "hover:text-tech-blue",
       isLucideIcon: true,
       iconSrc: ""
     },
@@ -40,7 +33,6 @@ const Contact = () => {
       icon: Linkedin,
       label: "LinkedIn",
       href: "https://www.linkedin.com/in/amitpaul05/",
-      color: "hover:text-tech-cyan",
       isLucideIcon: true,
       iconSrc: ""
     },
@@ -48,7 +40,6 @@ const Contact = () => {
       icon: null,
       label: "LeetCode",
       href: "https://leetcode.com/amit210905",
-      color: "hover:text-primary",
       isLucideIcon: false,
       iconSrc: leetcodeIcon
     },
@@ -56,28 +47,27 @@ const Contact = () => {
       icon: null,
       label: "Codeforces",
       href: "https://codeforces.com/profile/amit210905",
-      color: "hover:text-accent",
       isLucideIcon: false,
       iconSrc: codeforcesIcon
     }
   ];
 
   return (
-    <section className="py-20 bg-section-bg animate-on-scroll">
+    <section className="py-20 animate-on-scroll">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent gradient-text-animated">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
             Let's Connect
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ready for backend engineering challenges at global-level companies. Let's discuss how I can contribute to your team.
+            Backend engineer with production experience across LLM integrations, payment flows, and cloud deployments. Based in Dhaka — open to remote backend roles.
           </p>
         </div>
         
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Contact Information */}
-            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-500 hover:shadow-elegant card-hover animate-slide-in-left">
+            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-elegant animate-slide-in-left">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-semibold mb-6 text-card-foreground">
                   Contact Information
@@ -91,17 +81,18 @@ const Contact = () => {
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">{contact.label}</p>
-                        <a 
-                          href={contact.href}
-                          className="text-card-foreground hover:text-primary transition-colors duration-300 font-medium"
-                          title={
-                            contact.label === "Email" ? "Send me an email" :
-                            contact.label === "Phone" ? "Call me directly" :
-                            "My current location"
-                          }
-                        >
-                          {contact.value}
-                        </a>
+                        {contact.href !== '#' ? (
+                          <a
+                            href={contact.href}
+                            className="text-card-foreground hover:text-primary transition-colors duration-300 font-medium"
+                          >
+                            {contact.value}
+                          </a>
+                        ) : (
+                          <span className="text-card-foreground font-medium">
+                            {contact.value}
+                          </span>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -116,7 +107,7 @@ const Contact = () => {
                       <a
                         key={social.label}
                         href={social.href}
-                        className={`flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card/80 text-muted-foreground ${social.color} transition-all duration-300 hover:scale-105`}
+                        className="group flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card/80 text-muted-foreground hover:text-foreground transition-colors duration-200"
                         title={
                           social.label === "GitHub" ? "View my GitHub repositories and projects" :
                           social.label === "LinkedIn" ? "Connect with me on LinkedIn" :
@@ -127,7 +118,7 @@ const Contact = () => {
                         {social.isLucideIcon ? (
                           <social.icon className="h-5 w-5" />
                         ) : (
-                          <img src={social.iconSrc} alt={social.label} className="h-6 w-6 filter brightness-0 invert opacity-60" />
+                          <img src={social.iconSrc} alt={social.label} className="h-6 w-6 filter brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity duration-200" />
                         )}
                         <span className="font-medium">{social.label}</span>
                       </a>
@@ -137,75 +128,33 @@ const Contact = () => {
               </CardContent>
             </Card>
             
-            {/* Quick Message */}
-            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-500 hover:shadow-elegant card-hover animate-slide-in-right">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold mb-6 text-card-foreground">
-                  Ready to Collaborate
-                </h3>
-                
-                <div className="space-y-6">
-                  <div className="p-6 bg-card/30 rounded-lg border border-border/30">
-                    <h4 className="font-semibold text-card-foreground mb-3">
-                      Backend Engineering Expertise
-                    </h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      Specialized in Django, REST APIs, PostgreSQL, and scalable architecture. 
-                      Experience with microservices, real-time systems, and performance optimization.
-                    </p>
-                  </div>
-                  
-                  <div className="p-6 bg-card/30 rounded-lg border border-border/30">
-                    <h4 className="font-semibold text-card-foreground mb-3">
-                      Problem Solving Focus
-                    </h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      Active on LeetCode and Codeforces, continuously improving algorithmic thinking 
-                      and system design skills for complex engineering challenges.
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <Button 
-                      className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300"
-                      onClick={() => window.open('mailto:amit.paul.ece@gmail.com', '_blank')}
-                    >
-                      <Mail className="mr-2 h-4 w-4" />
-                      Send Email
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full hover:border-primary hover:text-primary transition-all duration-300"
-                      onClick={() => window.open(resume, '_blank')}
-                    >
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Download Resume
-                    </Button>
-                  </div>
+            {/* CTA Card */}
+            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-elegant animate-slide-in-right">
+              <CardContent className="p-8 flex flex-col justify-between h-full">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4 text-card-foreground">
+                    Open to Opportunities
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    Three years building Django systems in production — APIs, async pipelines, cloud deployments, and payment flows. Looking for backend roles where code quality and system reliability matter.
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Call to Action */}
-          <div className="text-center mt-12">
-            <Card className="bg-gradient-primary/5 border-primary/20 max-w-2xl mx-auto card-hover animate-scale-in">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold mb-4 text-card-foreground">
-                  Ready for Global Engineering Challenges
-                </h3>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Ubuntu-powered development environment, backend-first mindset, and technical confidence 
-                  to tackle complex problems at companies like Google and other global tech leaders.
-                </p>
-                <div className="flex justify-center">
-                  <Button 
-                    size="lg" 
-                    className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+
+                <div className="space-y-3">
+                  <Button
+                    className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300"
                     onClick={() => window.open('mailto:amit.paul.ece@gmail.com', '_blank')}
                   >
-                    <Mail className="mr-2 h-5 w-5" />
-                    Let's Build Something Amazing
+                    <Mail className="mr-2 h-4 w-4" />
+                    Send Email
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full hover:border-primary hover:text-primary transition-all duration-300"
+                    onClick={() => window.open(resume, '_blank')}
+                  >
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Download Resume
                   </Button>
                 </div>
               </CardContent>

@@ -10,8 +10,7 @@ const Certifications = () => {
       focus: "Data Science and Data Engineering",
       date: "2025",
       type: "Digital Ninja Program",
-      description: "Focused on real-world data engineering practices, ETL pipelines, and dashboard development",
-      badgeColor: "bg-tech-blue/10 text-tech-blue border-tech-blue/20",
+      description: "Built ETL pipelines in Python to ingest and aggregate call data records; delivered Power BI dashboards surfacing telecom KPIs including call volume trends and service type breakdown.",
       link: "https://drive.google.com/file/d/1e6sGcNpnBjjLzK6owj3xqWNzx001XqLL/view"
     },
     {
@@ -20,8 +19,7 @@ const Certifications = () => {
       focus: "Machine Learning Fundamentals",
       date: "2024",
       type: "Online Course",
-      description: "Core machine learning concepts, algorithms, and practical implementation",
-      badgeColor: "bg-tech-cyan/10 text-tech-cyan border-tech-cyan/20",
+      description: "Core machine learning concepts including decision trees, random forests, gradient boosting, and cross-validation — practical implementation in Python with scikit-learn.",
       link: "https://www.kaggle.com/learn/certification/amit210905/intro-to-machine-learning"
     },
     {
@@ -30,8 +28,7 @@ const Certifications = () => {
       focus: "Backend Development",
       date: "2024",
       type: "Professional Certificate",
-      description: "Advanced Django development, REST APIs, and scalable web application architecture",
-      badgeColor: "bg-primary/10 text-primary border-primary/20",
+      description: "Django ORM, views, forms, authentication, REST API design, and deployment patterns — Meta's backend track on Coursera.",
       link: "https://www.coursera.org/account/accomplishments/verify/JWJ6XA6H396S?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course"
     },
     {
@@ -40,42 +37,33 @@ const Certifications = () => {
       focus: "Competitive Programming",
       date: "2021",
       type: "Programming Contest",
-      description: "Participated in prestigious international competitive programming contest",
-      badgeColor: "bg-destructive/10 text-destructive border-destructive/20",
+      description: "Competed in the ICPC Asia Dhaka Regional — one of Bangladesh's most competitive algorithmic programming contests.",
       link: "https://drive.google.com/file/d/1bhFtM-fy52du5xQFllsi47IzWUycJWXW/view"
     }
   ];
 
   return (
-    <section id="certifications" className="py-20 bg-background">
+    <section id="certifications" className="py-20">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
             Certifications & Achievements
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Continuous learning and professional development in backend technologies and problem-solving
+            Competitive programming, ML foundations, and the Django track that started this career.
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {certifications.map((cert, index) => (
-            <Card 
-              key={cert.title} 
-              className="
-                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
-                border border-white/20 rounded-2xl shadow-2xl
-                hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-                before:absolute before:inset-0 before:rounded-2xl 
-                before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
-                before:blur-sm relative overflow-hidden group h-full
-                hover:border-primary/30 transition-all duration-300
-              "
+            <Card
+              key={cert.title}
+              className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl hover:border-primary/30 transition-all duration-300 group relative overflow-hidden h-full"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <CardContent className="p-6 flex flex-col h-full">
                 <div className="flex items-start justify-between mb-4">
-                  <Award className="h-8 w-8 text-primary group-hover:text-tech-cyan transition-colors duration-300 flex-shrink-0" />
+                  <Award className="h-8 w-8 text-primary group-hover:text-primary/70 transition-colors duration-300 flex-shrink-0" />
                   <div className="flex items-center gap-1 text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     <span>{cert.date}</span>
@@ -98,7 +86,7 @@ const Certifications = () => {
                 
                 <div className="flex flex-col gap-3">
                   <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className={cert.badgeColor}>
+                    <Badge className="bg-primary/10 text-primary border-primary/20">
                       {cert.type}
                     </Badge>
                     <Badge variant="outline" className="text-xs">
@@ -110,9 +98,9 @@ const Certifications = () => {
                     href={cert.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-primary hover:text-tech-cyan transition-colors duration-300 cursor-pointer text-sm group-hover:translate-x-1 transition-transform duration-300"
+                    className="flex items-center gap-1 text-primary hover:text-foreground transition-colors duration-200 cursor-pointer text-sm"
                   >
-                    <ExternalLink className="h-4 w-4 mr-1" />
+                    <ExternalLink className="h-4 w-4" />
                     <span>View Certificate</span>
                   </a>
                 </div>
@@ -121,38 +109,6 @@ const Certifications = () => {
           ))}
         </div>
         
-        {/* Skills Focus Section */}
-        <div className="mt-16 text-center">
-          <Card className="
-            backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
-            border border-white/20 rounded-2xl shadow-2xl max-w-2xl mx-auto
-            hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-            before:absolute before:inset-0 before:rounded-2xl 
-            before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
-            before:blur-sm relative overflow-hidden
-          ">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-4 text-card-foreground">
-                Continuous Learning Focus
-              </h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Actively improving problem-solving skills through competitive programming platforms 
-                and staying updated with the latest backend development technologies and best practices.
-              </p>
-              <div className="flex justify-center gap-4">
-                <Badge className="bg-tech-blue/10 text-tech-blue border-tech-blue/20">
-                  LeetCode Problem Solving
-                </Badge>
-                <Badge className="bg-tech-cyan/10 text-tech-cyan border-tech-cyan/20">
-                  System Design
-                </Badge>
-                <Badge className="bg-primary/10 text-primary border-primary/20">
-                  Cloud Architecture
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </section>
   );

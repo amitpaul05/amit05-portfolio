@@ -1,11 +1,11 @@
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { MapPin, GraduationCap, Code, Coffee } from "lucide-react";
+import { MapPin, GraduationCap, Code, Server } from "lucide-react";
 import amit from '../assets/amit.webp';
 
 const About = () => {
   return (
-    <section id="about" className="py-20 bg-background">
+    <section id="about" className="py-20">
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -21,22 +21,11 @@ const About = () => {
                     {/* Professional photo */}
                     <img 
                       src={amit}
-                      alt="Amit Paul - Software Engineer"
+                      alt="Amit Paul, Backend Engineer at Idlewild Digital"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   
-                  {/* Floating badges */}
-                  <div className="absolute -bottom-4 -right-4 bg-gradient-primary text-primary-foreground px-4 py-2 rounded-lg font-semibold shadow-lg animate-float">
-                    Software Engineer
-                  </div>
-                  
-                  <div
-                    className="absolute -top-4 -left-4 bg-gradient-to-r from-emerald-900 to-cyan-700 border border-border/50 px-3 py-2 rounded-lg text-sm text-white shadow-lg animate-float"
-                    style={{ animationDelay: '2s' }}
-                  >
-                    AI Enthusiast
-                  </div>
                 </div>
               </div>
             </div>
@@ -56,14 +45,7 @@ const About = () => {
               </div>
               
               {/* Quick facts */}
-              <Card className="
-                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30 
-                border border-white/20 rounded-2xl shadow-2xl
-                hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-                before:absolute before:inset-0 before:rounded-2xl 
-                before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
-                before:blur-sm relative overflow-hidden
-              ">
+              <Card className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-4 text-card-foreground">Quick Facts</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -76,30 +58,30 @@ const About = () => {
                         <p className="font-medium text-card-foreground">Dhaka, Bangladesh</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-tech-cyan/10 rounded-lg flex items-center justify-center">
-                        <GraduationCap className="h-5 w-5 text-tech-cyan" />
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <GraduationCap className="h-5 w-5 text-primary" />
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Education</p>
                         <p className="font-medium text-card-foreground">Khulna University</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
-                        <Code className="h-5 w-5 text-accent" />
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Code className="h-5 w-5 text-primary" />
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Primary OS</p>
                         <p className="font-medium text-card-foreground">Ubuntu/Linux</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-destructive/10 rounded-lg flex items-center justify-center">
-                        <Coffee className="h-5 w-5 text-destructive" />
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Server className="h-5 w-5 text-primary" />
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Favorite Stack</p>
@@ -114,42 +96,35 @@ const About = () => {
               <div>
                 <h3 className="text-xl font-semibold mb-4 text-card-foreground">Core Expertise</h3>
                 <div className="flex flex-wrap gap-2">
-                  <Badge className="bg-tech-blue/10 text-tech-blue border-tech-blue/20">
+                  <Badge className="bg-primary/10 text-primary border-primary/20">
                     Django Architecture
                   </Badge>
-                  <Badge className="bg-tech-cyan/10 text-tech-cyan border-tech-cyan/20">
+                  <Badge className="bg-primary/10 text-primary border-primary/20">
                     REST API Design
                   </Badge>
                   <Badge className="bg-primary/10 text-primary border-primary/20">
                     PostgreSQL Optimization
                   </Badge>
-                  <Badge className="bg-accent/10 text-accent border-accent/20">
+                  <Badge className="bg-accent-green/10 text-accent-green border-accent-green/20">
                     Cloud Deployments
                   </Badge>
-                  <Badge className="bg-destructive/10 text-destructive border-destructive/20">
+                  <Badge className="bg-accent-green/10 text-accent-green border-accent-green/20">
                     Payment Integration
                   </Badge>
-                  <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+                  <Badge className="bg-accent-green/10 text-accent-green border-accent-green/20">
                     LLM Integration
                   </Badge>
                 </div>
               </div>
               
               {/* Personal touch */}
-              <Card className="
-                backdrop-blur-xl bg-gradient-to-br from-primary/10 via-primary/20 to-primary/5 
-                border border-primary/20 rounded-2xl shadow-2xl
-                hover:shadow-[0_0_40px_rgba(var(--primary),0.2)]
-                before:absolute before:inset-0 before:rounded-2xl 
-                before:bg-gradient-to-br before:from-transparent before:via-primary/10 before:to-transparent
-                before:blur-sm relative overflow-hidden
-              ">
+              <Card className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl">
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold mb-3 text-card-foreground">
                     Beyond Code
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    Outside of work I work through technical books — Grokking Algorithms, Grokking System Design — and practice on LeetCode to sharpen problem-solving intuition. I also read Bengali literature to unwind. I'm drawn to understanding how systems work, whether in code or in a good story.
+                    Away from work I read through technical books — Grokking Algorithms, Grokking System Design — and practice on LeetCode to sharpen problem-solving intuition. I also read Bengali literature to unwind. I'm drawn to understanding how systems work, whether in code or in a good story.
                   </p>
                 </CardContent>
               </Card>

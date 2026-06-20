@@ -28,7 +28,7 @@ const App = () => (
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<PortfolioLayout />}>
-              <Route index element={null} />
+              <Route index element={<ProjectsPage />} />
               <Route path="about"        element={<AboutPage />} />
               <Route path="academic"     element={<AcademicPage />} />
               <Route path="projects"     element={<ProjectsPage />} />
