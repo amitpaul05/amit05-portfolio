@@ -162,8 +162,7 @@ const DiaryNew = () => {
       {showPAT && <PATModal onClose={() => setShowPAT(false)} />}
 
       <div className="min-h-screen text-foreground overflow-x-hidden">
-        {/* Material top bar */}
-        <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+        <header className="sticky top-0 z-40 bg-surface border-b border-outline-variant/30">
           <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
             <button
               onClick={handleBack}
@@ -189,14 +188,12 @@ const DiaryNew = () => {
         <main className="max-w-2xl mx-auto px-4 pt-8 pb-10">
           <form onSubmit={handleSubmit}>
             <div className="diary-paper rounded shadow-2xl relative overflow-hidden">
-              {/* Red margin rule */}
               <div
                 className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
                 style={{ left: '3rem', backgroundColor: 'hsl(var(--diary-rule-margin) / 0.55)' }}
               />
 
               <div className="pl-14 pr-10 pt-8 pb-8">
-                {/* Date */}
                 <div className="leading-8">
                   <input
                     type="date"
@@ -206,7 +203,6 @@ const DiaryNew = () => {
                   />
                 </div>
 
-                {/* Mood toggles — pick as many as apply */}
                 <div className="flex flex-wrap gap-2 leading-8">
                   {MOODS.map((m) => (
                     <button
@@ -224,7 +220,6 @@ const DiaryNew = () => {
                   ))}
                 </div>
 
-                {/* Body */}
                 <textarea
                   value={form.body}
                   onChange={(e) => set('body', e.target.value)}
@@ -236,7 +231,6 @@ const DiaryNew = () => {
               </div>
             </div>
 
-            {/* Submit */}
             <div className="mt-6 flex justify-end">
               <button
                 type="submit"

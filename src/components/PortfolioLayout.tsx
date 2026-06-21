@@ -12,9 +12,8 @@ import CertificatesPage from "@/pages/CertificatesPage";
 
 const DiaryPreview = lazy(() => import("@/pages/Diary"));
 
-// Prev/next chevron buttons (section pages only) — tab-bar order, no diary
+// prev/next chevrons exclude diary; swipe (tabOrder) includes it
 const sections = ["about", "projects", "academic", "certificates"];
-// Swipe order = full tab-bar order, including diary
 const tabOrder = ["about", "projects", "academic", "certificates", "diary"];
 const PAGE_BY_KEY: Record<string, React.ComponentType> = {
   about: AboutPage,
@@ -36,8 +35,6 @@ const PortfolioLayout = () => {
   // target underneath — same look as a swipe. prevRef tracks the page being left.
   const prevRef = useRef<string>(location.pathname === "/" ? "about" : location.pathname.slice(1));
   const [leaving, setLeaving] = useState<{ key: string; dir: "next" | "prev" } | null>(null);
-  // Page-enter rise plays on desktop only; on mobile every tab change is instant
-  // (the target reads as already-stacked-underneath, whether reached by tap or swipe).
   const [isDesktop, setIsDesktop] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches
   );
@@ -53,9 +50,6 @@ const PortfolioLayout = () => {
   const normalizedPath = location.pathname === '/' ? '/about' : location.pathname;
   const activeRoute = sections.find((s) => normalizedPath === `/${s}`) ?? '';
 
-  // Detect tab→tab navigation; on mobile clicks (not swipe commits) play the carousel slide:
-  // the new page (already mounted) starts off-screen and glides to center while the old page
-  // — rendered flush beside it — slides out. Same look as a swipe, driven on the same track.
   useLayoutEffect(() => {
     const newKey = location.pathname === '/' ? 'about' : location.pathname.slice(1);
     const oldKey = prevRef.current;
@@ -113,7 +107,6 @@ const PortfolioLayout = () => {
 
   const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-  // ── Mobile swipe between tabs (finger-tracking, with the target page revealed underneath) ──
   const tabIndex = tabOrder.indexOf(normalizedPath.slice(1));
   const swipePrev = tabIndex > 0 ? tabOrder[tabIndex - 1] : null;
   const swipeNext = tabIndex >= 0 && tabIndex < tabOrder.length - 1 ? tabOrder[tabIndex + 1] : null;
@@ -132,7 +125,7 @@ const PortfolioLayout = () => {
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
-    if (tabIndex < 0) return; // only on the tab pages
+    if (tabIndex < 0) return;
     const t = e.touches[0];
     touch.current = { x: t.clientX, y: t.clientY, axis: null };
     if (trackRef.current) {
@@ -217,8 +210,7 @@ const PortfolioLayout = () => {
     return null;
   })();
 
-  // Desktop: page-enter rise on every navigation. Mobile: no entrance animation at all
-  // (tap or swipe both read as the target already sitting underneath).
+  // Page-enter rise is desktop-only; mobile tab changes are instant.
   const enterClass = isDesktop ? "animate-page-enter" : "";
 
   return (
@@ -232,8 +224,6 @@ const PortfolioLayout = () => {
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
         >
-          {/* Carousel track — current page in flow + adjacent page flush beside it; the whole
-              track is translated imperatively in the touch handlers (keyed so nav resets it). */}
           <div
             ref={(el) => {
               contentRef.current = el;

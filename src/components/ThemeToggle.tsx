@@ -24,7 +24,6 @@ const ThemeToggle = () => {
     }
 
     const root = document.documentElement;
-    // to dark = sunset (reveal from top) · to light = sunrise (reveal from bottom)
     root.classList.add(toDark ? "vt-sunset" : "vt-sunrise");
 
     const transition = doc.startViewTransition(() => {
@@ -32,7 +31,6 @@ const ThemeToggle = () => {
     });
 
     transition.ready.then(() => {
-      // sunset: mask slides 100%→0% (opaque top band drops in); sunrise: 0%→100%
       const from = toDark ? "0% 100%" : "0% 0%";
       const to = toDark ? "0% 0%" : "0% 100%";
       const anim = root.animate(

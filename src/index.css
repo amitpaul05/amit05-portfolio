@@ -201,6 +201,11 @@
   :root {
     --radius: 1rem;
   }
+  /* Skip per-card grain on mobile — the page-level grain already carries the
+     texture, and dozens of card overlays add real compositing cost on phones. */
+  .material-card::after {
+    content: none;
+  }
 }
 
 @layer base {
@@ -214,7 +219,9 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Paper grain over the whole page, behind all content */
+  /* Paper grain over the whole page, behind all content.
+     Promoted to its own GPU layer so the fixed texture isn't repainted on every
+     scroll frame (a major mobile-jank source). */
   body::before {
     content: "";
     position: fixed;
@@ -224,6 +231,8 @@
     opacity: var(--grain-opacity);
     background-image: var(--grain-image);
     background-size: var(--grain-size) var(--grain-size);
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   section[id] {

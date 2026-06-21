@@ -132,9 +132,7 @@ const Academic = () => {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-        {/* Main column: degree + thesis */}
         <div className="lg:col-span-8 flex flex-col gap-6 md:gap-8">
-          {/* Degree */}
           <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8">
             <div className="flex items-start gap-5">
               <div className="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center shrink-0">
@@ -165,7 +163,6 @@ const Academic = () => {
             </div>
           </article>
 
-          {/* Thesis */}
           <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8">
             <div className="flex items-start gap-5">
               <div className="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center shrink-0">
@@ -230,7 +227,6 @@ const Academic = () => {
           </article>
         </div>
 
-        {/* Coursework sidebar */}
         <aside className="lg:col-span-4">
           <div className="bg-surface-container-low border border-outline-variant/20 rounded-lg p-6 lg:sticky lg:top-24">
             <h2 className="font-sans text-headline-sm text-primary mb-6 flex items-center gap-2">

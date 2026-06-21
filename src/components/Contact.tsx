@@ -61,7 +61,6 @@ const Contact = () => {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
-        {/* Contact information */}
         <div className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8">
           <h3 className="font-sans text-headline-sm text-primary mb-6">Contact Information</h3>
 
@@ -119,7 +118,6 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* CTA */}
         <div className="material-card bg-primary-container text-on-primary-container rounded-lg p-6 md:p-8 flex flex-col justify-between">
           <div>
             <h3 className="font-sans text-headline-sm mb-4">Open to Opportunities</h3>

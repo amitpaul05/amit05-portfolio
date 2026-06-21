@@ -74,7 +74,6 @@ const experiences: Role[] = [
   }
 ];
 
-// Group consecutive roles by company so each company reads as a promotion branch
 const companies: { company: string; roles: { role: Role; index: number }[] }[] = [];
 experiences.forEach((role, index) => {
   const last = companies[companies.length - 1];
@@ -111,8 +110,8 @@ const RoleDetail = ({ role }: { role: Role }) => (
 );
 
 const Experience = () => {
-  const [selected, setSelected] = useState(0); // desktop: which role the right panel shows
-  const [expanded, setExpanded] = useState<Set<number>>(() => new Set()); // mobile: open roles (multiple)
+  const [selected, setSelected] = useState(0);
+  const [expanded, setExpanded] = useState<Set<number>>(() => new Set());
 
   const wrapRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -121,7 +120,6 @@ const Experience = () => {
 
   const selectedRole = experiences[selected];
 
-  // Curvy connector from the selected card to the (fixed-spot) description panel
   useLayoutEffect(() => {
     const recalc = () => {
       const wrap = wrapRef.current;
@@ -137,7 +135,7 @@ const Experience = () => {
       const x1 = c.right - w.left;
       const y1 = c.top - w.top + c.height / 2;
       const x2 = p.left - w.left;
-      const y2 = p.top - w.top + 32; // anchor near the panel's header
+      const y2 = p.top - w.top + 32;
       const dx = Math.max(28, (x2 - x1) * 0.6);
       setPath(`M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`);
     };
@@ -170,7 +168,6 @@ const Experience = () => {
         ref={wrapRef}
         className="relative grid lg:grid-cols-[300px_minmax(0,1fr)] gap-gutter items-start"
       >
-        {/* Curvy connector (desktop) linking the selected card to the description panel */}
         <svg className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-0" aria-hidden>
           {path && (
             <path
@@ -183,7 +180,6 @@ const Experience = () => {
           )}
         </svg>
 
-        {/* LEFT — career paths, company-separated */}
         <div className="relative z-10 space-y-8">
           {companies.map((co) => (
             <div key={co.company}>
@@ -201,11 +197,10 @@ const Experience = () => {
 
               <ol className="relative ml-5 pl-8 border-l-2 border-outline-variant/40 space-y-3">
                 {co.roles.map(({ role, index }) => {
-                  const isOpen = expanded.has(index); // mobile
-                  const isSel = selected === index; // desktop
+                  const isOpen = expanded.has(index);
+                  const isSel = selected === index;
                   return (
                     <li key={index} className="relative">
-                      {/* node */}
                       <span
                         className={cn(
                           "absolute -left-[41px] top-4 w-3 h-3 rounded-full border-2 transition-colors",
@@ -218,14 +213,13 @@ const Experience = () => {
                         aria-expanded={isOpen}
                         ref={(el) => (cardRefs.current[index] = el)}
                         onClick={() => {
-                          setSelected(index); // desktop: drive the detail panel
+                          setSelected(index);
                           const willOpen = !expanded.has(index);
                           setExpanded((prev) => {
                             const next = new Set(prev);
                             willOpen ? next.add(index) : next.delete(index);
                             return next;
                           });
-                          // mobile: bring a just-opened card into view (no auto-collapse now)
                           if (willOpen && window.innerWidth < 1024) {
                             const el = cardRefs.current[index];
                             window.setTimeout(
@@ -250,7 +244,6 @@ const Experience = () => {
                               {role.type} · {role.location}
                             </p>
                           </div>
-                          {/* affordance: chevron — rotates on mobile, points to detail on desktop */}
                           <ChevronDown
                             className={cn(
                               "h-5 w-5 shrink-0 mt-1 text-on-surface-variant transition-transform lg:hidden",
@@ -259,7 +252,6 @@ const Experience = () => {
                           />
                         </div>
 
-                        {/* mobile inline detail (accordion) */}
                         <div
                           className={cn(
                             "lg:hidden grid transition-[grid-template-rows] duration-300 ease-out",
@@ -281,12 +273,10 @@ const Experience = () => {
           ))}
         </div>
 
-        {/* RIGHT — detail of the selected role (desktop only): fixed-size container */}
         <div
           ref={panelRef}
           className="hidden lg:flex lg:flex-col lg:sticky lg:top-24 lg:h-[calc(100vh)] material-card bg-surface-container-lowest border border-primary/40 rounded-lg overflow-hidden"
         >
-          {/* Shrunk header — title + badge only */}
           <div className="flex items-center justify-between gap-4 px-6 py-4 border-b border-outline-variant/30 shrink-0">
             <h3 className="font-sans text-headline-sm text-primary truncate">{selectedRole.title}</h3>
             <span className="shrink-0 bg-secondary-container text-on-secondary-container px-3 py-1 rounded font-sans text-label-md">
