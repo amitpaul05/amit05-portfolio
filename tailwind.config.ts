@@ -140,7 +140,7 @@ export default {
 				'headline-lg': ['40px', { lineHeight: '48px', letterSpacing: '-0.02em', fontWeight: '700' }],
 				'headline-md': ['28px', { lineHeight: '36px', letterSpacing: '-0.01em', fontWeight: '600' }],
 				'headline-sm': ['20px', { lineHeight: '28px', fontWeight: '600' }],
-				'headline-lg-mobile': ['32px', { lineHeight: '40px', fontWeight: '700' }],
+				'headline-lg-mobile': ['34px', { lineHeight: '40px', letterSpacing: '-0.02em', fontWeight: '800' }],
 				'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }],
 				'body-md': ['16px', { lineHeight: '24px', fontWeight: '400' }],
 				'label-md': ['14px', { lineHeight: '20px', letterSpacing: '0.05em', fontWeight: '500' }],
@@ -148,7 +148,7 @@ export default {
 			spacing: {
 				unit: '8px',
 				gutter: '24px',
-				'margin-mobile': '16px',
+				'margin-mobile': '24px',
 				'margin-desktop': '64px',
 			},
 			maxWidth: {
@@ -180,13 +180,30 @@ export default {
 				'fade-in-up': {
 					'0%': { opacity: '0', transform: 'translateY(16px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				/* Route/tab change — content fades and rises into place */
+				'page-enter': {
+					'0%': { opacity: '0', transform: 'translateY(12px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				/* Multi-bounce settling at the lifted rest (-6px) — for the active bottom tab */
+				'tab-bounce': {
+					'0%':   { transform: 'translateY(0)' },
+					'28%':  { transform: 'translateY(-13px)' },
+					'45%':  { transform: 'translateY(-2px)' },
+					'62%':  { transform: 'translateY(-9px)' },
+					'78%':  { transform: 'translateY(-4px)' },
+					'90%':  { transform: 'translateY(-7px)' },
+					'100%': { transform: 'translateY(-6px)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.4s ease-out',
-				'fade-in-up': 'fade-in-up 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+				'fade-in-up': 'fade-in-up 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+				'page-enter': 'page-enter 1s cubic-bezier(0.22, 1, 0.36, 1)',
+				'tab-bounce': 'tab-bounce 0.7s ease-out'
 			}
 		}
 	},

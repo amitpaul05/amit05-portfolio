@@ -13,7 +13,9 @@ const PortfolioLayout = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
 
-  const activeRoute = sections.find((s) => location.pathname === `/${s}`) ?? '';
+  // Index route ("/") renders About — treat it as "/about" for nav + page-transition keying
+  const normalizedPath = location.pathname === '/' ? '/about' : location.pathname;
+  const activeRoute = sections.find((s) => normalizedPath === `/${s}`) ?? '';
 
   useScrollAnimation([location.pathname]);
 
@@ -45,11 +47,11 @@ const PortfolioLayout = () => {
   const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
   return (
-    <div className="min-h-screen flex flex-col text-foreground overflow-x-hidden">
+    <div className="min-h-screen flex flex-col text-foreground overflow-x-hidden pb-16 lg:pb-0">
       <TopNav />
 
       <main className="flex-grow pt-16">
-        <div ref={contentRef}>
+        <div ref={contentRef} key={normalizedPath} className="animate-page-enter">
           <Outlet />
         </div>
 
