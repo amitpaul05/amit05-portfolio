@@ -1,5 +1,3 @@
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { GraduationCap, Book, Award, Calendar, MapPin, Mail, ExternalLink } from "lucide-react";
 import kuLogo from '../assets/khulna-university-logo.png';
 import tomaMadam from '../assets/toma_madam.webp';
@@ -17,15 +15,15 @@ type Person = {
 };
 
 const PersonCard = ({ person }: { person: Person }) => (
-  <div className="flex flex-col items-center text-center gap-1.5">
+  <div className="flex flex-col items-center text-center gap-2 w-28">
     <img
       src={person.photo}
       alt={person.name}
-      className="w-14 h-14 rounded-full object-cover border border-border/50"
+      className="w-16 h-16 rounded-full object-cover border border-outline-variant/40"
     />
     <div>
-      <p className="text-sm font-medium text-card-foreground leading-tight">{person.name}</p>
-      <p className="text-xs text-muted-foreground">{person.role}</p>
+      <p className="font-sans text-sm font-medium text-on-surface leading-tight">{person.name}</p>
+      <p className="font-sans text-label-md text-on-surface-variant">{person.role}</p>
     </div>
     <div className="flex gap-3">
       {person.contact && (
@@ -34,9 +32,9 @@ const PersonCard = ({ person }: { person: Person }) => (
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Email ${person.name}`}
-          className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+          className="text-on-surface-variant hover:text-primary transition-colors"
         >
-          <Mail className="h-3.5 w-3.5" />
+          <Mail className="h-4 w-4" />
         </a>
       )}
       {person.portfolio && (
@@ -45,9 +43,9 @@ const PersonCard = ({ person }: { person: Person }) => (
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`${person.name} profile`}
-          className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+          className="text-on-surface-variant hover:text-primary transition-colors"
         >
-          <ExternalLink className="h-3.5 w-3.5" />
+          <ExternalLink className="h-4 w-4" />
         </a>
       )}
     </div>
@@ -118,140 +116,140 @@ const Academic = () => {
   ];
 
   return (
-    <section id="academic" className="py-20 relative">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-4">
-            Academic Background
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            B.Sc. in Electronics and Communication Engineering with a final-year thesis in ML-based bearing fault detection.
-          </p>
-        </div>
+    <section
+      id="academic"
+      data-no-animate
+      className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pt-10 md:pt-16 pb-16"
+    >
+      <header className="mb-12">
+        <h1 className="font-sans text-headline-lg-mobile md:text-headline-lg text-primary mb-4">
+          Academic Background
+        </h1>
+        <p className="font-serif text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+          B.Sc. in Electronics and Communication Engineering, with a final-year thesis in
+          ML-based bearing fault detection.
+        </p>
+      </header>
 
-        <div className="max-w-4xl mx-auto space-y-6">
-
-          {/* Education */}
-          <Card className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl">
-            <CardContent className="p-8">
-              <div className="flex items-start gap-6">
-                <div className="p-3 bg-primary/10 rounded-lg flex-shrink-0">
-                  <GraduationCap className="h-7 w-7 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-xl font-semibold text-card-foreground mb-1">
-                    {education.discipline}
-                  </p>
-                  <span className="inline-block bg-muted text-muted-foreground text-xs font-medium px-3 py-1 rounded-full uppercase tracking-wide mb-4">
-                    {education.degree}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+        {/* Main column: degree + thesis */}
+        <div className="lg:col-span-8 flex flex-col gap-6 md:gap-8">
+          {/* Degree */}
+          <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8">
+            <div className="flex items-start gap-5">
+              <div className="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center shrink-0">
+                <GraduationCap className="h-6 w-6 text-on-secondary-container" />
+              </div>
+              <div className="flex-1">
+                <h2 className="font-sans text-headline-sm text-primary mb-1">
+                  {education.discipline}
+                </h2>
+                <span className="inline-block bg-surface-container-high text-on-surface-variant font-sans text-label-md uppercase tracking-wide px-3 py-1 rounded-full mb-4">
+                  {education.degree}
+                </span>
+                <div className="flex flex-wrap items-center gap-5 font-sans text-sm text-on-surface-variant">
+                  <span className="flex items-center gap-1.5">
+                    <img src={kuLogo} alt="Khulna University" className="h-4 w-4 object-contain" />
+                    {education.university}
                   </span>
-                  <div className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1.5">
-                      <img
-                        src={kuLogo}
-                        alt="Khulna University"
-                        className="h-4 w-4 object-contain"
-                      />
-                      <span>{education.university}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="h-4 w-4" />
-                      <span>{education.location}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="h-4 w-4" />
-                      <span>{education.period}</span>
-                    </div>
-                  </div>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="h-4 w-4" />
+                    {education.location}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4" />
+                    {education.period}
+                  </span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </article>
 
           {/* Thesis */}
-          <Card className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl">
-            <CardContent className="p-8">
-              <div className="flex items-start gap-6">
-                <div className="p-3 bg-primary/10 rounded-lg flex-shrink-0">
-                  <Award className="h-7 w-7 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                    Final Year Thesis
+          <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8">
+            <div className="flex items-start gap-5">
+              <div className="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center shrink-0">
+                <Award className="h-6 w-6 text-on-secondary-container" />
+              </div>
+              <div className="flex-1">
+                <p className="font-sans text-label-md uppercase tracking-widest text-secondary mb-2">
+                  Final Year Thesis
+                </p>
+                <h3 className="font-sans text-headline-sm text-primary leading-snug mb-4">
+                  {education.thesis.title}
+                </h3>
+
+                <div className="font-serif text-body-md text-on-surface-variant leading-relaxed space-y-3 mb-5">
+                  <p>
+                    Compared{" "}
+                    <strong className="text-on-surface font-semibold">Vision Transformers (ViT)</strong>{" "}
+                    and{" "}
+                    <strong className="text-on-surface font-semibold">Time Series Transformers (TST)</strong>{" "}
+                    for bearing fault detection using the{" "}
+                    <strong className="text-on-surface font-semibold">PU</strong> and{" "}
+                    <strong className="text-on-surface font-semibold">CWRU</strong> datasets.
                   </p>
-                  <h3 className="font-semibold text-card-foreground leading-snug mb-4">
-                    {education.thesis.title}
-                  </h3>
+                  <p>
+                    ViT processes spectrogram images; TST works directly with raw time-series data —
+                    evaluated across accuracy, noise robustness, and cross-dataset transfer performance.
+                  </p>
+                </div>
 
-                  <div className="text-sm text-muted-foreground leading-relaxed space-y-2 mb-5">
-                    <p>
-                      Compared{" "}
-                      <strong className="text-card-foreground font-medium">Vision Transformers (ViT)</strong>{" "}
-                      and{" "}
-                      <strong className="text-card-foreground font-medium">Time Series Transformers (TST)</strong>{" "}
-                      for bearing fault detection using the{" "}
-                      <strong className="text-card-foreground font-medium">PU</strong> and{" "}
-                      <strong className="text-card-foreground font-medium">CWRU</strong> datasets.
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {education.thesis.technologies.map((tech) => (
+                    <span key={tech} className="bg-surface-container-high text-on-surface-variant font-sans text-label-md px-3 py-1 rounded">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="pt-5 border-t border-outline-variant/40 space-y-6">
+                  <div>
+                    <p className="font-sans text-label-md uppercase tracking-widest text-secondary mb-4">
+                      Thesis Committee
                     </p>
-                    <p>
-                      ViT processes spectrogram images; TST works directly with raw time-series data —
-                      evaluated across accuracy, noise robustness, and cross-dataset transfer performance.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {education.thesis.technologies.map((tech) => (
-                      <Badge key={tech} variant="secondary" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  {/* Thesis Committee */}
-                  <div className="pt-5 border-t border-border/50 space-y-5">
-                    <div>
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-4">
-                        Thesis Committee
-                      </p>
-                      <div className="flex flex-wrap gap-6">
-                        {education.thesis.committee.map((person) => (
-                          <PersonCard key={person.name} person={person} />
-                        ))}
-                      </div>
+                    <div className="flex flex-wrap gap-6">
+                      {education.thesis.committee.map((person) => (
+                        <PersonCard key={person.name} person={person} />
+                      ))}
                     </div>
-
-                    <div>
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-4">
-                        Students
-                      </p>
-                      <div className="flex flex-wrap gap-6">
-                        {education.thesis.students.map((person) => (
-                          <PersonCard key={person.name} person={person} />
-                        ))}
-                      </div>
+                  </div>
+                  <div>
+                    <p className="font-sans text-label-md uppercase tracking-widest text-secondary mb-4">
+                      Students
+                    </p>
+                    <div className="flex flex-wrap gap-6">
+                      {education.thesis.students.map((person) => (
+                        <PersonCard key={person.name} person={person} />
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Relevant Coursework */}
-          <Card className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl">
-            <CardContent className="p-8">
-              <h3 className="text-lg font-semibold text-card-foreground mb-6">Relevant Coursework</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                {courses.map((course) => (
-                  <div key={course} className="flex items-center gap-2 p-3 bg-background/50 rounded-lg border border-border/30">
-                    <Book className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">{course}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
+            </div>
+          </article>
         </div>
+
+        {/* Coursework sidebar */}
+        <aside className="lg:col-span-4">
+          <div className="bg-surface-container-low border border-outline-variant/20 rounded-lg p-6 lg:sticky lg:top-24">
+            <h2 className="font-sans text-headline-sm text-primary mb-6 flex items-center gap-2">
+              <Book className="h-5 w-5" />
+              Relevant Coursework
+            </h2>
+            <ul className="space-y-3">
+              {courses.map((course) => (
+                <li
+                  key={course}
+                  className="flex items-center gap-2.5 font-serif text-body-md text-on-surface-variant"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                  {course}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
       </div>
     </section>
   );

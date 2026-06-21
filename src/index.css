@@ -12,38 +12,39 @@
 
 @layer base {
   :root {
-    /* ── M3 tokens — light (parchment) ── */
-    --surface: 48 33% 97%;
-    --surface-dim: 48 6% 85%;
-    --surface-bright: 48 33% 97%;
+    /* ── M3 tokens — light (#f5fffa creamy base) ── */
+    --surface: 150 100% 98%;
+    --surface-dim: 150 14% 90%;
+    --surface-bright: 150 100% 99%;
     --surface-container-lowest: 0 0% 100%;
-    --surface-container-low: 60 15% 95%;
-    --surface-container: 48 14% 93%;
-    --surface-container-high: 48 10% 90%;
-    --surface-container-highest: 45 7% 88%;
-    --surface-variant: 45 7% 88%;
-    --on-surface: 90 4% 11%;
-    --on-surface-variant: 233 6% 29%;
+    --surface-container-low: 150 50% 98%;
+    --surface-container: 150 32% 96%;
+    --surface-container-high: 150 24% 94%;
+    --surface-container-highest: 150 18% 92%;
+    --surface-variant: 150 18% 92%;
+    --on-surface: 150 8% 10%;
+    --on-surface-variant: 150 8% 22%;
     --inverse-surface: 100 3% 19%;
     --inverse-on-surface: 48 16% 94%;
-    --outline: 227 4% 48%;
-    --outline-variant: 240 8% 79%;
+    --outline: 150 6% 48%;
+    --outline-variant: 150 12% 80%;
     --surface-tint: 224 22% 41%;
 
     --primary: 223 47% 18%;
     --on-primary: 0 0% 100%;
     --primary-container: 223 32% 26%;
-    --on-primary-container: 225 31% 69%;
+    /* light: text on primary-container = the card colour (near-white), not muted blue */
+    --on-primary-container: 0 0% 100%;
     --inverse-primary: 226 57% 83%;
     --primary-fixed: 227 100% 93%;
     --primary-fixed-dim: 226 57% 83%;
     --on-primary-fixed: 222 62% 14%;
     --on-primary-fixed-variant: 224 28% 31%;
 
-    --secondary: 220 22% 40%;
+    --secondary: 222 30% 30%;
     --on-secondary: 0 0% 100%;
     --secondary-container: 222 93% 89%;
-    --on-secondary-container: 220 22% 40%;
+    --on-secondary-container: 222 34% 28%;
     --secondary-fixed: 222 100% 92%;
     --secondary-fixed-dim: 221 53% 82%;
     --on-secondary-fixed: 217 66% 13%;
@@ -64,22 +65,22 @@
     --on-error-container: 356 100% 29%;
 
     /* ── shadcn aliases → mapped onto M3 ── */
-    --background: 48 33% 97%;
-    --foreground: 90 4% 11%;
+    --background: 150 100% 98%;
+    --foreground: 150 8% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 90 4% 11%;
+    --card-foreground: 150 8% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 90 4% 11%;
+    --popover-foreground: 150 8% 10%;
     --primary-foreground: 0 0% 100%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 48 14% 93%;
-    --muted-foreground: 233 6% 29%;
+    --muted: 150 32% 96%;
+    --muted-foreground: 150 8% 22%;
     --accent: 222 93% 89%;
     --accent-foreground: 220 22% 40%;
     --destructive: 0 75% 42%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 8% 79%;
-    --input: 240 8% 79%;
+    --border: 150 12% 80%;
+    --input: 150 12% 80%;
     --ring: 223 47% 18%;
     --radius: 0.5rem;
 
@@ -91,6 +92,12 @@
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: 150ms ease;
     --transition-normal: 200ms ease;
+
+    /* Paper grain — single source of truth. Change these and the body + every
+       .material-card adapt automatically (cards render at half --grain-opacity). */
+    --grain-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --grain-size: 180px;
+    --grain-opacity: 0.5;
 
     --sidebar-background: 60 15% 95%;
     --sidebar-foreground: 233 6% 29%;
@@ -131,14 +138,16 @@
 
     --primary: 226 57% 83%;
     --on-primary: 220 41% 22%;
-    --primary-container: 226 25% 29%;
+    /* Original cool slate restored, fill opacity reduced so it sits subtly on the dark surface */
+    --primary-container: 225 18% 18%;
     --on-primary-container: 227 100% 93%;
     --inverse-primary: 223 47% 18%;
     /* fixed + on-* tokens are theme-invariant by M3 definition — inherited from :root */
 
     --secondary: 221 53% 82%;
     --on-secondary: 220 41% 22%;
-    --secondary-container: 219 28% 30%;
+    /* Original cool slate restored, fill opacity reduced (icon tiles, chips, badges) */
+    --secondary-container: 219 20% 19%;
     --on-secondary-container: 222 100% 92%;
 
     --tertiary: 40 57% 71%;
@@ -173,6 +182,9 @@
     --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.2);
     --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.32);
 
+    /* Paper grain — dark theme only needs a different opacity */
+    --grain-opacity: 0.1;
+
     --sidebar-background: 216 8% 12%;
     --sidebar-foreground: 240 8% 79%;
     --sidebar-primary: 226 57% 83%;
@@ -195,19 +207,16 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Subtle paper grain over the whole page, behind all content */
+  /* Paper grain over the whole page, behind all content */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  .dark body::before {
-    opacity: 0.045;
+    opacity: var(--grain-opacity);
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
   }
 
   section[id] {
@@ -248,9 +257,22 @@
   
   /* Material card — Level 1 elevation + soft ambient shadow, lifts on hover */
   .material-card {
+    position: relative;
     box-shadow: var(--shadow-card);
     transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Paper grain on each card — always half the body-grain opacity */
+  .material-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: calc(var(--grain-opacity) / 2);
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
   }
 
   .material-card:hover {

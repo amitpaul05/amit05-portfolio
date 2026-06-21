@@ -1,6 +1,4 @@
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Calendar, MapPin, Building } from "lucide-react";
+import { Building } from "lucide-react";
 
 type DateRange = {
   from: string;
@@ -66,86 +64,65 @@ const Experience = () => {
   ];
 
   return (
-    <section id="experience" className="py-20">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Professional Experience
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Three years at Idlewild Digital — promoted from intern to engineer. All production work, no toy projects.
-          </p>
-        </div>
+    <section id="experience" className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-16">
+      <header className="mb-12 text-center md:text-left">
+        <h2 className="font-sans text-headline-md text-primary mb-2">The Journey</h2>
+        <p className="font-sans text-label-md uppercase tracking-widest text-secondary">
+          Three years at Idlewild Digital — intern to engineer, all production work
+        </p>
+        <div className="w-16 h-1 bg-primary rounded-full mt-4 mx-auto md:mx-0" />
+      </header>
 
-        <div className="max-w-4xl mx-auto">
-          {experiences.map((exp, index) => (
-            <div key={index} className="relative">
-              {index !== experiences.length - 1 && (
-                <div className="absolute left-6 top-20 w-0.5 h-full bg-border"></div>
-              )}
+      <ol className="relative">
+        <span className="absolute left-[9px] top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-outline-variant to-transparent" />
+        {experiences.map((exp, index) => (
+          <li key={index} className="relative pl-10 md:pl-14 pb-8 last:pb-0">
+            <span className="absolute left-[3px] top-2 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-background" />
 
-              <Card
-                className="mb-8 ml-12 bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl hover:border-primary/30 transition-all duration-300 group relative overflow-hidden"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                <div className="absolute -left-8 top-6 w-4 h-4 bg-primary rounded-full border-4 border-background group-hover:bg-primary/70 transition-colors duration-300"></div>
-
-                <CardContent className="p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl font-semibold text-card-foreground group-hover:text-primary transition-colors duration-300">
-                        {exp.title}
-                      </h3>
-                      <div className="flex items-center gap-2 text-muted-foreground mt-1">
-                        <Building className="h-4 w-4" />
-                        <span className="font-medium">{exp.company}</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col lg:items-end gap-2 mt-2 lg:mt-0">
-                      <Badge variant="secondary" className="w-fit">
-                        {exp.type}
-                      </Badge>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>
-                            <time dateTime={exp.dateRange.fromISO}>{exp.dateRange.from}</time>
-                            {" – "}
-                            {exp.dateRange.toISO
-                              ? <time dateTime={exp.dateRange.toISO}>{exp.dateRange.to}</time>
-                              : exp.dateRange.to}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4" />
-                          <span>{exp.location}</span>
-                        </div>
-                      </div>
-                    </div>
+            <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                <div>
+                  <span className="font-sans text-label-md text-primary block mb-1">
+                    <time dateTime={exp.dateRange.fromISO}>{exp.dateRange.from}</time>
+                    {" – "}
+                    {exp.dateRange.toISO
+                      ? <time dateTime={exp.dateRange.toISO}>{exp.dateRange.to}</time>
+                      : exp.dateRange.to}
+                  </span>
+                  <h3 className="font-sans text-headline-sm text-primary">{exp.title}</h3>
+                  <div className="flex items-center gap-2 text-on-surface-variant mt-1">
+                    <Building className="h-4 w-4" />
+                    <span className="font-sans text-sm">{exp.company} · {exp.location}</span>
                   </div>
+                </div>
+                <span className="shrink-0 self-start bg-secondary-container text-on-secondary-container px-3 py-1 rounded font-sans text-label-md">
+                  {exp.type}
+                </span>
+              </div>
 
-                  <ul className="space-y-2 mb-4">
-                    {exp.achievements.map((achievement, i) => (
-                      <li key={i} className="text-muted-foreground leading-relaxed flex items-start gap-2">
-                        <span className="mt-2 block w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span>
-                        <span>{achievement}</span>
-                      </li>
-                    ))}
-                  </ul>
+              <ul className="space-y-3 mb-5">
+                {exp.achievements.map((achievement, i) => (
+                  <li key={i} className="font-serif text-body-md text-on-surface-variant leading-relaxed flex items-start gap-3">
+                    <span className="mt-2.5 block w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                    <span>{achievement}</span>
+                  </li>
+                ))}
+              </ul>
 
-                  <div className="flex flex-wrap gap-2">
-                    {exp.technologies.map((tech) => (
-                      <Badge key={tech} variant="outline" className="text-xs hover:border-primary/50 hover:text-primary transition-colors duration-200">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </div>
-      </div>
+              <div className="flex flex-wrap gap-2">
+                {exp.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="font-mono text-xs bg-surface-container-high text-on-surface-variant px-2 py-1 rounded"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 };

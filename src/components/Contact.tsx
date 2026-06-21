@@ -1,5 +1,3 @@
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
 import { Github, Linkedin, Mail, MapPin, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
 import codeforcesIcon from "../assets/codeforces-icon.svg";
@@ -53,112 +51,102 @@ const Contact = () => {
   ];
 
   return (
-    <section className="py-20 animate-on-scroll">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Let's Connect
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Backend engineer with production experience across LLM integrations, payment flows, and cloud deployments. Based in Dhaka — open to remote backend roles.
-          </p>
-        </div>
-        
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Contact Information */}
-            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-elegant animate-slide-in-left">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold mb-6 text-card-foreground">
-                  Contact Information
-                </h3>
-                
-                <div className="space-y-6">
-                  {contactInfo.map((contact, index) => (
-                    <div key={contact.label} className="flex items-center gap-4 group">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
-                        <contact.icon className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">{contact.label}</p>
-                        {contact.href !== '#' ? (
-                          <a
-                            href={contact.href}
-                            className="text-card-foreground hover:text-primary transition-colors duration-300 font-medium"
-                          >
-                            {contact.value}
-                          </a>
-                        ) : (
-                          <span className="text-card-foreground font-medium">
-                            {contact.value}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="mt-8 pt-6 border-t border-border/50">
-                  <h4 className="text-lg font-medium mb-4 text-card-foreground">
-                    Professional Profiles
-                  </h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    {socialLinks.map((social, index) => (
-                      <a
-                        key={social.label}
-                        href={social.href}
-                        className="group flex items-center gap-3 p-3 rounded-lg bg-card/50 hover:bg-card/80 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                        title={
-                          social.label === "GitHub" ? "View my GitHub repositories and projects" :
-                          social.label === "LinkedIn" ? "Connect with me on LinkedIn" :
-                          social.label === "LeetCode" ? "Check out my coding solutions on LeetCode" :
-                          "Visit my Codeforces profile for competitive programming"
-                        }
-                      >
-                        {social.isLucideIcon ? (
-                          <social.icon className="h-5 w-5" />
-                        ) : (
-                          <img src={social.iconSrc} alt={social.label} className="h-6 w-6 filter brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity duration-200" />
-                        )}
-                        <span className="font-medium">{social.label}</span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            {/* CTA Card */}
-            <Card className="bg-gradient-card border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-elegant animate-slide-in-right">
-              <CardContent className="p-8 flex flex-col justify-between h-full">
-                <div>
-                  <h3 className="text-2xl font-semibold mb-4 text-card-foreground">
-                    Open to Opportunities
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-8">
-                    Three years building Django systems in production — APIs, async pipelines, cloud deployments, and payment flows. Looking for backend roles where code quality and system reliability matter.
-                  </p>
-                </div>
+    <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-16">
+      <header className="mb-12 text-center">
+        <h2 className="font-sans text-headline-md text-primary mb-3">Let's Connect</h2>
+        <p className="font-serif text-body-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+          Backend engineer with production experience across LLM integrations, payment flows, and
+          cloud deployments. Based in Dhaka — open to remote backend roles.
+        </p>
+      </header>
 
-                <div className="space-y-3">
-                  <Button
-                    className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300"
-                    onClick={() => window.open('mailto:amit.paul.ece@gmail.com', '_blank')}
-                  >
-                    <Mail className="mr-2 h-4 w-4" />
-                    Send Email
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full hover:border-primary hover:text-primary transition-all duration-300"
-                    onClick={() => window.open(resume, '_blank')}
-                  >
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Download Resume
-                  </Button>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+        {/* Contact information */}
+        <div className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8">
+          <h3 className="font-sans text-headline-sm text-primary mb-6">Contact Information</h3>
+
+          <div className="space-y-5">
+            {contactInfo.map((contact) => (
+              <div key={contact.label} className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center shrink-0">
+                  <contact.icon className="h-5 w-5 text-on-secondary-container" />
                 </div>
-              </CardContent>
-            </Card>
+                <div>
+                  <p className="font-sans text-label-md uppercase tracking-wide text-secondary">
+                    {contact.label}
+                  </p>
+                  {contact.href !== "#" ? (
+                    <a
+                      href={contact.href}
+                      className="font-sans font-medium text-on-surface hover:text-primary transition-colors"
+                    >
+                      {contact.value}
+                    </a>
+                  ) : (
+                    <span className="font-sans font-medium text-on-surface">{contact.value}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-outline-variant/40">
+            <h4 className="font-sans text-label-md uppercase tracking-widest text-secondary mb-4">
+              Professional Profiles
+            </h4>
+            <div className="grid grid-cols-2 gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 p-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  {social.isLucideIcon && social.icon ? (
+                    <social.icon className="h-5 w-5" />
+                  ) : (
+                    <img
+                      src={social.iconSrc}
+                      alt={social.label}
+                      className="h-5 w-5 brightness-0 dark:invert opacity-70 group-hover:opacity-100 transition-opacity"
+                    />
+                  )}
+                  <span className="font-sans text-label-md">{social.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="material-card bg-primary-container text-on-primary-container rounded-lg p-6 md:p-8 flex flex-col justify-between">
+          <div>
+            <h3 className="font-sans text-headline-sm mb-4">Open to Opportunities</h3>
+            <p className="font-serif text-body-md text-on-primary-container leading-relaxed mb-8">
+              Three years building Django systems in production — APIs, async pipelines, cloud
+              deployments, and payment flows. Looking for backend roles where code quality and
+              system reliability matter.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <a
+              href="mailto:amit.paul.ece@gmail.com"
+              className="w-full inline-flex items-center justify-center gap-2 bg-on-primary-container text-primary-container px-5 py-3 rounded-lg font-sans text-label-md hover:opacity-90 transition-opacity"
+            >
+              <Mail className="h-4 w-4" />
+              Send Email
+            </a>
+            <a
+              href={resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 border border-on-primary-container/40 text-on-primary-container px-5 py-3 rounded-lg font-sans text-label-md hover:bg-on-primary-container/10 transition-colors"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Download Resume
+            </a>
           </div>
         </div>
       </div>

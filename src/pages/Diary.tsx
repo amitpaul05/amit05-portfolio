@@ -103,19 +103,19 @@ function SidebarList({
             <button
               onClick={() => onMonthClick(monthKey)}
               className={`flex items-center justify-between w-full text-left px-2 py-1 rounded transition-colors duration-200 ${
-                isOpen ? 'bg-white/10' : 'hover:bg-white/5'
+                isOpen ? 'bg-surface-container-high' : 'hover:bg-surface-container'
               }`}
             >
               <span
-                className={`text-[11px] font-semibold uppercase tracking-widest transition-colors duration-200 ${
-                  isOpen ? 'text-muted-foreground/90' : 'text-muted-foreground/40'
+                className={`font-sans text-[11px] font-semibold uppercase tracking-widest transition-colors duration-200 ${
+                  isOpen ? 'text-on-surface' : 'text-on-surface-variant/60'
                 }`}
               >
                 {formatMonthLabel(monthKey)}
               </span>
               <ChevronDown
                 className={`w-3 h-3 shrink-0 transition-transform duration-200 ${
-                  isOpen ? 'rotate-0 text-muted-foreground/60' : '-rotate-90 text-muted-foreground/30'
+                  isOpen ? 'rotate-0 text-on-surface-variant' : '-rotate-90 text-on-surface-variant/50'
                 }`}
               />
             </button>
@@ -124,19 +124,19 @@ function SidebarList({
                 isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
               }`}
             >
-              <ul className="min-h-0 overflow-hidden space-y-1.5 mt-1 ml-3 pl-2 border-l border-muted-foreground/20">
+              <ul className="min-h-0 overflow-hidden space-y-1.5 mt-1 ml-3 pl-2 border-l border-outline-variant/40">
                 {monthEntries.map((entry) => (
                   <li key={entry.slug}>
                     <button
                       onClick={() => scrollToEntry(entry.slug)}
                       className={`font-diary text-sm w-full text-left leading-snug flex items-center gap-1 px-1 py-0.5 rounded transition-colors duration-200 ${
                         entry.slug === activeSlug
-                          ? 'bg-white/10 text-foreground'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                          ? 'bg-secondary-container text-on-secondary-container'
+                          : 'text-on-surface-variant hover:text-primary hover:bg-surface-container'
                       }`}
                     >
                       <ChevronRight className={`w-2.5 h-2.5 shrink-0 transition-colors duration-200 ${
-                        entry.slug === activeSlug ? 'text-muted-foreground/70' : 'text-muted-foreground/30'
+                        entry.slug === activeSlug ? 'text-on-secondary-container/70' : 'text-on-surface-variant/40'
                       }`} />
                       {formatShortDate(entry.date)}
                     </button>
@@ -289,19 +289,34 @@ const Diary = () => {
       >
         <SidebarList groups={groups} expandedMonth={expandedMonth} activeSlug={activeSlug} onMonthClick={setExpandedMonth} />
       </aside>
-      <div className="max-w-[860px] mx-auto px-4 pt-6 pb-16 space-y-16">
-        {loading ? (
-          <>
-            <SkeletonCard />
-            <SkeletonCard />
-          </>
-        ) : entries.length === 0 ? (
-          <div className="text-center py-24">
-            <p className="font-diary text-xl text-muted-foreground">No entries yet.</p>
-          </div>
-        ) : (
-          entries.map((entry) => <EntryCard key={entry.slug} entry={entry} />)
-        )}
+      <div className="max-w-[860px] mx-auto px-4 pt-6 pb-16">
+        <header className="mb-10">
+          <span className="block font-sans text-label-md uppercase tracking-widest text-secondary mb-2">
+            System Logs &amp; Musings
+          </span>
+          <h1 className="font-sans text-headline-lg-mobile md:text-headline-lg text-primary mb-3">
+            The Engineering Diary
+          </h1>
+          <p className="font-serif text-body-md text-on-surface-variant leading-relaxed">
+            A running log of technical challenges, architectural decisions, and late-night
+            breakthroughs — documented as they happen.
+          </p>
+        </header>
+
+        <div className="space-y-16">
+          {loading ? (
+            <>
+              <SkeletonCard />
+              <SkeletonCard />
+            </>
+          ) : entries.length === 0 ? (
+            <div className="text-center py-24">
+              <p className="font-diary text-xl text-on-surface-variant">No entries yet.</p>
+            </div>
+          ) : (
+            entries.map((entry) => <EntryCard key={entry.slug} entry={entry} />)
+          )}
+        </div>
       </div>
     </section>
   );

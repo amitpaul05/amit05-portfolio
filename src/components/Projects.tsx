@@ -1,7 +1,4 @@
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { Github, ExternalLink, Lock, Activity } from "lucide-react";
+import { Github, ExternalLink, Lock, Activity, Terminal } from "lucide-react";
 
 const Projects = () => {
   const workProjects = [
@@ -75,164 +72,208 @@ const Projects = () => {
     },
   ];
 
-  return (
-    <section id="projects" className="py-20">
-      <div className="container mx-auto px-6">
-        {/* Projects I worked on */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Production Projects
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Professional projects I've contributed to in production environments
-          </p>
-        </div>
+  const [featured, ...restWork] = workProjects;
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-          {workProjects.map((project, index) => (
-            <Card
-              key={project.title}
-              className={`bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl transition-all duration-300 relative overflow-hidden flex flex-col${project.url ? ' hover:border-primary/30 group cursor-pointer' : ''}`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => project.url && window.open(project.url, '_blank')}
-            >
-              {project.screenshot && (
-                <div className="relative overflow-hidden h-44 rounded-t-2xl flex-shrink-0">
-                  <img
-                    src={project.screenshot}
-                    alt={`${project.title} — ${project.description.split(/\.\s/)[0]}`}
-                    className="w-full h-full object-cover object-top transition-transform duration-500"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/60" />
-                </div>
+  return (
+    <>
+      {/* Header + featured + production grid */}
+      <section
+        id="projects"
+        data-no-animate
+        className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pt-10 md:pt-16 pb-16"
+      >
+        <header className="mb-12">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-sans text-label-md uppercase tracking-wide mb-4">
+            <Terminal className="h-4 w-4" />
+            Engineering Repository
+          </span>
+          <h1 className="font-sans text-headline-lg-mobile md:text-headline-lg text-primary mb-4">
+            Selected Works &amp; Production Systems
+          </h1>
+          <p className="font-serif text-body-lg text-on-surface-variant max-w-2xl">
+            Backend systems I've shipped in production — LLM platforms, compliance SaaS,
+            payment infrastructure, and multi-tenant applications, built with Django and
+            documented for clarity.
+          </p>
+        </header>
+
+        {/* Featured project */}
+        <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg overflow-hidden flex flex-col lg:flex-row mb-gutter">
+          <div className="lg:w-1/2 p-6 md:p-8 flex flex-col justify-center order-2 lg:order-1">
+            <div className="flex flex-wrap gap-2 mb-5">
+              {featured.technologies.map((tech) => (
+                <span key={tech} className="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-sans text-label-md">
+                  {tech}
+                </span>
+              ))}
+            </div>
+            <h2 className="font-sans text-headline-md text-primary mb-4">{featured.title}</h2>
+            <p className="font-serif text-body-md text-on-surface-variant mb-4 leading-relaxed">
+              {featured.description}
+            </p>
+            {featured.architectureNote && (
+              <p className="font-mono text-xs text-on-surface-variant border-t border-outline-variant/40 pt-4 leading-relaxed">
+                {featured.architectureNote}
+              </p>
+            )}
+            <div className="mt-6">
+              {featured.url ? (
+                <a
+                  href={featured.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-lg font-sans text-label-md hover:opacity-90 transition-opacity"
+                >
+                  <ExternalLink className="h-5 w-5" />
+                  Visit Project
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant px-4 py-2 rounded-lg font-sans text-label-md">
+                  <Lock className="h-4 w-4" /> Private — access by invite
+                </span>
               )}
-              <CardContent className="p-6 relative z-10 flex-1 flex flex-col">
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-semibold group-hover:text-primary transition-colors duration-300">
-                      {project.title}
-                    </h3>
-                    <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                      {!project.url && (
-                        <span className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded border border-border text-muted-foreground">
-                          <Lock className="h-3 w-3" /> Private
-                        </span>
-                      )}
-                      {project.url && (
-                        <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300 mt-1" />
-                      )}
-                    </div>
+            </div>
+          </div>
+          {featured.screenshot && (
+            <div className="lg:w-1/2 bg-surface-container-high flex items-center justify-center order-1 lg:order-2 min-h-[240px]">
+              <img
+                src={featured.screenshot}
+                alt={`${featured.title} — ${featured.description.split(/\.\s/)[0]}`}
+                className="w-full h-full max-h-[420px] object-cover object-top"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          )}
+        </article>
+
+        {/* Production grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          {restWork.map((project) => {
+            const clickable = Boolean(project.url);
+            return (
+              <article
+                key={project.title}
+                onClick={() => project.url && window.open(project.url, "_blank")}
+                className={`material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg overflow-hidden flex flex-col${clickable ? " cursor-pointer" : ""}`}
+              >
+                {project.screenshot && (
+                  <div className="h-44 shrink-0 overflow-hidden border-b border-outline-variant/20">
+                    <img
+                      src={project.screenshot}
+                      alt={`${project.title} — ${project.description.split(/\.\s/)[0]}`}
+                      className="w-full h-full object-cover object-top"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
-                  <p className="text-muted-foreground mb-3 leading-relaxed text-sm">
+                )}
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <h3 className="font-sans text-headline-sm text-primary">{project.title}</h3>
+                    {project.url ? (
+                      <ExternalLink className="h-4 w-4 text-on-surface-variant shrink-0 mt-1" />
+                    ) : (
+                      <span className="inline-flex items-center gap-1 shrink-0 font-sans text-label-md px-2 py-0.5 rounded border border-outline-variant text-on-surface-variant">
+                        <Lock className="h-3 w-3" /> Private
+                      </span>
+                    )}
+                  </div>
+                  <p className="font-serif text-body-md text-on-surface-variant leading-relaxed mb-4">
                     {project.description}
                   </p>
-                  {'architectureNote' in project && project.architectureNote && (
-                    <p className="text-xs font-mono text-muted-foreground mb-4 pt-2 border-t border-border/50 leading-relaxed">
-                      {project.architectureNote}
-                    </p>
-                  )}
-                  {'trafficStats' in project && project.trafficStats && (
-                    <div className="mt-4 pt-3 border-t border-border/50">
+
+                  {"trafficStats" in project && project.trafficStats && (
+                    <div className="mb-4 pt-3 border-t border-outline-variant/40">
                       <div className="flex items-center gap-1.5 mb-2">
-                        <Activity className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-[11px] font-mono text-muted-foreground">{(project.trafficStats as any).label}</span>
+                        <Activity className="h-3 w-3 text-on-surface-variant" />
+                        <span className="font-mono text-[11px] text-on-surface-variant">
+                          {(project.trafficStats as any).label}
+                        </span>
                       </div>
                       <div className="flex gap-2">
-                        <div className="flex-1 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5">
-                          <div className="text-lg font-bold font-mono text-foreground leading-none mb-1">{(project.trafficStats as any).peak}</div>
-                          <div className="text-[11px] text-muted-foreground">peak req / day</div>
+                        <div className="flex-1 rounded border border-outline-variant/40 bg-surface-container px-3 py-2.5">
+                          <div className="font-mono text-lg font-bold text-primary leading-none mb-1">{(project.trafficStats as any).peak}</div>
+                          <div className="font-sans text-[11px] text-on-surface-variant">peak req / day</div>
                         </div>
-                        <div className="flex-1 rounded-lg border border-border/50 bg-muted/20 px-3 py-2.5">
-                          <div className="text-lg font-bold font-mono text-foreground leading-none mb-1">{(project.trafficStats as any).avg}</div>
-                          <div className="text-[11px] text-muted-foreground">avg req / day</div>
+                        <div className="flex-1 rounded border border-outline-variant/40 bg-surface-container px-3 py-2.5">
+                          <div className="font-mono text-lg font-bold text-primary leading-none mb-1">{(project.trafficStats as any).avg}</div>
+                          <div className="font-sans text-[11px] text-on-surface-variant">avg req / day</div>
                         </div>
                       </div>
                     </div>
                   )}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech) => (
-                    <Badge key={tech} variant="secondary" className="text-xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-                
-              </CardContent>
-            </Card>
-          ))}
-        </div>
 
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Academic & Personal Projects
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Projects built during university — spanning backend APIs, computer vision, and hardware integration
-          </p>
-        </div>
-
-        {/* Featured Projects */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <Card
-              key={project.title}
-              className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl hover:border-primary/30 transition-all duration-300 group relative overflow-hidden h-full"
-            >
-              <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full">
-                <div>
-                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors duration-300 mb-3">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-6 leading-relaxed text-sm">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
+                  <div className="flex flex-wrap gap-2 mt-auto">
                     {project.technologies.map((tech) => (
-                      <Badge
-                        key={tech}
-                        variant="secondary"
-                        className="text-xs"
-                      >
+                      <span key={tech} className="font-mono text-xs bg-surface-container-high text-on-surface-variant px-2 py-1 rounded">
                         {tech}
-                      </Badge>
+                      </span>
                     ))}
                   </div>
                 </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
 
-                <div className="flex gap-3 mt-auto">
-                  {project.links.github && project.links.github !== '#' && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 transition-all duration-300"
-                      onClick={() => window.open(project.links.github, '_blank')}
-                    >
-                      <Github className="h-4 w-4 mr-2" />
-                      View Code
-                    </Button>
-                  )}
-                  {project.links.demo && project.links.demo !== '#' && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 transition-all duration-300"
-                      onClick={() => window.open(project.links.demo, '_blank')}
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Demo
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+      {/* Academic & personal projects */}
+      <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pb-16">
+        <header className="mb-8">
+          <h2 className="font-sans text-headline-md text-primary mb-2">Academic &amp; Personal Projects</h2>
+          <p className="font-serif text-body-md text-on-surface-variant max-w-2xl">
+            Built during university — spanning backend APIs, computer vision, and hardware integration.
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          {projects.map((project) => (
+            <article
+              key={project.title}
+              className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 flex flex-col"
+            >
+              <h3 className="font-sans text-headline-sm text-primary mb-3">{project.title}</h3>
+              <p className="font-serif text-body-md text-on-surface-variant leading-relaxed mb-5">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="font-mono text-xs bg-surface-container-high text-on-surface-variant px-2 py-1 rounded">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex gap-3 mt-auto">
+                {project.links.github && project.links.github !== "#" && (
+                  <a
+                    href={project.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-4 py-2 rounded-lg font-sans text-label-md transition-colors"
+                  >
+                    <Github className="h-4 w-4" />
+                    View Code
+                  </a>
+                )}
+                {project.links.demo && project.links.demo !== "#" && (
+                  <a
+                    href={project.links.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-4 py-2 rounded-lg font-sans text-label-md transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Demo
+                  </a>
+                )}
+              </div>
+            </article>
           ))}
         </div>
-
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

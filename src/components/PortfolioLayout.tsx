@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { ChevronRight, ChevronLeft } from "lucide-react";
-import Hero from "./Hero";
+import { ChevronRight, ChevronLeft, Github, Linkedin, Mail } from "lucide-react";
+import TopNav from "./TopNav";
 import Contact from "./Contact";
 import useScrollAnimation from "./ScrollAnimations";
 
@@ -42,77 +42,84 @@ const PortfolioLayout = () => {
   const prevSection = currentIndex > 0 ? sections[currentIndex - 1] : null;
   const nextSection = currentIndex < sections.length - 1 ? sections[currentIndex + 1] : null;
 
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
   return (
-    <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
-      <Hero />
+    <div className="min-h-screen flex flex-col text-foreground overflow-x-hidden">
+      <TopNav />
 
-      <div className="bg-background" ref={contentRef}>
-        <Outlet />
-      </div>
+      <main className="flex-grow pt-16">
+        <div ref={contentRef}>
+          <Outlet />
+        </div>
 
-      {activeRoute && (
-        <div className="flex w-full mt-8 px-8">
-          <div className="flex w-full mt-8">
-            <div className="flex-1 flex justify-center px-2">
-              {prevSection && (
-                <button
-                  onClick={() => navigate(`/${prevSection}`)}
-                  className="group relative flex items-center justify-center
-                            lg:h-16 lg:w-48 rounded-md
-                            bg-bg-surface
-                            border border-border-muted-custom
-                            shadow-md
-                            overflow-hidden
-                            transition-all duration-200
-                            hover:border-primary/30 hover:text-foreground
-                            text-muted-foreground
-                            md:h-16 md:w-48 md:text-base
-                            h-14 w-40 text-sm"
-                >
-                  <span className="absolute left-8 opacity-0 group-hover:opacity-100 transform translate-x-28 lg:group-hover:translate-x-12 group-hover:translate-x-10 transition-all duration-300 whitespace-nowrap font-bold">
-                    {prevSection.charAt(0).toUpperCase() + prevSection.slice(1)}
-                  </span>
-                  <ChevronLeft
-                    className="z-10 w-7 h-7 group-hover:-translate-x-12 transition-transform duration-300"
-                    strokeWidth={5}
-                  />
-                </button>
-              )}
-            </div>
+        {activeRoute && (prevSection || nextSection) && (
+          <div className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop mt-16 flex items-center justify-between gap-4">
+            {prevSection ? (
+              <button
+                onClick={() => navigate(`/${prevSection}`)}
+                className="group inline-flex items-center gap-2 h-12 px-5 rounded-lg border border-outline-variant/40 bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:border-primary/40 transition-colors material-card"
+              >
+                <ChevronLeft className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
+                <span className="font-sans text-label-md">{cap(prevSection)}</span>
+              </button>
+            ) : (
+              <span />
+            )}
 
-            <div className="flex-1 flex justify-center px-2">
-              {nextSection && (
-                <button
-                  onClick={() => navigate(`/${nextSection}`)}
-                  className="group relative flex items-center justify-center
-                            lg:h-16 lg:w-48 rounded-md
-                            bg-bg-surface
-                            border border-border-muted-custom
-                            shadow-md
-                            overflow-hidden
-                            transition-all duration-200
-                            hover:border-primary/30 hover:text-foreground
-                            text-muted-foreground
-                            md:h-16 md:w-48 md:text-base
-                            h-14 w-40 text-sm"
-                >
-                  <span className="absolute left-8 opacity-0 group-hover:opacity-100 transform -translate-x-16 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap font-bold">
-                    {nextSection.charAt(0).toUpperCase() + nextSection.slice(1)}
-                  </span>
-                  <ChevronRight
-                    className="z-10 w-7 h-7 group-hover:translate-x-10 transition-transform duration-300"
-                    strokeWidth={5}
-                  />
-                </button>
-              )}
-            </div>
+            {nextSection ? (
+              <button
+                onClick={() => navigate(`/${nextSection}`)}
+                className="group inline-flex items-center gap-2 h-12 px-5 rounded-lg border border-outline-variant/40 bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:border-primary/40 transition-colors material-card"
+              >
+                <span className="font-sans text-label-md">{cap(nextSection)}</span>
+                <ChevronRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            ) : (
+              <span />
+            )}
+          </div>
+        )}
+
+        <div id="contact-section">
+          <Contact />
+        </div>
+      </main>
+
+      <footer className="mt-auto border-t border-outline-variant/30 bg-surface-container-low">
+        <div className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="font-sans text-label-md text-on-surface-variant text-center md:text-left">
+            © {new Date().getFullYear()} Amit Paul · Built with precision.
+          </p>
+          <div className="flex gap-6">
+            <a
+              href="https://github.com/amitpaul05"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              className="text-on-surface-variant hover:text-primary transition-colors"
+            >
+              <Github className="h-5 w-5" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/amitpaul05/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="text-on-surface-variant hover:text-primary transition-colors"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+            <a
+              href="mailto:amit.paul.ece@gmail.com"
+              aria-label="Email"
+              className="text-on-surface-variant hover:text-primary transition-colors"
+            >
+              <Mail className="h-5 w-5" />
+            </a>
           </div>
         </div>
-      )}
-
-      <div id="contact-section">
-        <Contact />
-      </div>
+      </footer>
     </div>
   );
 };

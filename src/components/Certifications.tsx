@@ -1,6 +1,4 @@
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Award, Calendar, ExternalLink } from "lucide-react";
+import { Award, ExternalLink } from "lucide-react";
 
 const Certifications = () => {
   const certifications = [
@@ -42,73 +40,104 @@ const Certifications = () => {
     }
   ];
 
+  // Feature the Django/Meta credential (called out in the intro); rest fill the bento.
+  const featuredIndex = certifications.findIndex((c) => c.issuer === "Meta");
+  const featured = certifications[featuredIndex] ?? certifications[0];
+  const rest = certifications.filter((c) => c !== featured);
+  const restSpans = ["lg:col-span-4", "lg:col-span-6", "lg:col-span-6"];
+
   return (
-    <section id="certifications" className="py-20">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Certifications & Achievements
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Competitive programming, ML foundations, and the Django track that started this career.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {certifications.map((cert, index) => (
-            <Card
-              key={cert.title}
-              className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-2xl hover:border-primary/30 transition-all duration-300 group relative overflow-hidden h-full"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <CardContent className="p-6 flex flex-col h-full">
-                <div className="flex items-start justify-between mb-4">
-                  <Award className="h-8 w-8 text-primary group-hover:text-primary/70 transition-colors duration-300 flex-shrink-0" />
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    <span>{cert.date}</span>
-                  </div>
-                </div>
-                
-                <div className="flex-grow">
-                  <h3 className="text-lg font-semibold text-card-foreground group-hover:text-primary transition-colors duration-300 mb-2">
-                    {cert.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground font-medium mb-3">
-                    {cert.issuer}
-                  </p>
-                  
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                    {cert.description}
-                  </p>
-                </div>
-                
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge className="bg-primary/10 text-primary border-primary/20">
-                      {cert.type}
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">
-                      {cert.focus}
-                    </Badge>
-                  </div>
-                  
-                  <a 
-                    href={cert.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-primary hover:text-foreground transition-colors duration-200 cursor-pointer text-sm"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    <span>View Certificate</span>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-        
+    <section
+      id="certifications"
+      data-no-animate
+      className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pt-10 md:pt-16 pb-16"
+    >
+      <header className="mb-12">
+        <span className="block font-sans text-label-md uppercase tracking-widest text-secondary mb-3">
+          Validation &amp; Mastery
+        </span>
+        <h1 className="font-sans text-headline-lg-mobile md:text-headline-lg text-primary mb-4">
+          Certifications &amp; Achievements
+        </h1>
+        <p className="font-serif text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+          Competitive programming, ML foundations, and the Django track that started this career.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        {/* Featured */}
+        <article className="md:col-span-12 lg:col-span-8 material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+          <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-lg bg-secondary-container flex items-center justify-center">
+            <Award className="h-9 w-9 md:h-11 md:w-11 text-on-secondary-container" />
+          </div>
+          <div className="flex-grow">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="px-3 py-1 rounded-full bg-primary text-on-primary font-sans text-label-md">
+                {featured.type}
+              </span>
+              <span className="font-sans text-label-md text-secondary">{featured.date}</span>
+            </div>
+            <h2 className="font-sans text-headline-md text-primary mb-1">{featured.title}</h2>
+            <p className="font-sans text-label-md uppercase tracking-wide text-secondary mb-4">
+              {featured.issuer}
+            </p>
+            <p className="font-serif text-body-md text-on-surface-variant leading-relaxed mb-5">
+              {featured.description}
+            </p>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <span className="px-3 py-1 bg-surface-container-high text-on-surface-variant font-sans text-label-md rounded">
+                {featured.focus}
+              </span>
+              <a
+                href={featured.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-sans text-label-md hover:opacity-90 transition-opacity"
+              >
+                <ExternalLink className="h-4 w-4" />
+                View Certificate
+              </a>
+            </div>
+          </div>
+        </article>
+
+        {/* Rest */}
+        {rest.map((cert, i) => (
+          <article
+            key={cert.title}
+            className={`md:col-span-6 ${restSpans[i] ?? "lg:col-span-6"} material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8 flex flex-col`}
+          >
+            <div className="w-16 h-16 shrink-0 rounded-lg bg-secondary-container flex items-center justify-center mb-5">
+              <Award className="h-7 w-7 text-on-secondary-container" />
+            </div>
+            <h3 className="font-sans text-headline-sm text-primary mb-1">{cert.title}</h3>
+            <p className="font-sans text-label-md uppercase tracking-wide text-secondary mb-3">
+              {cert.issuer}
+            </p>
+            <p className="font-serif text-body-md text-on-surface-variant leading-relaxed mb-5">
+              {cert.description}
+            </p>
+            <div className="flex flex-wrap gap-2 mb-5">
+              <span className="px-3 py-1 bg-primary-container text-on-primary-container font-sans text-label-md rounded">
+                {cert.type}
+              </span>
+              <span className="px-3 py-1 bg-surface-container-high text-on-surface-variant font-sans text-label-md rounded">
+                {cert.focus}
+              </span>
+            </div>
+            <div className="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/40">
+              <span className="font-sans text-label-md text-secondary">{cert.date}</span>
+              <a
+                href={cert.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-primary hover:opacity-80 font-sans text-label-md transition-opacity"
+              >
+                View <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
