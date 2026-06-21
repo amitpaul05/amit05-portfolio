@@ -20,7 +20,6 @@ const expertise = [
 const About = () => {
   return (
     <>
-      {/* Hero */}
       <section
         id="about"
         data-no-animate
@@ -67,7 +66,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Quick facts + Beyond Code + Expertise bento */}
       <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pb-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
           <div className="md:col-span-7 material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8">
@@ -115,7 +113,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Code-block manuscript */}
       <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pb-16">
         <div className="bg-[#1e1e1e] rounded-lg p-6 md:p-8 shadow-xl overflow-x-auto border border-primary/20">
           <div className="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">

@@ -65,7 +65,6 @@ const Certifications = () => {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-        {/* Featured */}
         <article className="md:col-span-12 lg:col-span-8 material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-start">
           <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-lg bg-secondary-container flex items-center justify-center">
             <Award className="h-9 w-9 md:h-11 md:w-11 text-on-secondary-container" />
@@ -101,7 +100,6 @@ const Certifications = () => {
           </div>
         </article>
 
-        {/* Rest */}
         {rest.map((cert, i) => (
           <article
             key={cert.title}

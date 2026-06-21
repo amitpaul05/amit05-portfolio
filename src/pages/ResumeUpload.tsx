@@ -101,7 +101,6 @@ const ResumeUpload = () => {
       {showPAT && <PATModal onClose={() => setShowPAT(false)} />}
 
       <div className="min-h-screen text-foreground">
-        {/* Material top bar */}
         <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
           <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
             <span className="font-sans font-semibold text-primary">Update Resume</span>
@@ -120,7 +119,6 @@ const ResumeUpload = () => {
 
         <main className="flex flex-col items-center justify-center px-4 py-20">
           <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
-            {/* Drop zone */}
             <div
               onClick={() => inputRef.current?.click()}
               className="material-card bg-surface-container-lowest border-2 border-dashed border-outline-variant hover:border-primary/60 rounded-lg p-10 flex flex-col items-center gap-3 cursor-pointer transition-colors"

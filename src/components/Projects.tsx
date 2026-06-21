@@ -76,7 +76,6 @@ const Projects = () => {
 
   return (
     <>
-      {/* Header + featured + production grid */}
       <section
         id="projects"
         data-no-animate
@@ -97,7 +96,6 @@ const Projects = () => {
           </p>
         </header>
 
-        {/* Featured project */}
         <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg overflow-hidden flex flex-col lg:flex-row mb-gutter">
           <div className="lg:w-1/2 p-6 md:p-8 flex flex-col justify-center order-2 lg:order-1">
             <div className="flex flex-wrap gap-2 mb-5">
@@ -147,7 +145,6 @@ const Projects = () => {
           )}
         </article>
 
-        {/* Production grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
           {restWork.map((project) => {
             const clickable = Boolean(project.url);
@@ -218,7 +215,6 @@ const Projects = () => {
         </div>
       </section>
 
-      {/* Academic & personal projects */}
       <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pb-16">
         <header className="mb-8">
           <h2 className="font-sans text-headline-md text-primary mb-2">Academic &amp; Personal Projects</h2>

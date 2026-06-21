@@ -135,7 +135,6 @@ const TopNav = () => {
           pointerEvents: open ? "auto" : "none",
         }}
       >
-        {/* iOS grabber */}
         <div className="mx-auto mt-3 mb-1 h-1.5 w-10 rounded-full bg-outline-variant/60" />
         <nav className="flex flex-col gap-3 px-7 pt-5 pb-8">
           {NAV.map((item, i) => (
@@ -177,7 +176,6 @@ const TopNav = () => {
       </div>
       )}
 
-      {/* iOS bottom tab bar (mobile only) — rounded top; active tab lifts with a dot, bouncy switch */}
       <nav className="fixed bottom-0 left-0 w-full z-[70] lg:hidden">
         <div className="flex items-stretch h-16 bg-surface/85 backdrop-blur-md border-x border-t border-outline-variant/30 rounded-t-3xl">
           {NAV.map((item) => {

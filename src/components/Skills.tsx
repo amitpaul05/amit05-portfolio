@@ -62,7 +62,6 @@ const Skills = () => {
         </p>
       </header>
 
-      {/* Tier legend */}
       <div className="flex flex-wrap justify-center md:justify-start gap-6 mb-8 font-sans text-label-md text-on-surface-variant">
         <span className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-sm bg-primary inline-block" /> Core
