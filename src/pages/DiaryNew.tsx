@@ -162,7 +162,7 @@ const DiaryNew = () => {
       {showPAT && <PATModal onClose={() => setShowPAT(false)} />}
 
       <div className="min-h-screen text-foreground overflow-x-hidden">
-        <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+        <header className="sticky top-0 z-40 bg-surface border-b border-outline-variant/30">
           <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
             <button
               onClick={handleBack}

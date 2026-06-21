@@ -177,7 +177,7 @@ const TopNav = () => {
       )}
 
       <nav className="fixed bottom-0 left-0 w-full z-[70] lg:hidden">
-        <div className="flex items-stretch h-16 bg-surface/85 backdrop-blur-md border-x border-t border-outline-variant/30 rounded-t-3xl">
+        <div className="flex items-stretch h-16 bg-surface border-x border-t border-outline-variant/30 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
           {NAV.map((item) => {
             const active = isItemActive(item.to);
             return (
