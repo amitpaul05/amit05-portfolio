@@ -97,7 +97,7 @@
        .material-card adapt automatically (cards render at half --grain-opacity). */
     --grain-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     --grain-size: 180px;
-    --grain-opacity: 0.5;
+    --grain-opacity: 0.25;
 
     --sidebar-background: 60 15% 95%;
     --sidebar-foreground: 233 6% 29%;
@@ -196,6 +196,13 @@
   }
 }
 
+/* Larger corner radii on mobile for an iOS feel (cards, buttons, inputs) */
+@media (max-width: 1023px) {
+  :root {
+    --radius: 1rem;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -278,6 +285,24 @@
   .material-card:hover {
     box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
+  }
+
+  /* iOS-style press feedback (mostly felt on touch, where there's no hover) */
+  .material-card:active {
+    transform: scale(0.985);
+  }
+
+  /* Top nav carries the same paper grain as the page so it doesn't read as a
+     separate bar. The header is fixed at top:0, so this layer tiles in sync
+     with body::before. Sits behind the nav content (which is relative z-10). */
+  .nav-grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
   }
 
   /* Stagger animation delays */

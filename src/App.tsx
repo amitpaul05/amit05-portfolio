@@ -7,8 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PortfolioLayout from "./components/PortfolioLayout";
 import NotFound from "./pages/NotFound";
+import AboutPage from "./pages/AboutPage";
 
-const AboutPage       = lazy(() => import('./pages/AboutPage'));
 const AcademicPage    = lazy(() => import('./pages/AcademicPage'));
 const ProjectsPage    = lazy(() => import('./pages/ProjectsPage'));
 const CertificatesPage = lazy(() => import('./pages/CertificatesPage'));
@@ -30,7 +30,7 @@ const App = () => (
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<PortfolioLayout />}>
-              <Route index element={<ProjectsPage />} />
+              <Route index element={<AboutPage />} />
               <Route path="about"        element={<AboutPage />} />
               <Route path="academic"     element={<AcademicPage />} />
               <Route path="projects"     element={<ProjectsPage />} />
