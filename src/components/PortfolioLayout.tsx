@@ -53,14 +53,32 @@ const PortfolioLayout = () => {
   const normalizedPath = location.pathname === '/' ? '/about' : location.pathname;
   const activeRoute = sections.find((s) => normalizedPath === `/${s}`) ?? '';
 
-  // Detect tab→tab navigation; on mobile clicks (not swipe commits) play the slide-off transition.
+  // Detect tab→tab navigation; on mobile clicks (not swipe commits) play the carousel slide:
+  // the new page (already mounted) starts off-screen and glides to center while the old page
+  // — rendered flush beside it — slides out. Same look as a swipe, driven on the same track.
   useLayoutEffect(() => {
     const newKey = location.pathname === '/' ? 'about' : location.pathname.slice(1);
     const oldKey = prevRef.current;
     const bothTabs = tabOrder.includes(oldKey) && tabOrder.includes(newKey);
     if (!committedRef.current && !isDesktop && bothTabs && oldKey !== newKey) {
-      const dir = tabOrder.indexOf(newKey) > tabOrder.indexOf(oldKey) ? 'next' : 'prev';
+      const dir = tabOrder.indexOf(newKey) > tabOrder.indexOf(oldKey) ? "next" : "prev";
       setLeaving({ key: oldKey, dir });
+      const el = trackRef.current;
+      if (el) {
+        const startX = dir === "next" ? window.innerWidth : -window.innerWidth;
+        el.style.transition = "none";
+        el.style.transform = `translateX(${startX}px)`;
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            el.style.transition = "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)";
+            el.style.transform = "translateX(0)";
+          })
+        );
+        window.setTimeout(() => {
+          setLeaving(null);
+          if (trackRef.current) trackRef.current.style.transition = "";
+        }, 340);
+      }
     }
     prevRef.current = newKey;
     committedRef.current = false;
@@ -101,22 +119,26 @@ const PortfolioLayout = () => {
   const swipeNext = tabIndex >= 0 && tabIndex < tabOrder.length - 1 ? tabOrder[tabIndex + 1] : null;
 
   const touch = useRef<{ x: number; y: number; axis: "h" | "v" | null } | null>(null);
-  // Drag offset is driven imperatively (no per-move re-render) for a smooth 60fps swipe.
+  // Carousel: current + adjacent page sit flush side-by-side in a track that the
+  // finger translates. Transform is set imperatively (GPU composite, no per-move re-render).
   const dragXRef = useRef(0);
-  const topRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
-  const [swipeKey, setSwipeKey] = useState<string | null>(null);
+  const [swipe, setSwipe] = useState<{ key: string; side: "next" | "prev" } | null>(null);
 
-  const applyDrag = (px: number) => {
+  const setTrackX = (px: number) => {
     dragXRef.current = px;
-    if (topRef.current) topRef.current.style.transform = px ? `translateX(${px}px)` : "";
+    if (trackRef.current) trackRef.current.style.transform = px ? `translateX(${px}px)` : "";
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
     if (tabIndex < 0) return; // only on the tab pages
     const t = e.touches[0];
     touch.current = { x: t.clientX, y: t.clientY, axis: null };
-    if (topRef.current) topRef.current.style.transition = "none";
+    if (trackRef.current) {
+      trackRef.current.style.transition = "none";
+      trackRef.current.style.willChange = "transform";
+    }
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
@@ -129,18 +151,23 @@ const PortfolioLayout = () => {
       if (touch.current.axis === "h") setDragging(true);
     }
     if (touch.current.axis === "h") {
-      // rubber-band when there's no tab in that direction
       const resist = (dx < 0 && !swipeNext) || (dx > 0 && !swipePrev);
       const px = resist ? dx * 0.25 : dx;
-      applyDrag(px);
-      const tk = px < 0 ? swipeNext : px > 0 ? swipePrev : null;
-      if (tk !== swipeKey) setSwipeKey(tk); // only fires when direction flips
+      setTrackX(px);
+      const side = px < 0 ? "next" : px > 0 ? "prev" : null;
+      const key = side === "next" ? swipeNext : side === "prev" ? swipePrev : null;
+      if (key && side) {
+        if (!swipe || swipe.key !== key) setSwipe({ key, side });
+      } else if (swipe) {
+        setSwipe(null);
+      }
     }
   };
 
   const endDrag = () => {
     setDragging(false);
-    setSwipeKey(null);
+    setSwipe(null);
+    if (trackRef.current) trackRef.current.style.willChange = "";
   };
 
   const onTouchEnd = () => {
@@ -150,16 +177,22 @@ const PortfolioLayout = () => {
 
     const goNext = dx <= -SWIPE_THRESHOLD && swipeNext;
     const goPrev = dx >= SWIPE_THRESHOLD && swipePrev;
+    const el = trackRef.current;
 
     if (axis === "h" && (goNext || goPrev)) {
-      // Committed: target already showing underneath → navigate (remount clears the transform)
+      // Committed: glide the track the rest of the way, then navigate (keyed remount resets it)
       committedRef.current = true;
-      applyDrag(0);
-      endDrag();
-      navigate(`/${goNext ? swipeNext : swipePrev}`);
+      const endX = goNext ? -window.innerWidth : window.innerWidth;
+      if (el) {
+        el.style.transition = "transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)";
+        el.style.transform = `translateX(${endX}px)`;
+      }
+      window.setTimeout(() => {
+        navigate(`/${goNext ? swipeNext : swipePrev}`);
+        endDrag();
+      }, 230);
     } else if (axis === "h") {
-      // Cancelled: ease back to center, keep the underneath mounted until it settles
-      const el = topRef.current;
+      // Cancelled: glide back to center
       if (el) {
         el.style.transition = "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)";
         el.style.transform = "translateX(0)";
@@ -171,11 +204,18 @@ const PortfolioLayout = () => {
     }
   };
 
-  // Target page revealed underneath during a horizontal drag (static — no rise/scale)
-  const TargetPage = swipeKey ? PAGE_BY_KEY[swipeKey] : null;
-
-  // Old page that slides off on a mobile click transition
-  const LeavingPage = leaving ? PAGE_BY_KEY[leaving.key] : null;
+  // Page rendered flush beside the current one in the track:
+  //  • during a swipe → the target tab (on the side you're dragging toward)
+  //  • during a click slide → the page you just left (on the opposite side, sliding out)
+  const adjacent = (() => {
+    if (dragging && swipe) {
+      return { Comp: PAGE_BY_KEY[swipe.key], left: swipe.side === "next" ? "100%" : "-100%" };
+    }
+    if (leaving) {
+      return { Comp: PAGE_BY_KEY[leaving.key], left: leaving.dir === "next" ? "-100%" : "100%" };
+    }
+    return null;
+  })();
 
   // Desktop: page-enter rise on every navigation. Mobile: no entrance animation at all
   // (tap or swipe both read as the target already sitting underneath).
@@ -192,49 +232,28 @@ const PortfolioLayout = () => {
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
         >
-          {/* Target page stacked underneath, statically revealed as the current page slides away */}
-          {dragging && TargetPage && (
-            <div className="absolute inset-0 bg-background page-grain overflow-hidden pointer-events-none">
-              <Suspense fallback={<div className="min-h-[60vh]" />}>
-                <TargetPage />
-              </Suspense>
-            </div>
-          )}
-
-          {/* Current page (base). Opaque + grain while dragging so it covers the layer below.
-              Transform/transition are set imperatively in the touch handlers (no per-move re-render). */}
+          {/* Carousel track — current page in flow + adjacent page flush beside it; the whole
+              track is translated imperatively in the touch handlers (keyed so nav resets it). */}
           <div
             ref={(el) => {
               contentRef.current = el;
-              topRef.current = el;
+              trackRef.current = el;
             }}
             key={normalizedPath}
-            className={cn(
-              "relative",
-              enterClass,
-              dragging && "bg-background page-grain shadow-[0_0_48px_rgba(0,0,0,0.22)]"
-            )}
+            className={cn("relative", enterClass)}
           >
             <Suspense fallback={<div className="min-h-[60vh]" />}>
               <Outlet />
             </Suspense>
-          </div>
 
-          {/* Click transition: the page just left slides off on top, revealing the new page underneath */}
-          {LeavingPage && (
-            <div
-              className={cn(
-                "absolute inset-0 bg-background page-grain overflow-hidden",
-                leaving!.dir === "next" ? "animate-slide-out-left" : "animate-slide-out-right"
-              )}
-              style={{ boxShadow: "0 0 48px rgba(0,0,0,0.22)" }}
-              onAnimationEnd={() => setLeaving(null)}
-            >
-              <Suspense fallback={<div className="min-h-[60vh]" />}>
-                <LeavingPage />
-              </Suspense>
-            </div>
-          )}
+            {adjacent && (
+              <div className="absolute top-0 w-full" style={{ left: adjacent.left }}>
+                <Suspense fallback={<div className="min-h-[60vh]" />}>
+                  <adjacent.Comp />
+                </Suspense>
+              </div>
+            )}
+          </div>
         </div>
 
         {activeRoute && (prevSection || nextSection) && (
