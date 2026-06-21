@@ -101,13 +101,22 @@ const PortfolioLayout = () => {
   const swipeNext = tabIndex >= 0 && tabIndex < tabOrder.length - 1 ? tabOrder[tabIndex + 1] : null;
 
   const touch = useRef<{ x: number; y: number; axis: "h" | "v" | null } | null>(null);
-  const [dragX, setDragX] = useState(0);
+  // Drag offset is driven imperatively (no per-move re-render) for a smooth 60fps swipe.
+  const dragXRef = useRef(0);
+  const topRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
+  const [swipeKey, setSwipeKey] = useState<string | null>(null);
+
+  const applyDrag = (px: number) => {
+    dragXRef.current = px;
+    if (topRef.current) topRef.current.style.transform = px ? `translateX(${px}px)` : "";
+  };
 
   const onTouchStart = (e: React.TouchEvent) => {
     if (tabIndex < 0) return; // only on the tab pages
     const t = e.touches[0];
     touch.current = { x: t.clientX, y: t.clientY, axis: null };
+    if (topRef.current) topRef.current.style.transition = "none";
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
@@ -122,32 +131,48 @@ const PortfolioLayout = () => {
     if (touch.current.axis === "h") {
       // rubber-band when there's no tab in that direction
       const resist = (dx < 0 && !swipeNext) || (dx > 0 && !swipePrev);
-      setDragX(resist ? dx * 0.25 : dx);
+      const px = resist ? dx * 0.25 : dx;
+      applyDrag(px);
+      const tk = px < 0 ? swipeNext : px > 0 ? swipePrev : null;
+      if (tk !== swipeKey) setSwipeKey(tk); // only fires when direction flips
     }
+  };
+
+  const endDrag = () => {
+    setDragging(false);
+    setSwipeKey(null);
   };
 
   const onTouchEnd = () => {
     const axis = touch.current?.axis;
-    const dx = dragX;
+    const dx = dragXRef.current;
     touch.current = null;
-    setDragging(false);
 
     const goNext = dx <= -SWIPE_THRESHOLD && swipeNext;
     const goPrev = dx >= SWIPE_THRESHOLD && swipePrev;
 
     if (axis === "h" && (goNext || goPrev)) {
-      // Committed: the target was already showing underneath → snap instantly, no enter animation
+      // Committed: target already showing underneath → navigate (remount clears the transform)
       committedRef.current = true;
-      setDragX(0);
+      applyDrag(0);
+      endDrag();
       navigate(`/${goNext ? swipeNext : swipePrev}`);
+    } else if (axis === "h") {
+      // Cancelled: ease back to center, keep the underneath mounted until it settles
+      const el = topRef.current;
+      if (el) {
+        el.style.transition = "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)";
+        el.style.transform = "translateX(0)";
+      }
+      dragXRef.current = 0;
+      window.setTimeout(endDrag, 300);
     } else {
-      setDragX(0); // cancelled → ease back to center
+      endDrag();
     }
   };
 
   // Target page revealed underneath during a horizontal drag (static — no rise/scale)
-  const targetKey = dragX < 0 ? swipeNext : dragX > 0 ? swipePrev : null;
-  const TargetPage = targetKey ? PAGE_BY_KEY[targetKey] : null;
+  const TargetPage = swipeKey ? PAGE_BY_KEY[swipeKey] : null;
 
   // Old page that slides off on a mobile click transition
   const LeavingPage = leaving ? PAGE_BY_KEY[leaving.key] : null;
@@ -176,19 +201,19 @@ const PortfolioLayout = () => {
             </div>
           )}
 
-          {/* Current page (base). Opaque + grain while dragging so it covers the layer below */}
+          {/* Current page (base). Opaque + grain while dragging so it covers the layer below.
+              Transform/transition are set imperatively in the touch handlers (no per-move re-render). */}
           <div
-            ref={contentRef}
-            key={normalizedPath}
-            className={cn("relative", enterClass, dragging && "bg-background page-grain")}
-            style={{
-              transform: dragX ? `translateX(${dragX}px)` : undefined,
-              transition:
-                dragging || committedRef.current
-                  ? "none"
-                  : "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
-              boxShadow: dragging ? "0 0 48px rgba(0,0,0,0.22)" : undefined,
+            ref={(el) => {
+              contentRef.current = el;
+              topRef.current = el;
             }}
+            key={normalizedPath}
+            className={cn(
+              "relative",
+              enterClass,
+              dragging && "bg-background page-grain shadow-[0_0_48px_rgba(0,0,0,0.22)]"
+            )}
           >
             <Suspense fallback={<div className="min-h-[60vh]" />}>
               <Outlet />
