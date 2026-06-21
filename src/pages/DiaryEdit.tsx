@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Settings, Eye, EyeOff, CheckCircle, Loader2, ArrowLeft, Pencil } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { commitDiaryEntry } from '@/lib/github';
 import { getAllEntries, getEntryBySlug, type DiaryEntry } from '@/lib/diary';
 import { toast } from 'sonner';
-import GlassSurface from '@/components/GlassSurface';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const PAT_KEY = 'diary_pat';
 
@@ -21,23 +20,13 @@ function formatDate(iso: string) {
   });
 }
 
-function GlassNav({ children }: { children: React.ReactNode }) {
+function TopBar({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
-      <nav className="relative px-6 py-2.5 rounded-full shadow-2xl overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <GlassSurface
-            width="100%" height="100%" borderRadius={50} borderWidth={0}
-            brightness={50} opacity={0.93} blur={10} displace={0.5}
-            backgroundOpacity={0.1} saturation={1} distortionScale={-180}
-            redOffset={0} greenOffset={10} blueOffset={20}
-          />
-        </div>
-        <div className="relative z-10 flex items-center justify-between">
-          {children}
-        </div>
-      </nav>
-    </div>
+    <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+      <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+        {children}
+      </div>
+    </header>
   );
 }
 
@@ -95,20 +84,20 @@ function DiaryEditList() {
   const entries = getAllEntries();
 
   return (
-    <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
-      <GlassNav>
+    <div className="min-h-screen text-foreground overflow-x-hidden">
+      <TopBar>
         <button
           onClick={() => navigate('/diary')}
-          className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
+          className="group inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary font-sans text-label-md transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
           Journal
         </button>
-        <span className="text-lg font-bold text-foreground">Edit entries</span>
-        <span className="w-16" />
-      </GlassNav>
+        <span className="font-sans font-semibold text-primary">Edit entries</span>
+        <ThemeToggle />
+      </TopBar>
 
-      <main className="max-w-2xl mx-auto px-4 pt-24 pb-10">
+      <main className="max-w-2xl mx-auto px-4 pt-8 pb-10">
         <div className="diary-paper rounded shadow-2xl relative overflow-hidden">
           <div
             className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
@@ -151,7 +140,6 @@ function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
   const [showPAT, setShowPAT] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
 
   const [form, setForm] = useState({
     date: entry.date,
@@ -171,8 +159,7 @@ function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
   }
 
   function handleBack() {
-    setIsLeaving(true);
-    setTimeout(() => navigate('/diary/edit'), 320);
+    navigate('/diary/edit');
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -194,7 +181,7 @@ function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
 
   if (done) {
     return (
-      <div className="min-h-screen bg-background text-foreground dark flex items-center justify-center">
+      <div className="min-h-screen text-foreground flex items-center justify-center">
         <div className="text-center space-y-4 px-6">
           <CheckCircle className="w-12 h-12 text-diary-accent mx-auto" />
           <p className="text-2xl font-bold text-diary-ink">Entry updated!</p>
@@ -216,39 +203,29 @@ function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
     <>
       {showPAT && <PATModal onClose={() => setShowPAT(false)} />}
 
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        animate={isLeaving ? { opacity: 0, x: 50 } : { opacity: 1, x: 0 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="min-h-screen bg-background text-foreground dark overflow-x-hidden"
-      >
-        <GlassNav>
+      <div className="min-h-screen text-foreground overflow-x-hidden">
+        <TopBar>
           <button
             onClick={handleBack}
-            disabled={isLeaving}
-            className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
+            className="group inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary font-sans text-label-md transition-colors"
           >
-            <motion.span
-              className="flex items-center gap-1.5"
-              whileHover={{ x: -4 }}
-              whileTap={{ x: -8 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+            Entries
+          </button>
+          <span className="font-sans font-semibold text-primary">Edit Entry</span>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              onClick={() => setShowPAT(true)}
+              className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"
+              title="GitHub token settings"
             >
-              <ArrowLeft className="w-4 h-4" />
-              Entries
-            </motion.span>
-          </button>
-          <span className="text-xl font-bold text-foreground">Edit Entry</span>
-          <button
-            onClick={() => setShowPAT(true)}
-            className="text-foreground/60 hover:text-foreground transition-colors"
-            title="GitHub token settings"
-          >
-            <Settings className="w-5 h-5" />
-          </button>
-        </GlassNav>
+              <Settings className="w-5 h-5" />
+            </button>
+          </div>
+        </TopBar>
 
-        <main className="max-w-2xl mx-auto px-4 pt-24 pb-10">
+        <main className="max-w-2xl mx-auto px-4 pt-8 pb-10">
           <form onSubmit={handleSubmit}>
             <div className="diary-paper rounded shadow-2xl relative overflow-hidden">
               <div
@@ -302,7 +279,7 @@ function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
             </div>
           </form>
         </main>
-      </motion.div>
+      </div>
     </>
   );
 }
@@ -316,10 +293,10 @@ const DiaryEdit = () => {
   const entry = getEntryBySlug(date);
   if (!entry) {
     return (
-      <div className="min-h-screen bg-background text-foreground dark flex items-center justify-center">
+      <div className="min-h-screen text-foreground flex items-center justify-center">
         <div className="text-center space-y-4">
-          <p className="text-xl text-muted-foreground">Entry not found.</p>
-          <button onClick={() => navigate('/diary/edit')} className="text-muted-foreground hover:text-foreground underline">
+          <p className="font-sans text-xl text-on-surface-variant">Entry not found.</p>
+          <button onClick={() => navigate('/diary/edit')} className="font-sans text-on-surface-variant hover:text-primary underline transition-colors">
             ← Back to entries
           </button>
         </div>

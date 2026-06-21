@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, Eye, EyeOff, CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { commitDiaryEntry } from '@/lib/github';
 import { toast } from 'sonner';
-import GlassSurface from '@/components/GlassSurface';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const PAT_KEY = 'diary_pat';
 
@@ -77,11 +76,9 @@ const DiaryNew = () => {
   const [showPAT, setShowPAT] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
 
   function handleBack() {
-    setIsLeaving(true);
-    setTimeout(() => navigate('/diary'), 320);
+    navigate('/diary');
   }
 
   const [form, setForm] = useState({
@@ -134,7 +131,7 @@ const DiaryNew = () => {
 
   if (done) {
     return (
-      <div className="min-h-screen bg-background text-foreground dark flex items-center justify-center">
+      <div className="min-h-screen text-foreground flex items-center justify-center">
         <div className="text-center space-y-4 px-6">
           <CheckCircle className="w-12 h-12 text-diary-accent mx-auto" />
           <p className="text-2xl font-bold text-diary-ink">Entry committed!</p>
@@ -164,62 +161,32 @@ const DiaryNew = () => {
     <>
       {showPAT && <PATModal onClose={() => setShowPAT(false)} />}
 
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        animate={isLeaving ? { opacity: 0, x: 50 } : { opacity: 1, x: 0 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="min-h-screen bg-background text-foreground dark overflow-x-hidden"
-      >
-        {/* Glassmorphic pill nav */}
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
-          <nav className="relative px-6 py-3 rounded-full shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <GlassSurface
-                width="100%"
-                height="100%"
-                borderRadius={50}
-                borderWidth={0}
-                brightness={50}
-                opacity={0.93}
-                blur={10}
-                displace={0.5}
-                backgroundOpacity={0.1}
-                saturation={1}
-                distortionScale={-180}
-                redOffset={0}
-                greenOffset={10}
-                blueOffset={20}
-              />
-            </div>
-            <div className="relative z-10 flex items-center justify-between">
-              <button
-                onClick={handleBack}
-                disabled={isLeaving}
-                className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
-              >
-                <motion.span
-                  className="flex items-center gap-1.5"
-                  whileHover={{ x: -4 }}
-                  whileTap={{ x: -8 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Journal
-                </motion.span>
-              </button>
-              <span className="text-xl font-bold text-foreground">New Entry</span>
+      <div className="min-h-screen text-foreground overflow-x-hidden">
+        {/* Material top bar */}
+        <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+          <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+            <button
+              onClick={handleBack}
+              className="group inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary font-sans text-label-md transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+              Journal
+            </button>
+            <span className="font-sans font-semibold text-primary">New Entry</span>
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
               <button
                 onClick={() => setShowPAT(true)}
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"
                 title="GitHub token settings"
               >
                 <Settings className="w-5 h-5" />
               </button>
             </div>
-          </nav>
-        </div>
+          </div>
+        </header>
 
-        <main className="max-w-2xl mx-auto px-4 pt-24 pb-10">
+        <main className="max-w-2xl mx-auto px-4 pt-8 pb-10">
           <form onSubmit={handleSubmit}>
             <div className="diary-paper rounded shadow-2xl relative overflow-hidden">
               {/* Red margin rule */}
@@ -282,7 +249,7 @@ const DiaryNew = () => {
             </div>
           </form>
         </main>
-      </motion.div>
+      </div>
     </>
   );
 };

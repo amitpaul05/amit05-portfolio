@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getEntryBySlug } from '@/lib/diary';
-import GlassSurface from '@/components/GlassSurface';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const MOOD_EMOJI: Record<string, string> = {
   motivated: '🔥',
@@ -33,12 +33,12 @@ const DiaryEntry = () => {
 
   if (!entry) {
     return (
-      <div className="min-h-screen bg-background text-foreground dark flex items-center justify-center">
+      <div className="min-h-screen text-foreground flex items-center justify-center">
         <div className="text-center space-y-4">
-          <p className="font-diary text-2xl text-muted-foreground">Entry not found.</p>
+          <p className="font-diary text-2xl text-on-surface-variant">Entry not found.</p>
           <button
             onClick={() => navigate('/diary')}
-            className="font-diary text-muted-foreground hover:text-foreground underline transition-colors"
+            className="font-sans text-on-surface-variant hover:text-primary underline transition-colors"
           >
             ← Back to journal
           </button>
@@ -49,43 +49,22 @@ const DiaryEntry = () => {
 
 
   return (
-    <div className="min-h-screen bg-background text-foreground dark overflow-x-hidden">
-      {/* Glassmorphic pill nav */}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
-        <nav className="relative px-6 py-3 rounded-full shadow-2xl overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none z-0">
-            <GlassSurface
-              width="100%"
-              height="100%"
-              borderRadius={50}
-              borderWidth={0}
-              brightness={50}
-              opacity={0.93}
-              blur={10}
-              displace={0.5}
-              backgroundOpacity={0.1}
-              saturation={1}
-              distortionScale={-180}
-              redOffset={0}
-              greenOffset={10}
-              blueOffset={20}
-            />
-          </div>
-          <div className="relative z-10 flex items-center justify-between">
-            <button
-              onClick={() => navigate('/diary')}
-              className="flex items-center gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200 text-sm md:text-base font-medium"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Journal
-            </button>
-            <span className="w-16" />
-            <span className="w-16" />
-          </div>
-        </nav>
-      </div>
+    <div className="min-h-screen text-foreground overflow-x-hidden">
+      {/* Material top bar */}
+      <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+          <button
+            onClick={() => navigate('/diary')}
+            className="group inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary font-sans text-label-md transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+            Journal
+          </button>
+          <ThemeToggle />
+        </div>
+      </header>
 
-      <main className="max-w-2xl mx-auto px-4 pt-24 pb-16">
+      <main className="max-w-2xl mx-auto px-4 pt-8 pb-16">
         <article className="relative">
           <div className="diary-paper rounded shadow-2xl relative h-[1088px] overflow-hidden">
 

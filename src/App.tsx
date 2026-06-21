@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,7 +21,8 @@ const ResumeUpload    = lazy(() => import('./pages/ResumeUpload'));
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+    <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -28,7 +30,7 @@ const App = () => (
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<PortfolioLayout />}>
-              <Route index element={null} />
+              <Route index element={<ProjectsPage />} />
               <Route path="about"        element={<AboutPage />} />
               <Route path="academic"     element={<AcademicPage />} />
               <Route path="projects"     element={<ProjectsPage />} />
@@ -46,7 +48,8 @@ const App = () => (
         </Suspense>
       </BrowserRouter>
     </TooltipProvider>
-  </QueryClientProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;

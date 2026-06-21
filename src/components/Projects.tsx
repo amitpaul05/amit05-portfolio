@@ -1,44 +1,43 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { Github, ExternalLink, Lock } from "lucide-react";
+import { Github, ExternalLink, Lock, Activity, Terminal } from "lucide-react";
 
 const Projects = () => {
   const workProjects = [
     {
       title: "AYO",
-      description: "LLM-powered chat platform for students. Architected chat storage directly in LibreChat (migrated from LiteLLM middleware), integrated Keycloak SSO with JWT refresh-retry flow, built media upload APIs, and shipped a streaming CSV export pipeline with generator-based responses and N+1-free queries.",
+      description: "AI chat research platform connecting researchers with student participants via researcher-issued invite links. Migrated chat storage from LiteLLM middleware to direct LibreChat integration, giving researchers access to full conversation metadata without a proxy hop. Keycloak SSO authenticates all roles; Django validates Bearer JWTs against the Keycloak userinfo endpoint. Built a streaming ZIP export (turns + conversations CSVs) using a generator that drains every 500 rows, eliminating timeout failures on large session exports.",
+      architectureNote: "Architecture: Keycloak SSO → Django API + Next.js dashboard → LibreChat (MongoDB) · PostgreSQL · LiteLLM proxy. Access via researcher-issued invite only.",
       url: null,
       screenshot: "/project-screenshots/ayo.png",
-      technologies: ["Django", "LibreChat", "LiteLLM", "Keycloak", "PostgreSQL"]
+      technologies: ["Django", "LibreChat", "LiteLLM", "Keycloak", "PostgreSQL", "MongoDB", "Next.js"]
     },
     {
       title: "Govara",
-      description: "AI-powered governance and compliance SaaS platform. Companies run self-audits against frameworks (ISO 27001, NIST AIRM), upload certifications for independent auditor review, and distribute them to stakeholders. Features Stripe subscription billing, a GPT-4o-mini governance assistant, Celery-based async tasks, and a public company directory.",
+      description: "AI-powered governance and compliance SaaS. Companies self-audit against ISO 27001 and ISO 42001 (AI governance) frameworks, upload evidence for assigned independent auditors, and share certifications with stakeholders via a public directory. Cross-framework control mapping reduces redundant evidence across frameworks. Built with Django, Celery async tasks, Stripe subscription billing, and a GPT-4o-mini compliance assistant.",
       url: "https://govara-ui.idlewilddigital.com/",
       screenshot: "/project-screenshots/govara.png",
       technologies: ["Django", "Next.js", "Stripe", "OpenAI", "Celery", "Redis", "PostgreSQL", "Cloudinary"]
     },
     {
       title: "SmallsLive",
-      description: "Ticket management platform for live jazz shows across three NYC venues (Smalls, Mezzrow, JazzCultural). Refactored legacy Stripe integration on an older Django app to support 3DS authentication — create payment method → pass method ID to confirmation → create payment intent via API → 3DS challenge → capture.",
+      description: "Ticket management platform for live jazz at three NYC venues (Smalls, Mezzrow, JazzCultural). Rebuilt the Stripe checkout flow on a legacy Django app to support 3DS2/SCA: server creates a PaymentIntent, client calls confirmCardPayment (which handles the 3DS challenge inline via Stripe.js), then submits for server-side capture on requires_capture — resolving declined EU cardholder transactions that broke under SCA enforcement.",
       url: "https://smallslive.com/",
       screenshot: "/project-screenshots/smallslive.png",
-      technologies: ["Django", "Stripe", "3DS Authentication", "Payment Processing"]
+      technologies: ["Django", "Stripe", "3DS2 / SCA", "Payment Processing"],
+      trafficStats: { label: "Jun 2026 snapshot of website traffic hits", peak: "328K", avg: "262K" }
     },
     {
       title: "ScholarStone",
-      description: "Educational platform and scholarship management system",
+      description: "Multi-academy LMS platform modeled on Coursera/Udemy. Instructors create courses structured as chapters → video lessons (Vimeo or YouTube), manage a draft → review → published lifecycle, and build quizzes. Students enroll, track lesson completion, and receive auto-generated certificates on finishing a course. Supports multiple independent academies with their own instructor teams.",
       url: "https://www.scholarstone.net/",
       screenshot: "/project-screenshots/scholarstone.png",
-      technologies: ["Web Platform", "Education Technology"]
+      technologies: ["Django", "Django REST", "PostgreSQL", "LMS", "Certificate Generation"]
     },
     {
       title: "Exporter Crabarian",
-      description: "Export management user interface system",
+      description: "ERP system for freight export management — Django REST backend, Vue.js frontend. Covers the full export workflow: inventory tracking → shipment creation → flight booking → sales and order management → payment processing → ledger reconciliation. Multi-company architecture with per-company configuration and role-based access.",
       url: "https://exporter.crabarian.com/",
       screenshot: "/project-screenshots/crabarian.png",
-      technologies: ["Import Export Management"]
+      technologies: ["Django", "Vue.js", "PostgreSQL", "REST API", "Multi-tenant"]
     }
   ];
 
@@ -55,7 +54,7 @@ const Projects = () => {
     },
     {
       title: "Smart Canteen System",
-      description: "Developed a system utilizing face recognition technology to track food consumption and payment status automatically, enhancing user engagement and admin efficiency.",
+      description: "Face-recognition-based canteen management system. Identifies students at payment terminals, records food consumption per student, and automates payment tracking — replacing manual cashier workflows.",
       technologies: ["Python", "Face Recognition", "Django", "Payment Processing", "Computer Vision"],
       links: {
         github: "#"
@@ -63,265 +62,218 @@ const Projects = () => {
       featured: true
     },
     {
-      title: "Automated Doctor's Serial Management System",
-      description: "Integrated GSM technology for SMS functionality to enable appointment management. Developed a web-based platform for users and staff to make, monitor, and view serial numbers conveniently.",
-      technologies: ["Django", "SMS/GSM Integration", "PostgreSQL", "Web Platform", "Appointment Management"],
+      title: "Doctor's Appointment Queue System",
+      description: "GSM/SMS-integrated appointment queue system for a medical clinic. A Django backend manages queue state; a hardware GSM module sends SMS notifications when a patient's number is called; staff and patients both have web interfaces.",
+      technologies: ["Django", "GSM / SMS Integration", "PostgreSQL", "Queue Management"],
       links: {
         github: "#"
       },
       featured: true
     },
-    {
-      title: "Customer Relationship Management (CRM)",
-      description: "Developed a CRM web app using Django and PostgreSQL with optimized queries and real-time dashboard features. Designed for internal tracking of clients, leads, and performance metrics.",
-      technologies: ["Django", "PostgreSQL", "Real-time Dashboard", "Performance Optimization"],
-      links: {
-        github: "#"
-      },
-      featured: false
-    },
-    {
-      title: "Little Lemon Restaurant App",
-      description: "Built a Django-based app for menu management and table reservations with a modular, reusable component structure. Implemented customer and staff workflows for a seamless restaurant management experience.",
-      technologies: ["Django", "Modular Design", "Restaurant Management", "Reservation System"],
-      links: {
-        github: "#"
-      },
-      featured: false
-    },
-    {
-      title: "Daily Updates Communication Tool",
-      description: "Internal team communication and reporting tool using Django REST Framework. Implemented secure login, update scheduling, and auto-archive of posts with modular coding and DRY principles.",
-      technologies: ["Django REST", "Team Communication", "Auto-scheduling", "Secure Authentication"],
-      links: {
-        github: "#"
-      },
-      featured: false
-    }
   ];
 
-  const featuredProjects = projects.filter(p => p.featured);
-  const otherProjects = projects.filter(p => !p.featured);
+  const [featured, ...restWork] = workProjects;
 
   return (
-    <section id="projects" className="py-20 bg-background">
-      <div className="container mx-auto px-6">
-        {/* Projects I worked on */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Projects I worked on
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Professional projects I've contributed to in production environments
+    <>
+      {/* Header + featured + production grid */}
+      <section
+        id="projects"
+        data-no-animate
+        className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pt-10 md:pt-16 pb-16"
+      >
+        <header className="mb-12">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-sans text-label-md uppercase tracking-wide mb-4">
+            <Terminal className="h-4 w-4" />
+            Engineering Repository
+          </span>
+          <h1 className="font-sans text-headline-lg-mobile md:text-headline-lg text-primary mb-4">
+            Selected Works &amp; Production Systems
+          </h1>
+          <p className="font-serif text-body-lg text-on-surface-variant max-w-2xl">
+            Backend systems I've shipped in production — LLM platforms, compliance SaaS,
+            payment infrastructure, and multi-tenant applications, built with Django and
+            documented for clarity.
           </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-          {workProjects.map((project, index) => (
-            <Card
-              key={project.title}
-              className={`
-                backdrop-blur-xl bg-gradient-to-br from-background/30 via-background/50 to-background/30
-                border border-white/20 rounded-2xl shadow-2xl
-                hover:shadow-[0_0_40px_rgba(255,255,255,0.1)]
-                before:absolute before:inset-0 before:rounded-2xl
-                before:bg-gradient-to-br before:from-transparent before:via-white/10 before:to-transparent
-                before:blur-sm relative overflow-hidden group
-                hover:border-primary/30 transition-all duration-300
-                ${project.url ? 'cursor-pointer' : ''}
-              `}
-              style={{ animationDelay: `${index * 0.1}s` }}
-              onClick={() => project.url && window.open(project.url, '_blank')}
-            >
-              {!project.url && (
-                <div className="absolute inset-0 z-20 bg-black/0 group-hover:bg-black/50 transition-all duration-300 rounded-2xl flex flex-col items-center justify-center gap-2 pointer-events-none">
-                  <Lock className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">Private</span>
-                </div>
-              )}
-              {project.screenshot && (
-                <div className="relative overflow-hidden h-44 rounded-t-2xl">
-                  <img
-                    src={project.screenshot}
-                    alt={`${project.title} screenshot`}
-                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/60" />
-                </div>
-              )}
-              <CardContent className="p-6 relative z-10">
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  {project.url && (
-                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300 flex-shrink-0 mt-1" />
-                  )}
-                </div>
-                <p className="text-muted-foreground mb-4 leading-relaxed text-sm">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech) => (
-                    <Badge key={tech} variant="secondary" className="text-xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        </header>
 
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            Featured Projects
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Personal projects showcasing full-stack development and backend architecture expertise
-          </p>
-        </div>
-        
-        {/* Featured Projects */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
-          {featuredProjects.map((project, index) => (
-            <Card 
-              key={project.title} 
-              className={`relative overflow-hidden bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 
-                hover:border-primary/50 transition-all duration-500 group h-full backdrop-blur-sm
-                hover:shadow-elegant hover:shadow-primary/20 animate-fade-in-up stagger-${index + 1}
-                before:absolute before:inset-0 before:bg-gradient-to-br before:from-primary/5 before:to-transparent 
-                before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100`}
-            >
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              {/* Floating elements */}
-              <div className="absolute top-4 right-4 w-8 h-8 bg-primary/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700" />
-              <div className="absolute bottom-4 left-4 w-6 h-6 bg-accent/20 rounded-full blur-lg group-hover:scale-125 transition-transform duration-500" />
-              
-              <CardHeader className="relative z-10 pb-4">
-                <CardTitle className="text-xl font-bold group-hover:text-primary transition-all duration-300 
-                  group-hover:scale-105 transform-gpu bg-gradient-to-r from-foreground to-foreground 
-                  group-hover:from-primary group-hover:to-accent bg-clip-text group-hover:text-transparent">
-                  {project.title}
-                </CardTitle>
-              </CardHeader>
-              
-              <CardContent className="relative z-10 flex flex-col justify-between h-full pt-0">
-                <div>
-                  <p className="text-muted-foreground mb-6 leading-relaxed text-sm group-hover:text-foreground/90 transition-colors duration-300">
+        {/* Featured project */}
+        <article className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg overflow-hidden flex flex-col lg:flex-row mb-gutter">
+          <div className="lg:w-1/2 p-6 md:p-8 flex flex-col justify-center order-2 lg:order-1">
+            <div className="flex flex-wrap gap-2 mb-5">
+              {featured.technologies.map((tech) => (
+                <span key={tech} className="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-sans text-label-md">
+                  {tech}
+                </span>
+              ))}
+            </div>
+            <h2 className="font-sans text-headline-md text-primary mb-4">{featured.title}</h2>
+            <p className="font-serif text-body-md text-on-surface-variant mb-4 leading-relaxed">
+              {featured.description}
+            </p>
+            {featured.architectureNote && (
+              <p className="font-mono text-xs text-on-surface-variant border-t border-outline-variant/40 pt-4 leading-relaxed">
+                {featured.architectureNote}
+              </p>
+            )}
+            <div className="mt-6">
+              {featured.url ? (
+                <a
+                  href={featured.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-lg font-sans text-label-md hover:opacity-90 transition-opacity"
+                >
+                  <ExternalLink className="h-5 w-5" />
+                  Visit Project
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant px-4 py-2 rounded-lg font-sans text-label-md">
+                  <Lock className="h-4 w-4" /> Private — access by invite
+                </span>
+              )}
+            </div>
+          </div>
+          {featured.screenshot && (
+            <div className="lg:w-1/2 bg-surface-container-high flex items-center justify-center order-1 lg:order-2 min-h-[240px]">
+              <img
+                src={featured.screenshot}
+                alt={`${featured.title} — ${featured.description.split(/\.\s/)[0]}`}
+                className="w-full h-full max-h-[420px] object-cover object-top"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          )}
+        </article>
+
+        {/* Production grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          {restWork.map((project) => {
+            const clickable = Boolean(project.url);
+            return (
+              <article
+                key={project.title}
+                onClick={() => project.url && window.open(project.url, "_blank")}
+                className={`material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg overflow-hidden flex flex-col${clickable ? " cursor-pointer" : ""}`}
+              >
+                {project.screenshot && (
+                  <div className="h-44 shrink-0 overflow-hidden border-b border-outline-variant/20">
+                    <img
+                      src={project.screenshot}
+                      alt={`${project.title} — ${project.description.split(/\.\s/)[0]}`}
+                      className="w-full h-full object-cover object-top"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )}
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <h3 className="font-sans text-headline-sm text-primary">{project.title}</h3>
+                    {project.url ? (
+                      <ExternalLink className="h-4 w-4 text-on-surface-variant shrink-0 mt-1" />
+                    ) : (
+                      <span className="inline-flex items-center gap-1 shrink-0 font-sans text-label-md px-2 py-0.5 rounded border border-outline-variant text-on-surface-variant">
+                        <Lock className="h-3 w-3" /> Private
+                      </span>
+                    )}
+                  </div>
+                  <p className="font-serif text-body-md text-on-surface-variant leading-relaxed mb-4">
                     {project.description}
                   </p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {project.technologies.map((tech, techIndex) => (
-                      <Badge 
-                        key={tech} 
-                        variant="secondary" 
-                        className={`text-xs relative overflow-hidden bg-muted/50 hover:bg-primary/20 
-                          border border-border/50 hover:border-primary/30 transition-all duration-300
-                          hover:scale-105 transform-gpu group-hover:animate-bounce-slow`}
-                        style={{ animationDelay: `${techIndex * 0.1}s` }}
-                      >
+
+                  {"trafficStats" in project && project.trafficStats && (
+                    <div className="mb-4 pt-3 border-t border-outline-variant/40">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Activity className="h-3 w-3 text-on-surface-variant" />
+                        <span className="font-mono text-[11px] text-on-surface-variant">
+                          {(project.trafficStats as any).label}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex-1 rounded border border-outline-variant/40 bg-surface-container px-3 py-2.5">
+                          <div className="font-mono text-lg font-bold text-primary leading-none mb-1">{(project.trafficStats as any).peak}</div>
+                          <div className="font-sans text-[11px] text-on-surface-variant">peak req / day</div>
+                        </div>
+                        <div className="flex-1 rounded border border-outline-variant/40 bg-surface-container px-3 py-2.5">
+                          <div className="font-mono text-lg font-bold text-primary leading-none mb-1">{(project.trafficStats as any).avg}</div>
+                          <div className="font-sans text-[11px] text-on-surface-variant">avg req / day</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {project.technologies.map((tech) => (
+                      <span key={tech} className="font-mono text-xs bg-surface-container-high text-on-surface-variant px-2 py-1 rounded">
                         {tech}
-                      </Badge>
+                      </span>
                     ))}
                   </div>
                 </div>
-                
-                <div className="flex gap-3 mt-auto">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex-1 hover:border-primary hover:text-primary hover:bg-primary/10 
-                      transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
-                    onClick={() => {
-                      if (project.links.github) {
-                        window.open(project.links.github, '_blank');
-                      } else {
-                        alert('GitHub repository link not available yet');
-                      }
-                    }}
-                  >
-                    <Github className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
-                    View Code
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex-1 hover:border-accent hover:text-accent hover:bg-accent/10 
-                      transition-all duration-300 hover:scale-105 transform-gpu group-hover:shadow-lg relative z-20"
-                    onClick={() => {
-                      if (project.links.demo && project.links.demo !== '#') {
-                        window.open(project.links.demo, '_blank');
-                      } else {
-                        alert('Demo link not available yet');
-                      }
-                    }}
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2 group-hover:animate-bounce-slow" />
-                    Demo
-                  </Button>
-                </div>
-              </CardContent>
-              
-              {/* Bottom border gradient */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary 
-                scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-            </Card>
-          ))}
+              </article>
+            );
+          })}
         </div>
+      </section>
 
-        {/* Other Projects */}
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-semibold text-card-foreground">Other Projects</h3>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {otherProjects.map((project, index) => (
-            <Card 
-              key={project.title} 
-              className="
-                backdrop-blur-xl bg-gradient-to-br from-background/20 via-background/30 to-background/20 
-                border border-white/15 rounded-xl shadow-xl
-                hover:shadow-[0_0_30px_rgba(255,255,255,0.08)]
-                before:absolute before:inset-0 before:rounded-xl 
-                before:bg-gradient-to-br before:from-transparent before:via-white/5 before:to-transparent
-                before:blur-sm relative overflow-hidden
-                hover:border-primary/20 transition-all duration-300
-              "
-              style={{ animationDelay: `${(index + 3) * 0.1}s` }}
+      {/* Academic & personal projects */}
+      <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pb-16">
+        <header className="mb-8">
+          <h2 className="font-sans text-headline-md text-primary mb-2">Academic &amp; Personal Projects</h2>
+          <p className="font-serif text-body-md text-on-surface-variant max-w-2xl">
+            Built during university — spanning backend APIs, computer vision, and hardware integration.
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          {projects.map((project) => (
+            <article
+              key={project.title}
+              className="material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 flex flex-col"
             >
-              <CardContent className="p-6">
-                <h4 className="text-lg font-semibold mb-2 text-card-foreground hover:text-primary transition-colors duration-300">
-                  {project.title}
-                </h4>
-                <p className="text-muted-foreground text-sm mb-3">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {project.technologies.slice(0, 3).map((tech) => (
-                    <Badge key={tech} variant="secondary" className="text-xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                  {project.technologies.length > 3 && (
-                    <Badge variant="secondary" className="text-xs">
-                      +{project.technologies.length - 3} more
-                    </Badge>
-                  )}
-                </div>
-                <Button variant="ghost" size="sm" className="p-0 h-auto text-primary hover:text-primary/80">
-                  <Github className="h-4 w-4 mr-1" />
-                  View Code
-                </Button>
-              </CardContent>
-            </Card>
+              <h3 className="font-sans text-headline-sm text-primary mb-3">{project.title}</h3>
+              <p className="font-serif text-body-md text-on-surface-variant leading-relaxed mb-5">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="font-mono text-xs bg-surface-container-high text-on-surface-variant px-2 py-1 rounded">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex gap-3 mt-auto">
+                {project.links.github && project.links.github !== "#" && (
+                  <a
+                    href={project.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-4 py-2 rounded-lg font-sans text-label-md transition-colors"
+                  >
+                    <Github className="h-4 w-4" />
+                    View Code
+                  </a>
+                )}
+                {project.links.demo && project.links.demo !== "#" && (
+                  <a
+                    href={project.links.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-4 py-2 rounded-lg font-sans text-label-md transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Demo
+                  </a>
+                )}
+              </div>
+            </article>
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

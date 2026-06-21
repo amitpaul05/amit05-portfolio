@@ -2,83 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ============================================================================
+   Architectural Parchment — Material Design 3 design system (light-first).
+   All colors MUST be HSL triplets, consumed via hsl(var(--token)) in
+   tailwind.config.ts. M3 named tokens (surface, primary, outline, …) are the
+   source of truth; the shadcn aliases below map onto them so the ui/* library
+   restyles automatically.
+   ========================================================================== */
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    /* ── M3 tokens — light (#f5fffa creamy base) ── */
+    --surface: 150 100% 98%;
+    --surface-dim: 150 14% 90%;
+    --surface-bright: 150 100% 99%;
+    --surface-container-lowest: 0 0% 100%;
+    --surface-container-low: 150 50% 98%;
+    --surface-container: 150 32% 96%;
+    --surface-container-high: 150 24% 94%;
+    --surface-container-highest: 150 18% 92%;
+    --surface-variant: 150 18% 92%;
+    --on-surface: 150 8% 10%;
+    --on-surface-variant: 150 8% 22%;
+    --inverse-surface: 100 3% 19%;
+    --inverse-on-surface: 48 16% 94%;
+    --outline: 150 6% 48%;
+    --outline-variant: 150 12% 80%;
+    --surface-tint: 224 22% 41%;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --primary: 223 47% 18%;
+    --on-primary: 0 0% 100%;
+    --primary-container: 223 32% 26%;
+    /* light: text on primary-container = the card colour (near-white), not muted blue */
+    --on-primary-container: 0 0% 100%;
+    --inverse-primary: 226 57% 83%;
+    --primary-fixed: 227 100% 93%;
+    --primary-fixed-dim: 226 57% 83%;
+    --on-primary-fixed: 222 62% 14%;
+    --on-primary-fixed-variant: 224 28% 31%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --secondary: 222 30% 30%;
+    --on-secondary: 0 0% 100%;
+    --secondary-container: 222 93% 89%;
+    --on-secondary-container: 222 34% 28%;
+    --secondary-fixed: 222 100% 92%;
+    --secondary-fixed-dim: 221 53% 82%;
+    --on-secondary-fixed: 217 66% 13%;
+    --on-secondary-fixed-variant: 219 28% 30%;
 
-    --primary: 263 70% 50%;
-    --primary-foreground: 0 0% 98%;
+    --tertiary: 43 100% 10%;
+    --on-tertiary: 0 0% 100%;
+    --tertiary-container: 43 72% 17%;
+    --on-tertiary-container: 40 37% 58%;
+    --tertiary-fixed: 40 96% 82%;
+    --tertiary-fixed-dim: 40 57% 71%;
+    --on-tertiary-fixed: 41 100% 7%;
+    --on-tertiary-fixed-variant: 42 58% 22%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --error: 0 75% 42%;
+    --on-error: 0 0% 100%;
+    --error-container: 6 100% 92%;
+    --on-error-container: 356 100% 29%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 142 76% 36%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 263 70% 50%;
-
+    /* ── shadcn aliases → mapped onto M3 ── */
+    --background: 150 100% 98%;
+    --foreground: 150 8% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 8% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 8% 10%;
+    --primary-foreground: 0 0% 100%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 150 32% 96%;
+    --muted-foreground: 150 8% 22%;
+    --accent: 222 93% 89%;
+    --accent-foreground: 220 22% 40%;
+    --destructive: 0 75% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 12% 80%;
+    --input: 150 12% 80%;
+    --ring: 223 47% 18%;
     --radius: 0.5rem;
 
-    /* Modern theme colors */
-    --primary-purple: 263 70% 50%;
-    --primary-violet: 270 91% 65%;
-    --accent-green: 142 76% 36%;
-    --accent-cyan: 188 94% 68%;
-    --tech-blue: 217 91% 60%;
-    --tech-cyan: 188 94% 68%;
-    --section-bg: 240 8% 8%;
-    --neutral-900: 240 10% 3.9%;
-    --neutral-800: 240 3.7% 15.9%;
-    --neutral-700: 240 5% 26%;
-    --neutral-600: 240 5% 34%;
-    --neutral-400: 240 5% 64.9%;
-    --neutral-200: 240 4.8% 95.9%;
-    --neutral-100: 0 0% 98%;
-    
-    /* Modern gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary-purple)), hsl(var(--primary-violet)));
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent-green)), hsl(var(--accent-cyan)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--neutral-800)) 0%, hsl(var(--neutral-700)) 100%);
-    --gradient-hero: radial-gradient(ellipse at center, hsl(var(--primary-purple) / 0.15) 0%, transparent 70%);
-    
-    /* Modern shadows */
-    --shadow-glow: 0 0 50px hsl(var(--primary-purple) / 0.4);
-    --shadow-card: 0 25px 50px -12px hsl(var(--neutral-900) / 0.25);
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary-purple) / 0.3);
-    --shadow-soft: 0 4px 20px hsl(var(--neutral-900) / 0.1);
-    
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    /* Material elevation (M3 tonal + soft ambient shadow) */
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.08);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Motion */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: 150ms ease;
+    --transition-normal: 200ms ease;
+
+    /* Paper grain — single source of truth. Change these and the body + every
+       .material-card adapt automatically (cards render at half --grain-opacity). */
+    --grain-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --grain-size: 180px;
+    --grain-opacity: 0.5;
+
+    --sidebar-background: 60 15% 95%;
+    --sidebar-foreground: 233 6% 29%;
+    --sidebar-primary: 223 47% 18%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 48 14% 93%;
+    --sidebar-accent-foreground: 90 4% 11%;
+    --sidebar-border: 240 8% 79%;
+    --sidebar-ring: 223 47% 18%;
 
     /* Diary page — always cream, never dark-mode-flipped */
     --diary-paper: 42 40% 93%;
@@ -90,42 +118,81 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    /* ── M3 tokens — dark ── */
+    --surface: 216 10% 10%;
+    --surface-dim: 210 11% 7%;
+    --surface-bright: 214 6% 22%;
+    --surface-container-lowest: 210 11% 7%;
+    --surface-container-low: 216 8% 12%;
+    --surface-container: 214 10% 14%;
+    --surface-container-high: 214 8% 18%;
+    --surface-container-highest: 214 6% 22%;
+    --surface-variant: 233 6% 29%;
+    --on-surface: 45 7% 88%;
+    --on-surface-variant: 240 8% 79%;
+    --inverse-surface: 45 7% 88%;
+    --inverse-on-surface: 100 3% 19%;
+    --outline: 229 5% 58%;
+    --outline-variant: 233 6% 29%;
+    --surface-tint: 226 57% 83%;
 
-    --card: 240 3.7% 15.9%;
-    --card-foreground: 0 0% 98%;
+    --primary: 226 57% 83%;
+    --on-primary: 220 41% 22%;
+    /* Original cool slate restored, fill opacity reduced so it sits subtly on the dark surface */
+    --primary-container: 225 18% 18%;
+    --on-primary-container: 227 100% 93%;
+    --inverse-primary: 223 47% 18%;
+    /* fixed + on-* tokens are theme-invariant by M3 definition — inherited from :root */
 
-    --popover: 240 3.7% 15.9%;
-    --popover-foreground: 0 0% 98%;
+    --secondary: 221 53% 82%;
+    --on-secondary: 220 41% 22%;
+    /* Original cool slate restored, fill opacity reduced (icon tiles, chips, badges) */
+    --secondary-container: 219 20% 19%;
+    --on-secondary-container: 222 100% 92%;
 
-    --primary: 263 70% 50%;
-    --primary-foreground: 0 0% 98%;
+    --tertiary: 40 57% 71%;
+    --on-tertiary: 44 74% 15%;
+    --tertiary-container: 42 58% 22%;
+    --on-tertiary-container: 40 96% 82%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --error: 6 100% 84%;
+    --on-error: 357 100% 21%;
+    --error-container: 356 100% 29%;
+    --on-error-container: 6 100% 92%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    /* ── shadcn aliases → mapped onto dark M3 ── */
+    --background: 216 10% 10%;
+    --foreground: 45 7% 88%;
+    --card: 216 8% 12%;
+    --card-foreground: 45 7% 88%;
+    --popover: 214 10% 14%;
+    --popover-foreground: 45 7% 88%;
+    --primary-foreground: 220 41% 22%;
+    --secondary-foreground: 220 41% 22%;
+    --muted: 214 10% 14%;
+    --muted-foreground: 240 8% 79%;
+    --accent: 219 28% 30%;
+    --accent-foreground: 222 100% 92%;
+    --destructive: 6 100% 84%;
+    --destructive-foreground: 357 100% 21%;
+    --border: 233 6% 29%;
+    --input: 233 6% 29%;
+    --ring: 226 57% 83%;
 
-    --accent: 142 76% 36%;
-    --accent-foreground: 0 0% 98%;
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.2);
+    --shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.32);
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    /* Paper grain — dark theme only needs a different opacity */
+    --grain-opacity: 0.1;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 263 70% 50%;
-    
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 263 70% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 263 70% 50%;
+    --sidebar-background: 216 8% 12%;
+    --sidebar-foreground: 240 8% 79%;
+    --sidebar-primary: 226 57% 83%;
+    --sidebar-primary-foreground: 220 41% 22%;
+    --sidebar-accent: 214 10% 14%;
+    --sidebar-accent-foreground: 45 7% 88%;
+    --sidebar-border: 233 6% 29%;
+    --sidebar-ring: 226 57% 83%;
   }
 }
 
@@ -135,7 +202,32 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-serif;
+    font-feature-settings: "liga" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Paper grain over the whole page, behind all content */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
+  }
+
+  section[id] {
+    scroll-margin-top: calc(80px + 1rem);
+  }
+
+  /* Material Symbols — inline icon defaults */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+    user-select: none;
   }
   
   /* Scroll animations - safer implementation */
@@ -163,32 +255,31 @@ All colors MUST be HSL.
     transform: translateX(-50px);
   }
   
-  /* Enhanced hover effects */
-  .card-hover {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Material card — Level 1 elevation + soft ambient shadow, lifts on hover */
+  .material-card {
+    position: relative;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
-  .card-hover:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
+
+  /* Paper grain on each card — always half the body-grain opacity */
+  .material-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: calc(var(--grain-opacity) / 2);
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
   }
-  
-  /* Gradient text animation */
-  .gradient-text-animated {
-    background: linear-gradient(-45deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary-violet)), hsl(var(--accent-cyan)));
-    background-size: 400% 400%;
-    animation: gradient-shift 4s ease infinite;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+
+  .material-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
   }
-  
-  @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
+
   /* Stagger animation delays */
   .stagger-1 { animation-delay: 0.1s; }
   .stagger-2 { animation-delay: 0.2s; }
@@ -309,5 +400,22 @@ All colors MUST be HSL.
   .diary-prose pre code {
     background: none;
     padding: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Force visible — the 2s IntersectionObserver fallback won't fire fast enough */
+  .animate-on-scroll,
+  .slide-on-scroll,
+  .stagger-child {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
   }
 }

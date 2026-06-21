@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
 import { Settings, Eye, EyeOff, CheckCircle, Loader2, Upload } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { commitResume } from '@/lib/github';
 import { toast } from 'sonner';
-import GlassSurface from '@/components/GlassSurface';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const PAT_KEY = 'diary_pat';
 
@@ -101,86 +100,66 @@ const ResumeUpload = () => {
     <>
       {showPAT && <PATModal onClose={() => setShowPAT(false)} />}
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="min-h-screen bg-background text-foreground dark flex flex-col items-center justify-center px-4"
-      >
-        {/* Glassmorphic pill nav */}
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-50">
-          <nav className="relative px-6 py-3 rounded-full shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <GlassSurface
-                width="100%"
-                height="100%"
-                borderRadius={50}
-                borderWidth={0}
-                brightness={50}
-                opacity={0.93}
-                blur={10}
-                displace={0.5}
-                backgroundOpacity={0.1}
-                saturation={1}
-                distortionScale={-180}
-                redOffset={0}
-                greenOffset={10}
-                blueOffset={20}
-              />
-            </div>
-            <div className="relative z-10 flex items-center justify-between">
-              <span className="text-xl font-bold text-foreground">Update Resume</span>
+      <div className="min-h-screen text-foreground">
+        {/* Material top bar */}
+        <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+          <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+            <span className="font-sans font-semibold text-primary">Update Resume</span>
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
               <button
                 onClick={() => setShowPAT(true)}
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"
                 title="GitHub token settings"
               >
                 <Settings className="w-5 h-5" />
               </button>
             </div>
-          </nav>
-        </div>
-
-        <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 mt-16">
-          {/* Drop zone */}
-          <div
-            onClick={() => inputRef.current?.click()}
-            className="border-2 border-dashed border-border hover:border-primary/60 rounded-xl p-10 flex flex-col items-center gap-3 cursor-pointer transition-colors"
-          >
-            <Upload className="w-8 h-8 text-muted-foreground" />
-            {file ? (
-              <p className="text-sm font-medium text-foreground text-center break-all">{file.name}</p>
-            ) : (
-              <p className="text-sm text-muted-foreground text-center">
-                Click to select PDF
-              </p>
-            )}
-            <input
-              ref={inputRef}
-              type="file"
-              accept=".pdf,application/pdf"
-              onChange={handleFileChange}
-              className="hidden"
-            />
           </div>
+        </header>
 
-          {done && (
-            <div className="flex items-center gap-2 text-green-400 text-sm justify-center">
-              <CheckCircle className="w-4 h-4" />
-              Resume committed — Netlify will rebuild in ~1 min.
+        <main className="flex flex-col items-center justify-center px-4 py-20">
+          <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+            {/* Drop zone */}
+            <div
+              onClick={() => inputRef.current?.click()}
+              className="material-card bg-surface-container-lowest border-2 border-dashed border-outline-variant hover:border-primary/60 rounded-lg p-10 flex flex-col items-center gap-3 cursor-pointer transition-colors"
+            >
+              <Upload className="w-8 h-8 text-on-surface-variant" />
+              {file ? (
+                <p className="font-sans text-sm font-medium text-on-surface text-center break-all">{file.name}</p>
+              ) : (
+                <p className="font-sans text-sm text-on-surface-variant text-center">
+                  Click to select PDF
+                </p>
+              )}
+              <input
+                ref={inputRef}
+                type="file"
+                accept=".pdf,application/pdf"
+                onChange={handleFileChange}
+                className="hidden"
+              />
             </div>
-          )}
 
-          <button
-            type="submit"
-            disabled={submitting || !file}
-            className="w-full py-3 rounded border border-primary/50 text-foreground bg-primary/10 hover:bg-primary/20 transition-colors disabled:opacity-40 flex items-center justify-center gap-2 text-base font-medium"
-          >
-            {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-            {submitting ? 'Committing...' : 'Commit resume'}
-          </button>
-        </form>
-      </motion.div>
+            {done && (
+              <div className="flex items-center gap-2 text-primary font-sans text-sm justify-center">
+                <CheckCircle className="w-4 h-4" />
+                Resume committed — Netlify will rebuild in ~1 min.
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting || !file}
+              className="w-full py-3 rounded-lg bg-primary text-on-primary font-sans text-label-md hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+            >
+              {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+              {submitting ? 'Committing...' : 'Commit resume'}
+            </button>
+          </form>
+        </main>
+      </div>
     </>
   );
 };

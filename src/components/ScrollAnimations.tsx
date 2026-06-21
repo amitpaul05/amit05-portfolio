@@ -19,7 +19,7 @@ const useScrollAnimation = (deps: unknown[] = []) => {
 
     const createObserver = (threshold = 0.1) => {
       return new IntersectionObserver(
-        (entries) => {
+        (entries, observer) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               entry.target.classList.add('visible');
@@ -29,6 +29,8 @@ const useScrollAnimation = (deps: unknown[] = []) => {
                   child.classList.add('visible');
                 }, index * 100);
               });
+              // Unobserve after first reveal — entrance fires once, never re-triggers
+              observer.unobserve(entry.target);
             }
           });
         },
