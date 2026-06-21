@@ -305,6 +305,19 @@
     background-size: var(--grain-size) var(--grain-size);
   }
 
+  /* Opaque sliding page layers (mobile swipe / click transition) keep the paper
+     grain so they don't read as flat blocks while moving over each other. */
+  .page-grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
+  }
+
   /* Stagger animation delays */
   .stagger-1 { animation-delay: 0.1s; }
   .stagger-2 { animation-delay: 0.2s; }
@@ -443,4 +456,36 @@
     visibility: visible !important;
     transform: none !important;
   }
+}
+
+/* ── Theme switch: directional gradient wipe (View Transitions API) ──
+   The old theme stays static underneath; the NEW theme is layered on top and
+   revealed through a soft vertical gradient mask that ThemeToggle slides:
+   • to dark  = "sunset"  → reveals from the TOP, sweeping down
+   • to light = "sunrise" → reveals from the BOTTOM, sweeping up
+   The feathered mask gives a gradient edge instead of a hard line. */
+::view-transition-old(root) {
+  animation: none;
+  z-index: 1;
+}
+::view-transition-new(root) {
+  animation: none;
+  z-index: 9999;
+}
+html.vt-sunset::view-transition-new(root),
+html.vt-sunrise::view-transition-new(root) {
+  mask-repeat: no-repeat;
+  mask-size: 100% 300%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 300%;
+}
+/* opaque band at the TOP → reveal sweeps downward */
+html.vt-sunset::view-transition-new(root) {
+  mask-image: linear-gradient(to bottom, #000 0%, #000 34%, transparent 66%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 34%, transparent 66%, transparent 100%);
+}
+/* opaque band at the BOTTOM → reveal sweeps upward */
+html.vt-sunrise::view-transition-new(root) {
+  mask-image: linear-gradient(to top, #000 0%, #000 34%, transparent 66%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 34%, transparent 66%, transparent 100%);
 }

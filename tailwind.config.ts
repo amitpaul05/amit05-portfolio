@@ -186,6 +186,15 @@ export default {
 					'0%': { opacity: '0', transform: 'translateY(12px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
 				},
+				/* Click transition (mobile): the leaving page slides off to reveal the target underneath */
+				'slide-out-left': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(-100%)' }
+				},
+				'slide-out-right': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(100%)' }
+				},
 				/* Multi-bounce settling at the lifted rest (-6px) — for the active bottom tab */
 				'tab-bounce': {
 					'0%':   { transform: 'translateY(0)' },
@@ -203,6 +212,8 @@ export default {
 				'fade-in': 'fade-in 0.4s ease-out',
 				'fade-in-up': 'fade-in-up 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
 				'page-enter': 'page-enter 1s cubic-bezier(0.22, 1, 0.36, 1)',
+				'slide-out-left': 'slide-out-left 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+				'slide-out-right': 'slide-out-right 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards',
 				'tab-bounce': 'tab-bounce 0.7s ease-out'
 			}
 		}
