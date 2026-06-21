@@ -8,10 +8,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PortfolioLayout from "./components/PortfolioLayout";
 import NotFound from "./pages/NotFound";
 import AboutPage from "./pages/AboutPage";
+import AcademicPage from "./pages/AcademicPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import CertificatesPage from "./pages/CertificatesPage";
 
-const AcademicPage    = lazy(() => import('./pages/AcademicPage'));
-const ProjectsPage    = lazy(() => import('./pages/ProjectsPage'));
-const CertificatesPage = lazy(() => import('./pages/CertificatesPage'));
 const Diary           = lazy(() => import('./pages/Diary'));
 const DiaryEntry      = lazy(() => import('./pages/DiaryEntry'));
 const DiaryNew        = lazy(() => import('./pages/DiaryNew'));
@@ -21,7 +21,7 @@ const ResumeUpload    = lazy(() => import('./pages/ResumeUpload'));
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+  <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
     <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />

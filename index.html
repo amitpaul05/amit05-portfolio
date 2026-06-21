@@ -4,13 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Apply persisted theme before paint to avoid a flash (light is default) -->
+    <!-- Apply theme before paint to avoid a flash (default = system) -->
     <script>
       (function () {
         try {
-          if (localStorage.getItem("theme") === "dark") {
-            document.documentElement.classList.add("dark");
-          }
+          var stored = localStorage.getItem("theme");
+          var sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = stored === "dark" || ((!stored || stored === "system") && sysDark);
+          if (dark) document.documentElement.classList.add("dark");
         } catch (e) {}
       })();
     </script>
