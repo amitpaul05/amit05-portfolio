@@ -1,8 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { NotebookPen, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { getAllEntries, type DiaryEntry } from '@/lib/diary';
 
 type Rect = { left: number; top: number; width: number; height: number };
@@ -354,13 +353,6 @@ const Diary = () => {
         </div>
       )}
 
-      <Link
-        to="/diary/new"
-        aria-label="New diary entry"
-        className="fixed bottom-20 right-4 lg:bottom-8 lg:right-8 z-40 w-14 h-14 rounded-full bg-primary text-on-primary shadow-lg flex items-center justify-center hover:opacity-90 active:scale-95 transition"
-      >
-        <NotebookPen className="h-5 w-5" />
-      </Link>
     </section>
   );
 };
