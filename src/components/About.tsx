@@ -112,34 +112,6 @@ const About = () => {
           </div>
         </div>
       </section>
-
-      <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pb-16">
-        <div className="bg-[#1e1e1e] rounded-lg p-6 md:p-8 shadow-xl overflow-x-auto border border-primary/20">
-          <div className="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
-            <span className="w-3 h-3 rounded-full bg-error" />
-            <span className="w-3 h-3 rounded-full bg-tertiary-fixed" />
-            <span className="w-3 h-3 rounded-full bg-on-primary-container" />
-            <span className="ml-4 font-mono text-sm text-white/40">engineer.py</span>
-          </div>
-          <pre className="font-mono text-sm leading-relaxed text-white/80">
-{`from dataclasses import dataclass
-
-`}<span className="text-[#c678dd]">@dataclass</span>{`
-`}<span className="text-[#c678dd]">class</span>{` `}<span className="text-[#e5c07b]">Engineer</span>{`:
-    name: `}<span className="text-[#e5c07b]">str</span>{` = `}<span className="text-[#98c379]">"Amit Paul"</span>{`
-    role: `}<span className="text-[#e5c07b]">str</span>{` = `}<span className="text-[#98c379]">"Backend Engineer"</span>{`
-    stack = (`}<span className="text-[#98c379]">"Django"</span>{`, `}<span className="text-[#98c379]">"PostgreSQL"</span>{`, `}<span className="text-[#98c379]">"Celery"</span>{`, `}<span className="text-[#98c379]">"Docker"</span>{`)
-
-    `}<span className="text-[#c678dd]">def</span>{` `}<span className="text-[#61afef]">build</span>{`(self, system: `}<span className="text-[#e5c07b]">str</span>{`) -> `}<span className="text-[#e5c07b]">str</span>{`:
-        `}<span className="text-[#5c6370]"># ship it: reliable, observable, maintainable</span>{`
-        `}<span className="text-[#c678dd]">return</span>{` `}<span className="text-[#98c379]">{`f"{system} → production"`}</span>{`
-
-
-amit = Engineer()
-amit.build(`}<span className="text-[#98c379]">"AYO · Govara · SmallsLive"</span>{`)`}
-          </pre>
-        </div>
-      </section>
     </>
   );
 };
