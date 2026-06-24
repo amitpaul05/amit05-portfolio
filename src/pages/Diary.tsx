@@ -6,6 +6,14 @@ import { getAllEntries, type DiaryEntry } from '@/lib/diary';
 
 type Rect = { left: number; top: number; width: number; height: number };
 
+type OpenCtx = {
+  entries: DiaryEntry[];
+  index: number;
+  openRect: Rect; // the tapped card's on-screen rect (morph origin)
+  centerRect: Rect; // the stack's centred-card rect (collapse / re-expand target)
+  setActive: (i: number) => void; // keep the underlying stack in sync
+};
+
 const MOOD_EMOJI: Record<string, string> = {
   motivated: '🔥',
   focused: '🎯',
@@ -44,9 +52,9 @@ function groupByMonth(entries: DiaryEntry[]) {
   return groups;
 }
 
-function PaperPage({ entry, full }: { entry: DiaryEntry; full?: boolean }) {
+function PaperPage({ entry }: { entry: DiaryEntry }) {
   return (
-    <div className={`relative diary-paper rounded-xl border border-diary-rule/30 ${full ? 'min-h-[calc(100vh-7rem)] shadow-2xl' : 'h-full shadow-2xl overflow-hidden'}`}>
+    <div className="relative diary-paper rounded-xl border border-diary-rule/30 h-full shadow-2xl overflow-hidden">
       <div
         className="absolute top-0 bottom-0 w-px z-10 pointer-events-none"
         style={{ left: '3rem', backgroundColor: 'hsl(var(--diary-rule-margin) / 0.55)' }}
@@ -69,26 +77,204 @@ function PaperPage({ entry, full }: { entry: DiaryEntry; full?: boolean }) {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{entry.content}</ReactMarkdown>
         </div>
       </div>
-      {!full && (
-        <div
-          className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, hsl(var(--diary-paper)), transparent)' }}
-        />
-      )}
+      <div
+        className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
+        style={{ background: 'linear-gradient(to top, hsl(var(--diary-paper)), transparent)' }}
+      />
     </div>
   );
 }
 
-// iOS App-Switcher style stack: overlapping page-cards, drag (mouse/touch) to flick
-// through, tap the front card to open it. stopPropagation keeps the horizontal drag
-// from triggering the layout's tab-swipe.
-function SwipeStack({
-  entries,
-  onOpen,
-}: {
-  entries: DiaryEntry[];
-  onOpen: (slug: string, openRect: Rect, closeRect: Rect) => void;
-}) {
+// Gesture-driven reader. Vertical swipe shrinks the page back onto the stack (close);
+// horizontal swipe drags a 3-card track so the prev/next page slides in under the finger.
+const GAP = 24;
+
+function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
+  const [index, setIndex] = useState(ctx.index);
+  const morphRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const natural = useRef<Rect | null>(null);
+  const busy = useRef(false);
+  const g = useRef({ x: 0, y: 0, axis: null as null | 'h' | 'v', on: false });
+
+  const setBackdrop = (o: number, ms = 0) => {
+    const b = backdropRef.current;
+    if (!b) return;
+    b.style.transition = ms ? `opacity ${ms}ms ease-out` : 'none';
+    b.style.opacity = String(o);
+  };
+
+  const tf = (r: Rect) => {
+    const f = natural.current;
+    if (!f) return 'none';
+    const dx = r.left + r.width / 2 - (f.left + f.width / 2);
+    const dy = r.top + r.height / 2 - (f.top + f.height / 2);
+    return `translate(${dx}px, ${dy}px) scale(${r.width / f.width}, ${r.height / f.height})`;
+  };
+
+  // Open: morph the page out from the tapped card; measure the natural rect once.
+  useLayoutEffect(() => {
+    const m = morphRef.current;
+    if (!m) return;
+    natural.current = m.getBoundingClientRect();
+    m.style.transform = tf(ctx.openRect);
+    m.style.opacity = '0.4';
+    setBackdrop(0);
+    requestAnimationFrame(() => {
+      m.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s';
+      m.style.transform = 'none';
+      m.style.opacity = '1';
+      setBackdrop(1, 300);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Release with no commit: settle the page and the track back to rest.
+  const spring = () => {
+    const m = morphRef.current;
+    const tr = trackRef.current;
+    if (m) {
+      m.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.3s';
+      m.style.transform = 'none';
+      m.style.opacity = '1';
+    }
+    if (tr) {
+      tr.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1)';
+      tr.style.transform = 'none';
+    }
+    setBackdrop(1, 200);
+  };
+
+  // Vertical dismiss: shrink the page down into its slot on the stack, then unmount.
+  const close = () => {
+    const m = morphRef.current;
+    if (busy.current || !m) return;
+    busy.current = true;
+    m.style.transition = 'transform 0.3s cubic-bezier(0.4,0,1,1), opacity 0.3s';
+    m.style.transform = tf(ctx.centerRect);
+    m.style.opacity = '0.15';
+    setBackdrop(0, 300);
+    window.setTimeout(onClose, 300);
+  };
+
+  // Horizontal commit: slide the track one card over so the neighbour lands centred.
+  const commit = (dir: -1 | 1) => {
+    const target = index + dir;
+    const tr = trackRef.current;
+    if (busy.current || !tr || target < 0 || target >= ctx.entries.length) {
+      spring();
+      return;
+    }
+    busy.current = true;
+    const step = (natural.current?.width ?? 0) + GAP;
+    tr.style.transition = 'transform 0.32s cubic-bezier(0.22,1,0.36,1)';
+    tr.style.transform = `translateX(${-dir * step}px)`;
+    window.setTimeout(() => {
+      ctx.setActive(target);
+      setIndex(target);
+      tr.style.transition = 'none';
+      tr.style.transform = 'none';
+      busy.current = false;
+    }, 320);
+  };
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (busy.current) return;
+    g.current = { x: e.clientX, y: e.clientY, axis: null, on: true };
+    morphRef.current?.setPointerCapture(e.pointerId);
+    if (morphRef.current) morphRef.current.style.transition = 'none';
+    if (trackRef.current) trackRef.current.style.transition = 'none';
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    const s = g.current;
+    if (!s.on) return;
+    const dx = e.clientX - s.x;
+    const dy = e.clientY - s.y;
+    if (!s.axis && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) s.axis = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+    if (s.axis === 'v') {
+      const m = morphRef.current;
+      if (!m) return;
+      m.style.transform = `translateY(${dy}px) scale(${Math.max(0.85, 1 - Math.abs(dy) / 1400)})`;
+      setBackdrop(Math.max(0, 1 - Math.abs(dy) / 480));
+    } else if (s.axis === 'h') {
+      const tr = trackRef.current;
+      if (!tr) return;
+      // resist at the ends where there is no neighbour to pull in
+      const atStart = index === 0 && dx > 0;
+      const atEnd = index === ctx.entries.length - 1 && dx < 0;
+      tr.style.transform = `translateX(${atStart || atEnd ? dx * 0.3 : dx}px)`;
+    }
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    const s = g.current;
+    if (!s.on) return;
+    s.on = false;
+    const dx = e.clientX - s.x;
+    const dy = e.clientY - s.y;
+    if (s.axis === 'v' && Math.abs(dy) > 110) return close();
+    if (s.axis === 'h' && Math.abs(dx) > 70) return commit(dx < 0 ? 1 : -1);
+    spring();
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[80]"
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+    >
+      <div ref={backdropRef} onClick={close} className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      <button
+        aria-label="Close"
+        onClick={close}
+        className="fixed top-4 right-4 z-[90] w-10 h-10 rounded-full bg-surface text-on-surface-variant hover:text-primary shadow-lg flex items-center justify-center transition-colors"
+      >
+        <X className="h-5 w-5" />
+      </button>
+      <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8 pointer-events-none">
+        <div
+          ref={morphRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={spring}
+          className="relative pointer-events-auto w-full max-w-[720px] lg:max-w-[900px] h-[calc(100vh-7rem)] touch-none cursor-grab active:cursor-grabbing will-change-transform"
+        >
+          <div ref={trackRef} className="absolute inset-0 will-change-transform">
+            {[-1, 0, 1].map((slot) => {
+              const i = index + slot;
+              if (i < 0 || i >= ctx.entries.length) return null;
+              return (
+                <div
+                  key={ctx.entries[i].slug}
+                  className="absolute inset-0"
+                  style={{ transform: `translateX(calc((100% + ${GAP}px) * ${slot}))` }}
+                >
+                  <PaperPage entry={ctx.entries[i]} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// iOS App-Switcher style stack: overlapping page-cards, drag to flick through, tap to open.
+function SwipeStack({ entries, onOpen, lifted = false }: { entries: DiaryEntry[]; onOpen: (ctx: OpenCtx) => void; lifted?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [drag, setDrag] = useState(0);
@@ -110,7 +296,6 @@ function SwipeStack({
   const peek = cardW * 0.5;
   const last = entries.length - 1;
 
-  // Which card sits in front at a horizontal offset from centre (front-most = highest z)
   const cardAt = (rel: number): number => {
     let hit = -1;
     let bestZ = -1;
@@ -151,20 +336,18 @@ function SwipeStack({
       setActive(Math.min(last, Math.max(0, Math.round(active + drag))));
       return;
     }
-    // tap → open the page actually under the finger (ignore taps on empty space)
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     const hit = cardAt(e.clientX - (rect.left + rect.width / 2));
     if (hit >= 0) {
-      // On-screen rect of a card at step `o` from centre — for the expand/collapse morph
       const rectFor = (o: number): Rect => {
         const sc = Math.max(0.62, 1 - Math.abs(o) * 0.13);
         const w = cardW * sc;
         const h = rect.height * sc;
         return { left: rect.left + rect.width / 2 + o * peek - w / 2, top: rect.top + (rect.height - h) / 2, width: w, height: h };
       };
-      onOpen(entries[hit].slug, rectFor(hit - active), rectFor(0));
-      setActive(hit); // focus the tapped page so the modal collapses back to centre
+      onOpen({ entries, index: hit, openRect: rectFor(hit - active), centerRect: rectFor(0), setActive });
+      setActive(hit);
     }
   };
   const onPointerCancel = () => {
@@ -197,7 +380,7 @@ function SwipeStack({
                 height: '100%',
                 transform: `translateX(calc(-50% + ${o * peek}px)) scale(${scale}) rotateY(${rot}deg)`,
                 zIndex: 100 - Math.round(abs * 10),
-                opacity: abs > 3 ? 0 : 1,
+                opacity: abs > 3 || (lifted && i === active) ? 0 : 1,
                 transition: dragging ? 'none' : 'transform 0.42s cubic-bezier(0.22,1,0.36,1), opacity 0.3s',
               }}
             >
@@ -228,68 +411,7 @@ function SwipeStack({
 const Diary = () => {
   const entries = useMemo(() => getAllEntries(), []);
   const groups = useMemo(() => groupByMonth(entries), [entries]);
-  const [openSlug, setOpenSlug] = useState<string | null>(null);
-  const openEntry = openSlug ? entries.find((e) => e.slug === openSlug) : null;
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const backdropRef = useRef<HTMLDivElement>(null);
-  const rects = useRef<{ open: Rect; close: Rect } | null>(null);
-
-  const openModal = (slug: string, open: Rect, close: Rect) => {
-    rects.current = { open, close };
-    setOpenSlug(slug);
-  };
-
-  // Morph the dialog between a card rect and its centred position (FLIP)
-  const morph = (target: Rect, closing: boolean) => {
-    const dlg = dialogRef.current;
-    if (!dlg) return;
-    const f = dlg.getBoundingClientRect();
-    const dx = target.left + target.width / 2 - (f.left + f.width / 2);
-    const dy = target.top + target.height / 2 - (f.top + f.height / 2);
-    const sx = target.width / f.width;
-    const sy = target.height / f.height;
-    const card = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
-    dlg.animate(
-      closing
-        ? [{ transform: 'none', opacity: 1 }, { transform: card, opacity: 0.2 }]
-        : [{ transform: card, opacity: 0.3 }, { transform: 'none', opacity: 1 }],
-      { duration: closing ? 300 : 360, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' }
-    );
-    backdropRef.current?.animate(closing ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }], {
-      duration: 300,
-      easing: 'ease-out',
-      fill: 'both',
-    });
-  };
-
-  const closeModal = () => {
-    if (rects.current && dialogRef.current) {
-      morph(rects.current.close, true);
-      const done = dialogRef.current.getAnimations().slice(-1)[0];
-      if (done) done.onfinish = () => setOpenSlug(null);
-      else setOpenSlug(null);
-    } else {
-      setOpenSlug(null);
-    }
-  };
-
-  useLayoutEffect(() => {
-    if (openSlug && rects.current) morph(rects.current.open, false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openSlug]);
-
-  useEffect(() => {
-    if (!openSlug) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeModal();
-    window.addEventListener('keydown', onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener('keydown', onKey);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openSlug]);
+  const [ctx, setCtx] = useState<OpenCtx | null>(null);
 
   return (
     <section
@@ -323,36 +445,19 @@ const Diary = () => {
                   {monthEntries.length} {monthEntries.length === 1 ? 'entry' : 'entries'}
                 </span>
               </div>
-              <SwipeStack entries={monthEntries} onOpen={openModal} />
+              <SwipeStack entries={monthEntries} onOpen={setCtx} lifted={ctx?.entries === monthEntries} />
             </div>
           ))}
         </div>
       )}
 
-      {/* In-page reader — keeps the Diary list mounted (no reload on close) */}
-      {openEntry && (
-        <div className="fixed inset-0 z-[80] overflow-y-auto" onClick={closeModal}>
-          {/* fixed backdrop covers the viewport even when a tall entry scrolls */}
-          <div ref={backdropRef} className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-          <button
-            aria-label="Close"
-            onClick={closeModal}
-            className="fixed top-4 right-4 z-[90] w-10 h-10 rounded-full bg-surface text-on-surface-variant hover:text-primary shadow-lg flex items-center justify-center transition-colors"
-          >
-            <X className="h-5 w-5" />
-          </button>
-          <div className="relative flex min-h-full justify-center p-4 md:p-8">
-            <div
-              ref={dialogRef}
-              className="w-full max-w-[720px] lg:max-w-[900px] my-auto will-change-transform"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <PaperPage entry={openEntry} full />
-            </div>
-          </div>
-        </div>
+      {ctx && (
+        <DiaryReader
+          key={ctx.entries[ctx.index].slug}
+          ctx={ctx}
+          onClose={() => setCtx(null)}
+        />
       )}
-
     </section>
   );
 };
