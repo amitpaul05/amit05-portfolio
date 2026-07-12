@@ -383,6 +383,15 @@
     display: none;
   }
 
+  /* Scroll without a visible scrollbar track */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .diary-shimmer-bar {
     background: linear-gradient(
       90deg,

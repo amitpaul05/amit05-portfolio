@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { getAllEntries, type DiaryEntry } from '@/lib/diary';
 
 type Rect = { left: number; top: number; width: number; height: number };
@@ -10,7 +12,7 @@ type OpenCtx = {
   entries: DiaryEntry[];
   index: number;
   openRect: Rect; // the tapped card's on-screen rect (morph origin)
-  centerRect: Rect; // the stack's centred-card rect (collapse / re-expand target)
+  rectFor: (offset: number) => Rect; // on-screen rect of the card `offset` steps from the stack's centre
   setActive: (i: number) => void; // keep the underlying stack in sync
 };
 
@@ -52,7 +54,18 @@ function groupByMonth(entries: DiaryEntry[]) {
   return groups;
 }
 
-function PaperPage({ entry }: { entry: DiaryEntry }) {
+// `scrollable` turns the copy into an internal scroll region so a long entry can be read
+// in full in the reader; the stack cards leave it off and keep the clipped-with-fade look.
+// `scrollRef` lets the reader read the scroll position to arbitrate swipe-vs-close.
+function PaperPage({
+  entry,
+  scrollable = false,
+  scrollRef,
+}: {
+  entry: DiaryEntry;
+  scrollable?: boolean;
+  scrollRef?: React.Ref<HTMLDivElement>;
+}) {
   return (
     <div className="relative diary-paper rounded-xl border border-diary-rule/30 h-full shadow-2xl overflow-hidden">
       <div
@@ -67,7 +80,11 @@ function PaperPage({ entry }: { entry: DiaryEntry }) {
           {formatDate(entry.date)}
         </span>
       </div>
-      <div className="pl-14 pr-10 pt-8 pb-10">
+      <div
+        ref={scrollRef}
+        className={cn('pl-14 pr-10 pt-8', scrollable ? 'h-full overflow-y-auto no-scrollbar pb-16' : 'pb-10')}
+        style={scrollable ? { touchAction: 'none' } : undefined}
+      >
         <div className="font-diary text-sm text-diary-ink-muted flex flex-wrap items-center gap-3 leading-8">
           {entry.moods.map((m) => (
             <span key={m}>{MOOD_EMOJI[m] ?? '•'} {m}</span>
@@ -77,26 +94,39 @@ function PaperPage({ entry }: { entry: DiaryEntry }) {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{entry.content}</ReactMarkdown>
         </div>
       </div>
-      <div
-        className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
-        style={{ background: 'linear-gradient(to top, hsl(var(--diary-paper)), transparent)' }}
-      />
+      {!scrollable && (
+        <div
+          className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, hsl(var(--diary-paper)), transparent)' }}
+        />
+      )}
     </div>
   );
 }
 
-// Gesture-driven reader. Vertical swipe shrinks the page back onto the stack (close);
-// horizontal swipe drags a 3-card track so the prev/next page slides in under the finger.
-const GAP = 24;
+// Gesture- and arrow-driven reader. Only ever one page is enlarged for reading; the rest
+// stay in the real SwipeStack behind the backdrop. Opening lifts the tapped card out of
+// that stack; navigating sends the current page back down into its slot on the stack while
+// the neighbour is lifted out of the stack in its place — so every transition reads as
+// "off the stack / onto the stack", never a separate carousel.
+//
+// Vertical swipe shrinks the page down into its slot to close. Horizontal swipe (mobile)
+// or the side arrows / arrow keys (PC) flick between entries.
+const NAV_MS = 440;
 
 function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
   const [index, setIndex] = useState(ctx.index);
-  const morphRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const [incoming, setIncoming] = useState<number | null>(null); // page being lifted out of the stack mid-nav
+  const morphRef = useRef<HTMLDivElement>(null); // the current, front page
+  const inRef = useRef<HTMLDivElement>(null); // the incoming page during a nav
   const backdropRef = useRef<HTMLDivElement>(null);
-  const natural = useRef<Rect | null>(null);
+  const natural = useRef<Rect | null>(null); // full reading rect, measured once
+  const incomingFrom = useRef<Rect | null>(null); // stack slot the incoming page rises from
+  const scrollRef = useRef<HTMLDivElement>(null); // active page's scroll region
   const busy = useRef(false);
-  const g = useRef({ x: 0, y: 0, axis: null as null | 'h' | 'v', on: false });
+  const g = useRef({ x: 0, y: 0, lastY: 0, dismiss: 0, axis: null as null | 'h' | 'v', on: false });
+  const indexRef = useRef(ctx.index);
+  const last = ctx.entries.length - 1;
 
   const setBackdrop = (o: number, ms = 0) => {
     const b = backdropRef.current;
@@ -113,7 +143,7 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
     return `translate(${dx}px, ${dy}px) scale(${r.width / f.width}, ${r.height / f.height})`;
   };
 
-  // Open: morph the page out from the tapped card; measure the natural rect once.
+  // Open: lift the page out of the tapped stack card; measure the natural rect once.
   useLayoutEffect(() => {
     const m = morphRef.current;
     if (!m) return;
@@ -130,10 +160,29 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Incoming page: start it collapsed on its stack slot, then lift it up to the reading rect.
+  useLayoutEffect(() => {
+    if (incoming == null) return;
+    const el = inRef.current;
+    if (!el || !incomingFrom.current) return;
+    el.style.transition = 'none';
+    el.style.transform = tf(incomingFrom.current);
+    el.style.opacity = '0.4';
+    requestAnimationFrame(() => {
+      el.style.transition = `transform ${NAV_MS}ms cubic-bezier(0.22,1,0.36,1), opacity 0.3s`;
+      el.style.transform = 'none';
+      el.style.opacity = '1';
+    });
+  }, [incoming]);
+
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight') go(1);
+      else if (e.key === 'ArrowLeft') go(-1);
+    };
     window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = prev;
@@ -142,18 +191,51 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Release with no commit: settle the page and the track back to rest.
+  // Navigate: drop the current page back onto its stack slot while lifting the neighbour
+  // out of the stack. After the shuffle, the neighbour becomes the resting front page.
+  const go = (dir: -1 | 1) => {
+    if (busy.current) return;
+    const from = indexRef.current;
+    const target = from + dir;
+    if (target < 0 || target > last) {
+      spring();
+      return;
+    }
+    busy.current = true;
+    indexRef.current = target;
+    ctx.setActive(target);
+
+    const m = morphRef.current;
+    if (m) {
+      // -dir is where the outgoing card lands once the stack re-centres on the target
+      m.style.transition = `transform ${NAV_MS}ms cubic-bezier(0.22,1,0.36,1), opacity 0.3s`;
+      m.style.transform = tf(ctx.rectFor(-dir));
+      m.style.opacity = '0.2';
+    }
+    incomingFrom.current = ctx.rectFor(dir);
+    setIncoming(target);
+
+    window.setTimeout(() => {
+      setIndex(target);
+      setIncoming(null);
+      if (scrollRef.current) scrollRef.current.scrollTop = 0;
+      const mm = morphRef.current;
+      if (mm) {
+        mm.style.transition = 'none';
+        mm.style.transform = 'none';
+        mm.style.opacity = '1';
+      }
+      busy.current = false;
+    }, NAV_MS);
+  };
+
+  // Release with no commit: settle the page back to the reading rect.
   const spring = () => {
     const m = morphRef.current;
-    const tr = trackRef.current;
     if (m) {
       m.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.3s';
       m.style.transform = 'none';
       m.style.opacity = '1';
-    }
-    if (tr) {
-      tr.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1)';
-      tr.style.transform = 'none';
     }
     setBackdrop(1, 200);
   };
@@ -164,58 +246,54 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
     if (busy.current || !m) return;
     busy.current = true;
     m.style.transition = 'transform 0.3s cubic-bezier(0.4,0,1,1), opacity 0.3s';
-    m.style.transform = tf(ctx.centerRect);
+    m.style.transform = tf(ctx.rectFor(0));
     m.style.opacity = '0.15';
     setBackdrop(0, 300);
     window.setTimeout(onClose, 300);
   };
 
-  // Horizontal commit: slide the track one card over so the neighbour lands centred.
-  const commit = (dir: -1 | 1) => {
-    const target = index + dir;
-    const tr = trackRef.current;
-    if (busy.current || !tr || target < 0 || target >= ctx.entries.length) {
-      spring();
-      return;
-    }
-    busy.current = true;
-    const step = (natural.current?.width ?? 0) + GAP;
-    tr.style.transition = 'transform 0.32s cubic-bezier(0.22,1,0.36,1)';
-    tr.style.transform = `translateX(${-dir * step}px)`;
-    window.setTimeout(() => {
-      ctx.setActive(target);
-      setIndex(target);
-      tr.style.transition = 'none';
-      tr.style.transform = 'none';
-      busy.current = false;
-    }, 320);
-  };
-
   const onPointerDown = (e: React.PointerEvent) => {
     if (busy.current) return;
-    g.current = { x: e.clientX, y: e.clientY, axis: null, on: true };
+    g.current = { x: e.clientX, y: e.clientY, lastY: e.clientY, dismiss: 0, axis: null, on: true };
     morphRef.current?.setPointerCapture(e.pointerId);
     if (morphRef.current) morphRef.current.style.transition = 'none';
-    if (trackRef.current) trackRef.current.style.transition = 'none';
   };
   const onPointerMove = (e: React.PointerEvent) => {
     const s = g.current;
-    if (!s.on) return;
+    if (!s.on || busy.current) return;
     const dx = e.clientX - s.x;
     const dy = e.clientY - s.y;
     if (!s.axis && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) s.axis = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+    const m = morphRef.current;
+    if (!m) return;
     if (s.axis === 'v') {
-      const m = morphRef.current;
-      if (!m) return;
-      m.style.transform = `translateY(${dy}px) scale(${Math.max(0.85, 1 - Math.abs(dy) / 1400)})`;
-      setBackdrop(Math.max(0, 1 - Math.abs(dy) / 480));
+      // Scroll the page first; only travel past the top/bottom edge feeds the dismiss.
+      const delta = e.clientY - s.lastY; // +down / -up
+      s.lastY = e.clientY;
+      const sc = scrollRef.current;
+      if (sc && s.dismiss === 0) {
+        const max = Math.max(0, sc.scrollHeight - sc.clientHeight);
+        const next = sc.scrollTop - delta; // finger down scrolls content up
+        if (next < 0 && delta > 0) {
+          sc.scrollTop = 0;
+          s.dismiss += -next; // overscrolled past the top → pull down to dismiss
+        } else if (next > max && delta < 0) {
+          sc.scrollTop = max;
+          s.dismiss += max - next; // overscrolled past the bottom → pull up to dismiss
+        } else {
+          sc.scrollTop = Math.min(max, Math.max(0, next));
+        }
+      } else {
+        s.dismiss += delta;
+      }
+      if (s.dismiss !== 0) {
+        m.style.transform = `translateY(${s.dismiss}px) scale(${Math.max(0.85, 1 - Math.abs(s.dismiss) / 1400)})`;
+        setBackdrop(Math.max(0, 1 - Math.abs(s.dismiss) / 480));
+      }
     } else if (s.axis === 'h') {
-      const tr = trackRef.current;
-      if (!tr) return;
-      // resist at the ends where there is no neighbour to pull in
-      const atStart = index === 0 && dx > 0;
-      const atEnd = index === ctx.entries.length - 1 && dx < 0;
-      tr.style.transform = `translateX(${atStart || atEnd ? dx * 0.3 : dx}px)`;
+      // drag the page toward its stack slot; resist at the ends where there is no neighbour
+      const atEnd = (index === 0 && dx > 0) || (index === last && dx < 0);
+      m.style.transform = `translateX(${atEnd ? dx * 0.3 : dx}px)`;
     }
   };
   const onPointerUp = (e: React.PointerEvent) => {
@@ -223,13 +301,17 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
     if (!s.on) return;
     s.on = false;
     const dx = e.clientX - s.x;
-    const dy = e.clientY - s.y;
-    if (s.axis === 'v' && Math.abs(dy) > 110) return close();
-    if (s.axis === 'h' && Math.abs(dx) > 70) return commit(dx < 0 ? 1 : -1);
+    if (s.axis === 'v' && Math.abs(s.dismiss) > 110) return close();
+    if (s.axis === 'h' && Math.abs(dx) > 70) return go(dx < 0 ? 1 : -1);
     spring();
   };
 
-  return (
+  const arrow = 'fixed z-[90] top-1/2 -translate-y-1/2 hidden md:flex w-11 h-11 rounded-full bg-surface text-on-surface-variant shadow-lg items-center justify-center transition-colors hover:text-primary disabled:opacity-0 disabled:pointer-events-none';
+
+  // Portal to <body>: the routed page sits inside a transformed track in PortfolioLayout,
+  // which would otherwise become the containing block for this `fixed` overlay and push it
+  // off-screen when the page is scrolled.
+  return createPortal(
     <div
       className="fixed inset-0 z-[80]"
       onTouchStart={(e) => e.stopPropagation()}
@@ -243,33 +325,33 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
       >
         <X className="h-5 w-5" />
       </button>
+      <button aria-label="Previous entry" onClick={() => go(-1)} disabled={index === 0} className={`${arrow} left-4`}>
+        <ChevronLeft className="h-6 w-6" />
+      </button>
+      <button aria-label="Next entry" onClick={() => go(1)} disabled={index === last} className={`${arrow} right-4`}>
+        <ChevronRight className="h-6 w-6" />
+      </button>
       <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8 pointer-events-none">
-        <div
-          ref={morphRef}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={spring}
-          className="relative pointer-events-auto w-full max-w-[720px] lg:max-w-[900px] h-[calc(100vh-7rem)] touch-none cursor-grab active:cursor-grabbing will-change-transform"
-        >
-          <div ref={trackRef} className="absolute inset-0 will-change-transform">
-            {[-1, 0, 1].map((slot) => {
-              const i = index + slot;
-              if (i < 0 || i >= ctx.entries.length) return null;
-              return (
-                <div
-                  key={ctx.entries[i].slug}
-                  className="absolute inset-0"
-                  style={{ transform: `translateX(calc((100% + ${GAP}px) * ${slot}))` }}
-                >
-                  <PaperPage entry={ctx.entries[i]} />
-                </div>
-              );
-            })}
+        <div className="relative w-full max-w-[720px] lg:max-w-[900px] h-[calc(100vh-7rem)]">
+          {incoming != null && (
+            <div ref={inRef} className="absolute inset-0 will-change-transform pointer-events-none">
+              <PaperPage entry={ctx.entries[incoming]} scrollable />
+            </div>
+          )}
+          <div
+            ref={morphRef}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={spring}
+            className="absolute inset-0 pointer-events-auto touch-none cursor-grab active:cursor-grabbing will-change-transform"
+          >
+            <PaperPage entry={ctx.entries[index]} scrollable scrollRef={scrollRef} />
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -282,6 +364,8 @@ function SwipeStack({ entries, onOpen, lifted = false }: { entries: DiaryEntry[]
   const [cardW, setCardW] = useState(320);
   const startX = useRef(0);
   const moved = useRef(false);
+  const cardWRef = useRef(cardW);
+  cardWRef.current = cardW;
 
   useEffect(() => {
     const measure = () => {
@@ -295,6 +379,20 @@ function SwipeStack({ entries, onOpen, lifted = false }: { entries: DiaryEntry[]
 
   const peek = cardW * 0.5;
   const last = entries.length - 1;
+
+  // On-screen rect of the card `offset` steps from the centred one. Geometry-only (depends
+  // on offset, not which card sits there), read live so the open reader can reuse it to
+  // morph pages back into / out of the stack as it navigates.
+  const rectFor = (offset: number): Rect => {
+    const el = ref.current;
+    const box = el?.getBoundingClientRect() ?? { left: 0, top: 0, width: 0, height: 0 };
+    const cw = cardWRef.current;
+    const pk = cw * 0.5;
+    const sc = Math.max(0.62, 1 - Math.abs(offset) * 0.13);
+    const w = cw * sc;
+    const h = box.height * sc;
+    return { left: box.left + box.width / 2 + offset * pk - w / 2, top: box.top + (box.height - h) / 2, width: w, height: h };
+  };
 
   const cardAt = (rel: number): number => {
     let hit = -1;
@@ -340,13 +438,7 @@ function SwipeStack({ entries, onOpen, lifted = false }: { entries: DiaryEntry[]
     if (!rect) return;
     const hit = cardAt(e.clientX - (rect.left + rect.width / 2));
     if (hit >= 0) {
-      const rectFor = (o: number): Rect => {
-        const sc = Math.max(0.62, 1 - Math.abs(o) * 0.13);
-        const w = cardW * sc;
-        const h = rect.height * sc;
-        return { left: rect.left + rect.width / 2 + o * peek - w / 2, top: rect.top + (rect.height - h) / 2, width: w, height: h };
-      };
-      onOpen({ entries, index: hit, openRect: rectFor(hit - active), centerRect: rectFor(0), setActive });
+      onOpen({ entries, index: hit, openRect: rectFor(hit - active), rectFor, setActive });
       setActive(hit);
     }
   };
