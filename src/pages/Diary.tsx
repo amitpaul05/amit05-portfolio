@@ -191,6 +191,40 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Trackpad two-finger swipe: a horizontally-dominant wheel gesture flicks between
+  // entries; vertical wheel is left alone so it scrolls the page natively. `locked` keeps
+  // one continuous swipe to a single navigation until the momentum tail settles.
+  useEffect(() => {
+    const el = morphRef.current;
+    if (!el) return;
+    let accum = 0;
+    let locked = false;
+    let resetId: number;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      if (busy.current || locked) return;
+      accum += e.deltaX;
+      window.clearTimeout(resetId);
+      resetId = window.setTimeout(() => {
+        accum = 0;
+        locked = false;
+      }, 140);
+      if (Math.abs(accum) > 40) {
+        const dir = accum > 0 ? 1 : -1;
+        accum = 0;
+        locked = true;
+        go(dir);
+      }
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      window.clearTimeout(resetId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Navigate: drop the current page back onto its stack slot while lifting the neighbour
   // out of the stack. After the shuffle, the neighbour becomes the resting front page.
   const go = (dir: -1 | 1) => {
@@ -379,6 +413,37 @@ function SwipeStack({ entries, onOpen, lifted = false }: { entries: DiaryEntry[]
 
   const peek = cardW * 0.5;
   const last = entries.length - 1;
+
+  // Trackpad two-finger swipe flicks through the stack; vertical wheel scrolls the page.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let accum = 0;
+    let locked = false;
+    let resetId: number;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      if (locked) return;
+      accum += e.deltaX;
+      window.clearTimeout(resetId);
+      resetId = window.setTimeout(() => {
+        accum = 0;
+        locked = false;
+      }, 140);
+      if (Math.abs(accum) > 40) {
+        const dir = accum > 0 ? 1 : -1;
+        accum = 0;
+        locked = true;
+        setActive((a) => Math.min(last, Math.max(0, a + dir)));
+      }
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+      window.clearTimeout(resetId);
+    };
+  }, [last]);
 
   // On-screen rect of the card `offset` steps from the centred one. Geometry-only (depends
   // on offset, not which card sits there), read live so the open reader can reuse it to
