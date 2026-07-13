@@ -17,6 +17,17 @@ const NAV = [
 // menu button share this so their background + text colour are always identical.
 const RESUME_BTN_COLOR = "bg-primary text-on-primary hover:opacity-90";
 
+// The anchor keeps opening the PDF in a new tab (a bare `download` attribute would
+// suppress that), so we trigger the save via a throwaway anchor click alongside it.
+export const downloadResume = () => {
+  const a = document.createElement("a");
+  a.href = resume;
+  a.download = "Amit_Paul_Resume.pdf";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
 const TopNav = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -80,6 +91,7 @@ const TopNav = () => {
               href={resume}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={downloadResume}
               className={cn(
                 "inline-flex items-center gap-2 px-4 py-2 font-sans text-label-md rounded-lg transition-opacity",
                 RESUME_BTN_COLOR
@@ -161,7 +173,10 @@ const TopNav = () => {
             href={resume}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              downloadResume();
+              setOpen(false);
+            }}
             style={{ transitionDelay: open ? `${180 + NAV.length * 60}ms` : "0ms" }}
             className={cn(
               "mt-8 inline-flex items-center justify-center gap-2 py-4 font-sans text-headline-sm rounded-xl transition-all duration-300",

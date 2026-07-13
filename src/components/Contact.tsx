@@ -2,6 +2,7 @@ import { Github, Linkedin, Mail, MapPin, ExternalLink } from "lucide-react";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
 import codeforcesIcon from "../assets/codeforces-icon.svg";
 import resume from '../assets/Amit_Paul_s_Resume.pdf';
+import { downloadResume } from './TopNav';
 
 const Contact = () => {
   const contactInfo = [
@@ -140,6 +141,7 @@ const Contact = () => {
               href={resume}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={downloadResume}
               className="w-full inline-flex items-center justify-center gap-2 border border-on-primary-container/40 text-on-primary-container px-5 py-3 rounded-lg font-sans text-label-md hover:bg-on-primary-container/10 transition-colors"
             >
               <ExternalLink className="h-4 w-4" />
