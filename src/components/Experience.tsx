@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { Building, ChevronDown } from "lucide-react";
+import { Buildings, CaretDown } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 
 type DateRange = {
@@ -185,7 +185,7 @@ const Experience = () => {
             <div key={co.company}>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-primary text-on-primary flex items-center justify-center shrink-0">
-                  <Building className="h-5 w-5" />
+                  <Buildings className="h-5 w-5" />
                 </div>
                 <div>
                   <h3 className="font-sans text-headline-sm text-primary leading-tight">{co.company}</h3>
@@ -244,7 +244,7 @@ const Experience = () => {
                               {role.type} · {role.location}
                             </p>
                           </div>
-                          <ChevronDown
+                          <CaretDown
                             className={cn(
                               "h-5 w-5 shrink-0 mt-1 text-on-surface-variant transition-transform lg:hidden",
                               isOpen && "rotate-180 text-primary"

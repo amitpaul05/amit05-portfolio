@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "@/lib/icons";
 import { useTheme } from "next-themes";
 
 const ThemeToggle = () => {

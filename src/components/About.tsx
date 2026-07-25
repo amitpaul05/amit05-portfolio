@@ -1,11 +1,11 @@
-import { MapPin, GraduationCap, Terminal, Server } from "lucide-react";
+import { MapPin, GraduationCap, TerminalWindow, HardDrives } from "@/lib/icons";
 import amit from "../assets/amit.webp";
 
 const quickFacts = [
   { icon: MapPin, label: "Location", value: "Dhaka, Bangladesh" },
   { icon: GraduationCap, label: "Education", value: "Khulna University" },
-  { icon: Terminal, label: "Primary OS", value: "Ubuntu / Linux" },
-  { icon: Server, label: "Favorite Stack", value: "Django + PostgreSQL" },
+  { icon: TerminalWindow, label: "Primary OS", value: "Ubuntu / Linux" },
+  { icon: HardDrives, label: "Favorite Stack", value: "Django + PostgreSQL" },
 ];
 
 const expertise = [

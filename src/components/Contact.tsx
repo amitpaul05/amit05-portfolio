@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, MapPin, ExternalLink } from "lucide-react";
+import { GithubLogo, LinkedinLogo, EnvelopeSimple, MapPin, ArrowSquareOut } from "@/lib/icons";
 import leetcodeIcon from "../assets/leetcode-icon.svg";
 import codeforcesIcon from "../assets/codeforces-icon.svg";
 import resume from '../assets/Amit_Paul_s_Resume.pdf';
@@ -7,7 +7,7 @@ import { downloadResume } from './TopNav';
 const Contact = () => {
   const contactInfo = [
     {
-      icon: Mail,
+      icon: EnvelopeSimple,
       label: "Email",
       value: "amit.paul.ece@gmail.com",
       href: "mailto:amit.paul.ece@gmail.com"
@@ -22,31 +22,31 @@ const Contact = () => {
 
   const socialLinks = [
     {
-      icon: Github,
+      icon: GithubLogo,
       label: "GitHub",
       href: "https://github.com/amitpaul05",
-      isLucideIcon: true,
+      isComponentIcon: true,
       iconSrc: ""
     },
     {
-      icon: Linkedin,
+      icon: LinkedinLogo,
       label: "LinkedIn",
       href: "https://www.linkedin.com/in/amitpaul05/",
-      isLucideIcon: true,
+      isComponentIcon: true,
       iconSrc: ""
     },
     {
       icon: null,
       label: "LeetCode",
       href: "https://leetcode.com/amit210905",
-      isLucideIcon: false,
+      isComponentIcon: false,
       iconSrc: leetcodeIcon
     },
     {
       icon: null,
       label: "Codeforces",
       href: "https://codeforces.com/profile/amit210905",
-      isLucideIcon: false,
+      isComponentIcon: false,
       iconSrc: codeforcesIcon
     }
   ];
@@ -103,7 +103,7 @@ const Contact = () => {
                   rel="noopener noreferrer"
                   className="group flex items-center gap-3 p-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors"
                 >
-                  {social.isLucideIcon && social.icon ? (
+                  {social.isComponentIcon && social.icon ? (
                     <social.icon className="h-5 w-5" />
                   ) : (
                     <img
@@ -134,7 +134,7 @@ const Contact = () => {
               href="mailto:amit.paul.ece@gmail.com"
               className="w-full inline-flex items-center justify-center gap-2 bg-on-primary-container text-primary-container px-5 py-3 rounded-lg font-sans text-label-md hover:opacity-90 transition-opacity"
             >
-              <Mail className="h-4 w-4" />
+              <EnvelopeSimple className="h-4 w-4" />
               Send Email
             </a>
             <a
@@ -144,7 +144,7 @@ const Contact = () => {
               onClick={downloadResume}
               className="w-full inline-flex items-center justify-center gap-2 border border-on-primary-container/40 text-on-primary-container px-5 py-3 rounded-lg font-sans text-label-md hover:bg-on-primary-container/10 transition-colors"
             >
-              <ExternalLink className="h-4 w-4" />
+              <ArrowSquareOut className="h-4 w-4" />
               Download Resume
             </a>
           </div>

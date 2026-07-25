@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, Suspense, lazy } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { ChevronRight, ChevronLeft, Github, Linkedin, Mail } from "lucide-react";
+import { CaretRight, CaretLeft, GithubLogo, LinkedinLogo, EnvelopeSimple } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import TopNav from "./TopNav";
 import Contact from "./Contact";
@@ -64,14 +64,14 @@ const PortfolioLayout = () => {
         el.style.transform = `translateX(${startX}px)`;
         requestAnimationFrame(() =>
           requestAnimationFrame(() => {
-            el.style.transition = "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)";
+            el.style.transition = "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
             el.style.transform = "translateX(0)";
           })
         );
         window.setTimeout(() => {
           setLeaving(null);
           if (trackRef.current) trackRef.current.style.transition = "";
-        }, 340);
+        }, 540);
       }
     }
     prevRef.current = newKey;
@@ -124,6 +124,14 @@ const PortfolioLayout = () => {
     if (trackRef.current) trackRef.current.style.transform = px ? `translateX(${px}px)` : "";
   };
 
+  // Move the bottom-nav indicator dot (owned by TopNav) via a root CSS var so it
+  // follows the finger during a swipe, mirroring the page. pos is a fractional tab index.
+  const lastTab = tabOrder.length - 1;
+  const setDotPos = (pos: number) => {
+    const clamped = Math.max(0, Math.min(lastTab, pos));
+    document.documentElement.style.setProperty("--tab-pos", String(clamped));
+  };
+
   const onTouchStart = (e: React.TouchEvent) => {
     if (tabIndex < 0) return;
     const t = e.touches[0];
@@ -141,12 +149,17 @@ const PortfolioLayout = () => {
     const dy = t.clientY - touch.current.y;
     if (touch.current.axis === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
       touch.current.axis = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
-      if (touch.current.axis === "h") setDragging(true);
+      if (touch.current.axis === "h") {
+        setDragging(true);
+        // dot tracks the finger with no easing while dragging
+        document.documentElement.style.setProperty("--tab-pos-ms", "0ms");
+      }
     }
     if (touch.current.axis === "h") {
       const resist = (dx < 0 && !swipeNext) || (dx > 0 && !swipePrev);
       const px = resist ? dx * 0.25 : dx;
       setTrackX(px);
+      setDotPos(tabIndex - px / window.innerWidth);
       const side = px < 0 ? "next" : px > 0 ? "prev" : null;
       const key = side === "next" ? swipeNext : side === "prev" ? swipePrev : null;
       if (key && side) {
@@ -180,6 +193,9 @@ const PortfolioLayout = () => {
         el.style.transition = "transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)";
         el.style.transform = `translateX(${endX}px)`;
       }
+      // glide the dot the rest of the way onto the target tab, in step with the page
+      document.documentElement.style.setProperty("--tab-pos-ms", "250ms");
+      setDotPos(goNext ? tabIndex + 1 : tabIndex - 1);
       window.setTimeout(() => {
         navigate(`/${goNext ? swipeNext : swipePrev}`);
         endDrag();
@@ -190,6 +206,9 @@ const PortfolioLayout = () => {
         el.style.transition = "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)";
         el.style.transform = "translateX(0)";
       }
+      // snap the dot back to the current tab alongside the page
+      document.documentElement.style.setProperty("--tab-pos-ms", "300ms");
+      setDotPos(tabIndex);
       dragXRef.current = 0;
       window.setTimeout(endDrag, 300);
     } else {
@@ -253,7 +272,7 @@ const PortfolioLayout = () => {
                 onClick={() => navigate(`/${prevSection}`)}
                 className="group inline-flex items-center gap-2 h-12 px-5 rounded-lg border border-outline-variant/40 bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:border-primary/40 transition-colors material-card"
               >
-                <ChevronLeft className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
+                <CaretLeft className="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" />
                 <span className="font-sans text-label-md">{cap(prevSection)}</span>
               </button>
             ) : (
@@ -266,7 +285,7 @@ const PortfolioLayout = () => {
                 className="group inline-flex items-center gap-2 h-12 px-5 rounded-lg border border-outline-variant/40 bg-surface-container-lowest text-on-surface-variant hover:text-primary hover:border-primary/40 transition-colors material-card"
               >
                 <span className="font-sans text-label-md">{cap(nextSection)}</span>
-                <ChevronRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                <CaretRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             ) : (
               <span />
@@ -292,7 +311,7 @@ const PortfolioLayout = () => {
               aria-label="GitHub"
               className="text-on-surface-variant hover:text-primary transition-colors"
             >
-              <Github className="h-5 w-5" />
+              <GithubLogo className="h-5 w-5" />
             </a>
             <a
               href="https://www.linkedin.com/in/amitpaul05/"
@@ -301,14 +320,14 @@ const PortfolioLayout = () => {
               aria-label="LinkedIn"
               className="text-on-surface-variant hover:text-primary transition-colors"
             >
-              <Linkedin className="h-5 w-5" />
+              <LinkedinLogo className="h-5 w-5" />
             </a>
             <a
               href="mailto:amit.paul.ece@gmail.com"
               aria-label="Email"
               className="text-on-surface-variant hover:text-primary transition-colors"
             >
-              <Mail className="h-5 w-5" />
+              <EnvelopeSimple className="h-5 w-5" />
             </a>
           </div>
         </div>

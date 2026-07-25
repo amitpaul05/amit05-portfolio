@@ -1,4 +1,4 @@
-import { Award, ExternalLink } from "lucide-react";
+import { Certificate, ArrowSquareOut } from "@/lib/icons";
 
 const Certifications = () => {
   const certifications = [
@@ -67,7 +67,7 @@ const Certifications = () => {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
         <article className="md:col-span-12 lg:col-span-8 material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-start">
           <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-lg bg-secondary-container flex items-center justify-center">
-            <Award className="h-9 w-9 md:h-11 md:w-11 text-on-secondary-container" />
+            <Certificate className="h-9 w-9 md:h-11 md:w-11 text-on-secondary-container" />
           </div>
           <div className="flex-grow">
             <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -93,7 +93,7 @@ const Certifications = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-sans text-label-md hover:opacity-90 transition-opacity"
               >
-                <ExternalLink className="h-4 w-4" />
+                <ArrowSquareOut className="h-4 w-4" />
                 View Certificate
               </a>
             </div>
@@ -106,7 +106,7 @@ const Certifications = () => {
             className={`md:col-span-6 ${restSpans[i] ?? "lg:col-span-6"} material-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-6 md:p-8 flex flex-col`}
           >
             <div className="w-16 h-16 shrink-0 rounded-lg bg-secondary-container flex items-center justify-center mb-5">
-              <Award className="h-7 w-7 text-on-secondary-container" />
+              <Certificate className="h-7 w-7 text-on-secondary-container" />
             </div>
             <h3 className="font-sans text-headline-sm text-primary mb-1">{cert.title}</h3>
             <p className="font-sans text-label-md uppercase tracking-wide text-secondary mb-3">
@@ -131,7 +131,7 @@ const Certifications = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-primary hover:opacity-80 font-sans text-label-md transition-opacity"
               >
-                View <ExternalLink className="h-4 w-4" />
+                View <ArrowSquareOut className="h-4 w-4" />
               </a>
             </div>
           </article>

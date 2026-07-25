@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Settings, Eye, EyeOff, CheckCircle, Loader2, ArrowLeft, Pencil } from 'lucide-react';
+import { GearSix, Eye, EyeSlash, CheckCircle, CircleNotch, ArrowLeft, PencilSimple } from '@/lib/icons';
 import { commitDiaryEntry } from '@/lib/github';
 import { getAllEntries, getEntryBySlug, type DiaryEntry } from '@/lib/diary';
 import { toast } from 'sonner';
@@ -60,7 +60,7 @@ function PATModal({ onClose }: { onClose: () => void }) {
             onClick={() => setShow((s) => !s)}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           >
-            {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {show ? <EyeSlash className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
         <div className="flex gap-3 mt-4">
@@ -122,7 +122,7 @@ function DiaryEditList() {
                     onClick={() => navigate(`/diary/${entry.slug}/edit`)}
                     className="font-diary text-xs text-diary-ink-muted hover:text-diary-ink transition-colors flex items-center gap-1 leading-8"
                   >
-                    <Pencil className="w-3 h-3" />
+                    <PencilSimple className="w-3 h-3" />
                     edit
                   </button>
                 </div>
@@ -220,7 +220,7 @@ function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
               className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"
               title="GitHub token settings"
             >
-              <Settings className="w-5 h-5" />
+              <GearSix className="w-5 h-5" />
             </button>
           </div>
         </TopBar>
@@ -273,7 +273,7 @@ function DiaryEditForm({ entry }: { entry: DiaryEntry }) {
                 disabled={submitting}
                 className="text-lg px-8 py-2 rounded border border-diary-accent/50 text-diary-ink bg-diary-accent/10 hover:bg-diary-accent/20 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
-                {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                {submitting && <CircleNotch className="w-4 h-4 animate-spin" />}
                 {submitting ? 'Saving...' : 'Save changes'}
               </button>
             </div>

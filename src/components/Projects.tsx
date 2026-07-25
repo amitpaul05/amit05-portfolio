@@ -1,4 +1,4 @@
-import { Github, ExternalLink, Lock, Activity, Terminal } from "lucide-react";
+import { GithubLogo, ArrowSquareOut, Lock, Pulse, TerminalWindow } from "@/lib/icons";
 
 const Projects = () => {
   const workProjects = [
@@ -83,7 +83,7 @@ const Projects = () => {
       >
         <header className="mb-12">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-sans text-label-md uppercase tracking-wide mb-4">
-            <Terminal className="h-4 w-4" />
+            <TerminalWindow className="h-4 w-4" />
             Engineering Repository
           </span>
           <h1 className="font-sans text-headline-lg-mobile md:text-headline-lg text-primary mb-4">
@@ -122,7 +122,7 @@ const Projects = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-lg font-sans text-label-md hover:opacity-90 transition-opacity"
                 >
-                  <ExternalLink className="h-5 w-5" />
+                  <ArrowSquareOut className="h-5 w-5" />
                   Visit Project
                 </a>
               ) : (
@@ -169,7 +169,7 @@ const Projects = () => {
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <h3 className="font-sans text-headline-sm text-primary">{project.title}</h3>
                     {project.url ? (
-                      <ExternalLink className="h-4 w-4 text-on-surface-variant shrink-0 mt-1" />
+                      <ArrowSquareOut className="h-4 w-4 text-on-surface-variant shrink-0 mt-1" />
                     ) : (
                       <span className="inline-flex items-center gap-1 shrink-0 font-sans text-label-md px-2 py-0.5 rounded border border-outline-variant text-on-surface-variant">
                         <Lock className="h-3 w-3" /> Private
@@ -183,7 +183,7 @@ const Projects = () => {
                   {"trafficStats" in project && project.trafficStats && (
                     <div className="mb-4 pt-3 border-t border-outline-variant/40">
                       <div className="flex items-center gap-1.5 mb-2">
-                        <Activity className="h-3 w-3 text-on-surface-variant" />
+                        <Pulse className="h-3 w-3 text-on-surface-variant" />
                         <span className="font-mono text-[11px] text-on-surface-variant">
                           {(project.trafficStats as any).label}
                         </span>
@@ -249,7 +249,7 @@ const Projects = () => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-4 py-2 rounded-lg font-sans text-label-md transition-colors"
                   >
-                    <Github className="h-4 w-4" />
+                    <GithubLogo className="h-4 w-4" />
                     View Code
                   </a>
                 )}
@@ -260,7 +260,7 @@ const Projects = () => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary px-4 py-2 rounded-lg font-sans text-label-md transition-colors"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <ArrowSquareOut className="h-4 w-4" />
                     Demo
                   </a>
                 )}

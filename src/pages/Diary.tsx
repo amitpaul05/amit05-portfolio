@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, CaretLeft, CaretRight } from '@/lib/icons';
 import { cn } from '@/lib/utils';
 import { getAllEntries, type DiaryEntry } from '@/lib/diary';
 
@@ -360,10 +360,10 @@ function DiaryReader({ ctx, onClose }: { ctx: OpenCtx; onClose: () => void }) {
         <X className="h-5 w-5" />
       </button>
       <button aria-label="Previous entry" onClick={() => go(-1)} disabled={index === 0} className={`${arrow} left-4`}>
-        <ChevronLeft className="h-6 w-6" />
+        <CaretLeft className="h-6 w-6" />
       </button>
       <button aria-label="Next entry" onClick={() => go(1)} disabled={index === last} className={`${arrow} right-4`}>
-        <ChevronRight className="h-6 w-6" />
+        <CaretRight className="h-6 w-6" />
       </button>
       <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8 pointer-events-none">
         <div className="relative w-full max-w-[720px] lg:max-w-[900px] h-[calc(100vh-7rem)]">

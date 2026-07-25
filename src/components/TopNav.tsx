@@ -1,16 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Download, User, FolderGit2, GraduationCap, Award, NotebookPen } from "lucide-react";
+import { DownloadSimple } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import resume from "../assets/Amit_Paul_s_Resume.pdf";
+// Tab bar imports both Solar variants per icon: linear (outline) at rest, bold (filled) when
+// active — the macOS-style outline→filled swap. Solar components have no weight prop, so the
+// two variants are distinct components picked per active state.
+import UserLinear from "~icons/solar/user-rounded-linear";
+import UserBold from "~icons/solar/user-rounded-bold";
+import FolderLinear from "~icons/solar/folder-linear";
+import FolderBold from "~icons/solar/folder-bold";
+import CapLinear from "~icons/solar/square-academic-cap-linear";
+import CapBold from "~icons/solar/square-academic-cap-bold";
+import DiplomaLinear from "~icons/solar/diploma-linear";
+import DiplomaBold from "~icons/solar/diploma-bold";
+import NotebookLinear from "~icons/solar/notebook-linear";
+import NotebookBold from "~icons/solar/notebook-bold";
 
+// Desktop nav renders labels; the mobile tab bar renders `icon` (outline) → `iconActive` (filled).
 const NAV = [
-  { label: "About", tab: "About", to: "/about", icon: User },
-  { label: "Projects", tab: "Projects", to: "/projects", icon: FolderGit2 },
-  { label: "Academic", tab: "Academic", to: "/academic", icon: GraduationCap },
-  { label: "Certificates", tab: "Certs", to: "/certificates", icon: Award },
-  { label: "Diary", tab: "Diary", to: "/diary", icon: NotebookPen },
+  { label: "About", tab: "About", to: "/about", icon: UserLinear, iconActive: UserBold },
+  { label: "Projects", tab: "Projects", to: "/projects", icon: FolderLinear, iconActive: FolderBold },
+  { label: "Academic", tab: "Academic", to: "/academic", icon: CapLinear, iconActive: CapBold },
+  { label: "Certificates", tab: "Certs", to: "/certificates", icon: DiplomaLinear, iconActive: DiplomaBold },
+  { label: "Diary", tab: "Diary", to: "/diary", icon: NotebookLinear, iconActive: NotebookBold },
 ];
 
 // Single source of truth for the Resume button colour — desktop pill and mobile
@@ -38,6 +52,19 @@ const TopNav = () => {
     pathname === to ||
     pathname.startsWith(to + "/") ||
     (pathname === "/" && to === "/about");
+
+  const activeIndex = NAV.findIndex((item) => isItemActive(item.to));
+
+  // The sliding indicator dot is driven by two root CSS vars so PortfolioLayout can
+  // move it imperatively during a swipe (like the page) without re-rendering TopNav.
+  // TopNav owns the resting value; a committed swipe / click just lands on activeIndex.
+  const dotInit = useRef(true);
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty("--tab-pos", String(activeIndex < 0 ? 0 : activeIndex));
+    root.style.setProperty("--tab-pos-ms", dotInit.current ? "0ms" : "550ms");
+    dotInit.current = false;
+  }, [activeIndex]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -97,7 +124,7 @@ const TopNav = () => {
                 RESUME_BTN_COLOR
               )}
             >
-              <Download className="h-4 w-4" />
+              <DownloadSimple className="h-4 w-4" />
               Resume
             </a>
 
@@ -184,7 +211,7 @@ const TopNav = () => {
               open ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
             )}
           >
-            <Download className="h-5 w-5" />
+            <DownloadSimple className="h-5 w-5" />
             Resume
           </a>
         </nav>
@@ -192,9 +219,25 @@ const TopNav = () => {
       )}
 
       <nav className="fixed bottom-0 left-0 w-full z-[70] lg:hidden">
-        <div className="flex items-stretch h-16 bg-surface border-x border-t border-outline-variant/30 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
-          {NAV.map((item) => {
-            const active = isItemActive(item.to);
+        <div className="relative flex items-stretch h-16 rounded-t-3xl border-x border-t border-outline-variant/60 bg-surface/85 backdrop-blur-xl shadow-[0_-8px_28px_-6px_rgba(0,0,0,0.22)]">
+          {/* Single shared indicator dot: it slides to the active tab and, on a swipe,
+              follows the finger — both driven by the --tab-pos / --tab-pos-ms root vars.
+              Positioned with translateX (GPU-composited) so the swipe-follow stays smooth. */}
+          <span
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute bottom-1.5 left-0 h-1.5 w-1.5 rounded-full bg-primary will-change-transform",
+              activeIndex < 0 && "opacity-0"
+            )}
+            style={{
+              transform: `translateX(calc((var(--tab-pos, ${activeIndex < 0 ? 0 : activeIndex}) + 0.5) * ${100 / NAV.length}vw - 3px))`,
+              transition:
+                "transform var(--tab-pos-ms, 550ms) cubic-bezier(0.34, 1.56, 0.64, 1), opacity 200ms ease",
+            }}
+          />
+          {NAV.map((item, i) => {
+            const active = i === activeIndex;
+            const Icon = active ? item.iconActive : item.icon;
             return (
               <NavLink
                 key={item.to}
@@ -209,15 +252,9 @@ const TopNav = () => {
                       : "text-on-surface-variant transition-transform duration-300"
                   )}
                 >
-                  <item.icon className="h-5 w-5" />
+                  <Icon className="h-6 w-6" />
                   <span className="font-sans text-[10px] tracking-wide">{item.tab}</span>
                 </span>
-                <span
-                  className={cn(
-                    "absolute bottom-1.5 h-1.5 w-1.5 rounded-full bg-primary transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
-                    active ? "opacity-100 scale-100" : "opacity-0 scale-0"
-                  )}
-                />
               </NavLink>
             );
           })}

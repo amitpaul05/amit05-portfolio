@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, Eye, EyeOff, CheckCircle, Loader2, ArrowLeft } from 'lucide-react';
+import { GearSix, Eye, EyeSlash, CheckCircle, CircleNotch, ArrowLeft } from '@/lib/icons';
 import { commitDiaryEntry } from '@/lib/github';
 import { toast } from 'sonner';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -48,7 +48,7 @@ function PATModal({ onClose }: { onClose: () => void }) {
             onClick={() => setShow((s) => !s)}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           >
-            {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {show ? <EyeSlash className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
 
@@ -179,7 +179,7 @@ const DiaryNew = () => {
                 className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"
                 title="GitHub token settings"
               >
-                <Settings className="w-5 h-5" />
+                <GearSix className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -237,7 +237,7 @@ const DiaryNew = () => {
                 disabled={submitting}
                 className="text-lg px-8 py-2 rounded border border-diary-accent/50 text-diary-ink bg-diary-accent/10 hover:bg-diary-accent/20 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
-                {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                {submitting && <CircleNotch className="w-4 h-4 animate-spin" />}
                 {submitting ? 'Committing...' : 'Commit entry'}
               </button>
             </div>

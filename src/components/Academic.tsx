@@ -1,4 +1,4 @@
-import { GraduationCap, Book, Award, Calendar, MapPin, Mail, ExternalLink } from "lucide-react";
+import { GraduationCap, BookOpen, Medal, CalendarDots, MapPin, EnvelopeSimple, ArrowSquareOut } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import kuLogo from '../assets/khulna-university-logo.png';
 import tomaMadam from '../assets/toma_madam.webp';
@@ -49,7 +49,7 @@ const MapNode = ({ person, student = false }: { person: Person; student?: boolea
           aria-label={`Email ${person.name}`}
           className="text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
         >
-          <Mail className="h-3.5 w-3.5" />
+          <EnvelopeSimple className="h-3.5 w-3.5" />
         </a>
       )}
       {person.portfolio && (
@@ -60,7 +60,7 @@ const MapNode = ({ person, student = false }: { person: Person; student?: boolea
           aria-label={`${person.name} profile`}
           className="text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
         >
-          <ExternalLink className="h-3.5 w-3.5" />
+          <ArrowSquareOut className="h-3.5 w-3.5" />
         </a>
       )}
     </div>
@@ -177,7 +177,7 @@ const Academic = () => {
                 {education.location}
               </span>
               <span className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
+                <CalendarDots className="h-4 w-4" />
                 {education.period}
               </span>
             </div>
@@ -186,7 +186,7 @@ const Academic = () => {
           <article className={card}>
             <div className="mb-6 flex items-center gap-3.5">
               <div className={tile}>
-                <Award className="h-6 w-6 text-on-secondary-container" />
+                <Medal className="h-6 w-6 text-on-secondary-container" />
               </div>
               <p className={eyebrow}>Final Year Thesis</p>
             </div>
@@ -261,7 +261,7 @@ const Academic = () => {
           <div className={cn(card, "lg:sticky lg:top-24")}>
             <div className="mb-4 flex items-center gap-3.5">
               <div className={tile}>
-                <Book className="h-6 w-6 text-on-secondary-container" />
+                <BookOpen className="h-6 w-6 text-on-secondary-container" />
               </div>
               <p className={eyebrow}>Relevant Coursework</p>
             </div>

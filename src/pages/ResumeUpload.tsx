@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Settings, Eye, EyeOff, CheckCircle, Loader2, Upload } from 'lucide-react';
+import { GearSix, Eye, EyeSlash, CheckCircle, CircleNotch, UploadSimple } from '@/lib/icons';
 import { commitResume } from '@/lib/github';
 import { toast } from 'sonner';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -36,7 +36,7 @@ function PATModal({ onClose }: { onClose: () => void }) {
             onClick={() => setShow((s) => !s)}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           >
-            {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {show ? <EyeSlash className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
         </div>
         <div className="flex gap-3 mt-4">
@@ -111,7 +111,7 @@ const ResumeUpload = () => {
                 className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors"
                 title="GitHub token settings"
               >
-                <Settings className="w-5 h-5" />
+                <GearSix className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -123,7 +123,7 @@ const ResumeUpload = () => {
               onClick={() => inputRef.current?.click()}
               className="material-card bg-surface-container-lowest border-2 border-dashed border-outline-variant hover:border-primary/60 rounded-lg p-10 flex flex-col items-center gap-3 cursor-pointer transition-colors"
             >
-              <Upload className="w-8 h-8 text-on-surface-variant" />
+              <UploadSimple className="w-8 h-8 text-on-surface-variant" />
               {file ? (
                 <p className="font-sans text-sm font-medium text-on-surface text-center break-all">{file.name}</p>
               ) : (
@@ -152,7 +152,7 @@ const ResumeUpload = () => {
               disabled={submitting || !file}
               className="w-full py-3 rounded-lg bg-primary text-on-primary font-sans text-label-md hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
             >
-              {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+              {submitting && <CircleNotch className="w-4 h-4 animate-spin" />}
               {submitting ? 'Committing...' : 'Commit resume'}
             </button>
           </form>
