@@ -1,4 +1,5 @@
 import { MapPin, GraduationCap, TerminalWindow, HardDrives } from "@/lib/icons";
+import PaintPour from "@/components/paint/PaintPour";
 import amit from "../assets/amit.webp";
 
 const quickFacts = [
@@ -25,8 +26,8 @@ const About = () => {
         data-no-animate
         className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pt-10 md:pt-16 pb-16"
       >
-        <div className="flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1 space-y-6 text-center md:text-left">
+        <PaintPour src={amit} alt="Amit Paul, Backend Engineer at Idlewild Digital">
+          <div className="space-y-6 text-center md:text-left">
             <span className="font-sans text-label-md uppercase tracking-widest text-secondary">
               About Me
             </span>
@@ -45,7 +46,7 @@ const About = () => {
               refactor for NYC jazz venues), and deploying production Django projects across AWS,
               GCP, and VPS infrastructure.
             </p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-3">
+            <div data-paint-lip className="flex flex-wrap justify-center md:justify-start gap-3">
               <span className="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-sans text-label-md">
                 Software Engineer @ Idlewild Digital
               </span>
@@ -54,16 +55,7 @@ const About = () => {
               </span>
             </div>
           </div>
-
-          <div className="w-2/3 sm:w-1/2 md:w-1/3 shrink-0 aspect-[3/4] relative rounded-lg overflow-hidden border border-outline-variant/30 material-card group">
-            <div className="absolute inset-0 bg-primary/5 mix-blend-multiply z-10 transition-opacity duration-300 group-hover:opacity-0" />
-            <img
-              src={amit}
-              alt="Amit Paul, Backend Engineer at Idlewild Digital"
-              className="object-cover w-full h-full grayscale-[0.35] transition-[filter] duration-300 group-hover:grayscale-0"
-            />
-          </div>
-        </div>
+        </PaintPour>
       </section>
 
       <section className="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop pb-16">

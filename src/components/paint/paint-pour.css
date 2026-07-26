@@ -1,0 +1,287 @@
+/* Mobile pour: the portrait backs the text block, drains from the top, funnels
+   through a stream and pools bottom-up into the frame. `--paint` (0 → 1), written
+   by usePaintPour, is the only input. */
+
+:root {
+  --paint-wash: 0.07;
+  --paint-wash-sat: 0.25;
+  --paint-stream: 0.92;
+  --paint-neck-seam: 0.08;
+  --paint-grain: 0.45;
+}
+
+.dark {
+  --paint-wash: 0.06;
+  --paint-wash-sat: 0.3;
+  --paint-stream: 0.85;
+  --paint-neck-seam: 0.07;
+  --paint-grain: 0.18;
+}
+
+/* Finished state — also what desktop, reduced motion and a no-JS render get. */
+.paint-bg,
+.paint-primed,
+.paint-stream {
+  display: none;
+}
+
+.paint-pool {
+  position: absolute;
+  inset: 0;
+}
+
+.paint-pool img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 767px) {
+  .paint-pour {
+    /* Sequencing windows: the head crosses the gap over 0 → 0.10, crosses the
+       empty frame over 0.10 → 0.22, and the level rises over 0.22 → 1. Nothing
+       fills before the head lands. Multipliers are inlined because calc()
+       dividing by a custom property has thinner support than by a literal. */
+    --reach: clamp(0, calc(var(--paint, 1) * 10), 1);
+    --fall: clamp(0, calc((var(--paint, 1) - 0.1) * 8.3333), 1);
+    --pour: clamp(0, calc((var(--paint, 1) - 0.22) * 1.28205), 1);
+    /* Bell curve, so the pool surface is flat at both ends and finishes level. */
+    --wave: calc(var(--pour) * (1 - var(--pour)) * 4);
+    --dry: clamp(0, calc((1 - var(--pour)) * 4), 1);
+    --head-fade: clamp(0, calc(1 - var(--pour) * 8), 1);
+    /* Step, not a fade: the two bead elements coincide at the handover. */
+    --in-frame: clamp(0, calc(var(--fall) * 1000), 1);
+
+    /* Measured by usePaintPour before first paint; these fallbacks are the
+       spacing the layout has without the effect. */
+    --zone-top: 104px;
+    --gap: 3rem;
+    --wash-end: 100vh;
+
+    /* Percentages are left unresolved so they resolve against .paint-bg, which
+       is what keeps .paint-wash and .paint-neck in register. */
+    --body-half: calc(var(--dry) * 50%);
+    --neck-out: calc(50% - var(--body-half));
+    --stream-half: calc(var(--dry) * 7px);
+    --neck-top: var(--wash-end);
+    --neck-h: calc(var(--reach) * (100% - var(--wash-end)));
+    --run: calc(var(--body-half) - var(--stream-half));
+  }
+
+  .paint-bg,
+  .paint-primed,
+  .paint-stream {
+    display: block;
+  }
+
+  /* Excluding .paint-bg matters: equal specificity would override its
+     `position: absolute` and collapse the wash to zero height. */
+  .paint-desc > :not(.paint-bg) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Spacing comes from the frame's margin rather than the wrapper's flex gap, so
+     --gap alone places both the zone's bottom edge and the frame's top edge. */
+  .paint-frame {
+    margin-top: var(--gap);
+  }
+
+  /* Full-bleed off the viewport, not off the text block, which `items-center` can
+     leave narrower than the page. Bottom edge is the frame's top edge. */
+  .paint-bg {
+    position: absolute;
+    top: calc(-1 * var(--zone-top));
+    bottom: calc(-1 * var(--gap));
+    left: 50%;
+    width: 100vw;
+    translate: -50% 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* Both layers span the whole zone and hold the same <img>, differing only in
+     clip-path — two sized boxes would crop from different origins and step. */
+  .paint-wash,
+  .paint-neck {
+    position: absolute;
+    inset: 0;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .paint-wash img,
+  .paint-neck img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  /* Empties from the top at full width, so what is left always sits lowest. */
+  .paint-wash {
+    opacity: var(--paint-wash);
+    filter: saturate(var(--paint-wash-sat));
+    --top: calc(var(--pour) * var(--wash-end));
+    clip-path: inset(var(--top) 0 calc(100% - var(--wash-end)) 0);
+  }
+
+  /* Smoothstep profile: half-width = body − s(f)·run, s(f) = f²(3−2f). Eight
+     fractions mirrored about 50%, so both shoulders are identical. The mask hands
+     the wash's opacity off to full paint by the time it is a stream. */
+  .paint-neck {
+    opacity: var(--paint-stream);
+    clip-path: polygon(
+      var(--neck-out) var(--neck-top),
+      calc(var(--neck-out) + 0.061 * var(--run)) calc(var(--neck-top) + 0.15 * var(--neck-h)),
+      calc(var(--neck-out) + 0.216 * var(--run)) calc(var(--neck-top) + 0.3 * var(--neck-h)),
+      calc(var(--neck-out) + 0.425 * var(--run)) calc(var(--neck-top) + 0.45 * var(--neck-h)),
+      calc(var(--neck-out) + 0.648 * var(--run)) calc(var(--neck-top) + 0.6 * var(--neck-h)),
+      calc(var(--neck-out) + 0.844 * var(--run)) calc(var(--neck-top) + 0.75 * var(--neck-h)),
+      calc(var(--neck-out) + 0.972 * var(--run)) calc(var(--neck-top) + 0.9 * var(--neck-h)),
+      calc(50% - var(--stream-half)) calc(var(--neck-top) + var(--neck-h)),
+      calc(50% + var(--stream-half)) calc(var(--neck-top) + var(--neck-h)),
+      calc(100% - var(--neck-out) - 0.972 * var(--run)) calc(var(--neck-top) + 0.9 * var(--neck-h)),
+      calc(100% - var(--neck-out) - 0.844 * var(--run)) calc(var(--neck-top) + 0.75 * var(--neck-h)),
+      calc(100% - var(--neck-out) - 0.648 * var(--run)) calc(var(--neck-top) + 0.6 * var(--neck-h)),
+      calc(100% - var(--neck-out) - 0.425 * var(--run)) calc(var(--neck-top) + 0.45 * var(--neck-h)),
+      calc(100% - var(--neck-out) - 0.216 * var(--run)) calc(var(--neck-top) + 0.3 * var(--neck-h)),
+      calc(100% - var(--neck-out) - 0.061 * var(--run)) calc(var(--neck-top) + 0.15 * var(--neck-h)),
+      calc(100% - var(--neck-out)) var(--neck-top)
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgb(0 0 0 / var(--paint-neck-seam)) var(--neck-top),
+      #000 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      rgb(0 0 0 / var(--paint-neck-seam)) var(--neck-top),
+      #000 100%
+    );
+  }
+
+  /* Multiplied so the grain reads through the image; the frame needs its own
+     layer because .material-card::after is disabled below 1024px. */
+  .paint-wash::after,
+  .paint-neck::after,
+  .paint-pool::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
+    opacity: var(--paint-grain);
+    mix-blend-mode: multiply;
+  }
+
+  /* background-size: 100% 100% squeezes the whole portrait into the ribbon, so
+     the stream carries the image rather than a flat colour. */
+  .paint-stream {
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    opacity: var(--paint-stream);
+    background-image: var(--paint-img);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Bead at the neck's tip, handed to .paint-head-canvas on entering the frame. */
+  .paint-stream-head {
+    top: calc(var(--neck-top) + var(--neck-h));
+    translate: -50% -60%;
+    width: calc(var(--reach) * (1 - var(--in-frame)) * 20px);
+    height: calc(var(--reach) * (1 - var(--in-frame)) * 24px);
+    border-radius: 50%;
+  }
+
+  .paint-primed {
+    position: absolute;
+    inset: 0;
+    background: hsl(var(--surface-container-lowest));
+  }
+
+  .paint-primed::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: var(--grain-opacity);
+    background-image: var(--grain-image);
+    background-size: var(--grain-size) var(--grain-size);
+  }
+
+  /* Portrait at final scale behind a rising liquid surface, so the face never
+     stretches — the squeeze exists only in flight. */
+  .paint-pool {
+    --level: calc((1 - var(--pour)) * 100%);
+    clip-path: polygon(
+      0% calc(var(--level) + var(--wave) * 7px),
+      17% calc(var(--level) + var(--wave) * 2px),
+      34% calc(var(--level) + var(--wave) * 9px),
+      50% calc(var(--level) + var(--wave) * 4px),
+      66% calc(var(--level) + var(--wave) * 8px),
+      83% calc(var(--level) + var(--wave) * 1px),
+      100% calc(var(--level) + var(--wave) * 6px),
+      100% 100%,
+      0% 100%
+    );
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .paint-stream-canvas {
+    top: 0;
+    /* Trails the falling head, then stops at the surface; both read 1 at the
+       handover, so min() switches between them without a conditional. */
+    height: calc(min(var(--fall), 1 - var(--pour)) * 100%);
+    width: 34px;
+    clip-path: polygon(
+      calc(50% - var(--stream-half)) 0%,
+      calc(50% - 0.72 * var(--stream-half)) 15%,
+      calc(50% - 1.16 * var(--stream-half)) 30%,
+      calc(50% - 0.66 * var(--stream-half)) 45%,
+      calc(50% - 1.1 * var(--stream-half)) 60%,
+      calc(50% - 0.7 * var(--stream-half)) 75%,
+      calc(50% - 1.04 * var(--stream-half)) 88%,
+      calc(50% - 0.9 * var(--stream-half)) 100%,
+      calc(50% + 0.9 * var(--stream-half)) 100%,
+      calc(50% + 1.04 * var(--stream-half)) 88%,
+      calc(50% + 0.7 * var(--stream-half)) 75%,
+      calc(50% + 1.1 * var(--stream-half)) 60%,
+      calc(50% + 0.66 * var(--stream-half)) 45%,
+      calc(50% + 1.16 * var(--stream-half)) 30%,
+      calc(50% + 0.72 * var(--stream-half)) 15%,
+      calc(50% + var(--stream-half)) 0%
+    );
+  }
+
+  .paint-head-canvas {
+    top: calc(var(--fall) * 100%);
+    translate: -50% -60%;
+    width: calc(var(--in-frame) * var(--head-fade) * 20px);
+    height: calc(var(--in-frame) * var(--head-fade) * 24px);
+    border-radius: 50%;
+  }
+
+  .paint-splash {
+    top: calc((1 - var(--pour)) * 100%);
+    translate: -50% -50%;
+    width: calc(var(--wave) * var(--dry) * 34px);
+    height: calc(var(--wave) * var(--dry) * 14px);
+    border-radius: 50%;
+    opacity: calc(var(--paint-stream) * 0.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paint-pour {
+    --paint: 1 !important;
+  }
+}

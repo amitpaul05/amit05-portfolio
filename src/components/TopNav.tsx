@@ -84,8 +84,16 @@ const TopNav = () => {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 w-full z-[70] bg-background nav-grain transition-all duration-300",
-          scrolled ? "h-14" : "h-16"
+          "fixed top-0 left-0 w-full z-[70] transition-all duration-300",
+          // Transparent at rest below md so the About portrait runs up behind it
+          // and the first screen reads as one flat sheet. It only takes a
+          // surface — and with it the paper grain — once content is actually
+          // passing underneath. The grain has to arrive *with* the background:
+          // over a transparent header it would tile on top of body::before and
+          // the doubled texture reads as a banded strip across the top.
+          scrolled
+            ? "h-14 bg-background nav-grain"
+            : "h-16 bg-transparent md:bg-background md:nav-grain"
         )}
       >
         <div className="relative z-10 flex justify-between items-center h-full px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto">
